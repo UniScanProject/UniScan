@@ -1,0 +1,86 @@
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Text.Json;
+using Shiki.Common.Identity;
+using Shiki.Common.Util;
+using UniScan.Core.State.Attribute;
+using UniScan.Core.State.Radio;
+using UniScan.Core.State.Types;
+
+namespace UniScan.Core.State;
+
+/// <summary>
+/// The state stored within a Scanner, and converted from received data from the remote.
+///
+/// To be passed over the network to all clients
+/// </summary>
+[DebuggerDisplay("= Device State =\n- Volume: {Volume}/{MaxVolume}\n- Squelch: {Squelch}/{MaxSquelch}\n- Signal: {Signal}/{MaxSignal}\n- Scanning {ScanDirection}")]
+public class DeviceState
+{
+    /// <summary>
+    /// A write lock to make sure we're not trying to concurrently modify the state
+    /// </summary>
+    public readonly Lock Lock = new();
+    
+    /// <summary>
+    /// The current volume of the Scanner
+    /// </summary>
+    public int Volume { get; set; } = 0;
+    /// <summary>
+    /// The maximum possible volume of the Scanner
+    /// </summary>
+    public int MaxVolume { get; set; } = 100;
+
+    /// <summary>
+    /// The current squelch of the Scanner
+    /// </summary>
+    public int Squelch { get; set; } = 0;
+    /// <summary>
+    /// The maximum squelch of the Scanner
+    /// </summary>
+    public int MaxSquelch { get; set; } = 100;
+
+    /// <summary>
+    /// The currently received signal strength
+    ///
+    /// Should be 0 when no data is being received on the current channel
+    /// </summary>
+    public int Signal { get; set; } = 0;
+    /// <summary>
+    /// The maximum possible received signal
+    /// </summary>
+    public int MaxSignal { get; set; } = 5;
+
+    /// <summary>
+    /// The direction the scanner is scanning in
+    /// </summary>
+    public ScanDirection? ScanDirection { get; set; }
+
+    /// <summary>
+    /// The device's scan tree
+    /// </summary>
+    private List<ScanList> ScanLists { get; set; }
+    
+    /// <summary>
+    /// The current List being scanned
+    /// </summary>
+    public ScanList? CurrentScanList { get; set; }
+    /// <summary>
+    /// The current Zone being scanned
+    /// </summary>
+    public IScanZone? CurrentZone { get; set; }
+    /// <summary>
+    /// The current Group being scanned
+    /// </summary>
+    public IScanGroup? CurrentGroup { get; set; }
+    /// <summary>
+    /// The current Channel
+    /// </summary>
+    public IScanChannel? CurrentChannel { get; set; }
+
+    //dict of special attributes, allows for enough flexibility when a scanner may have extra state to store
+    public Dictionary<Identifier, IStateAttribute> Attributes { get; set; } = [];//TODO send to deepest point of hell and instead subclass DeviceState
+
+    /// <inheritdoc/>
+    public override string ToString() => JsonSerializer.Serialize(this);
+}

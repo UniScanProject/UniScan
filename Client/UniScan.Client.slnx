@@ -1,0 +1,11 @@
+﻿<Solution>
+  <Project Path="UniScan.Client.Android/UniScan.Client.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="UniScan.Client.Browser/UniScan.Client.Browser.csproj" />
+  <Project Path="UniScan.Client.Desktop/UniScan.Client.Desktop.csproj" />
+  <Project Path="UniScan.Client.iOS/UniScan.Client.iOS.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="UniScan.Client/UniScan.Client.csproj" />
+</Solution>

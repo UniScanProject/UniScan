@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>14</LangVersion>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <Company>UniScan</Company>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <FileVersion>0.0.1</FileVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia"/>
+        <PackageReference Include="Avalonia.Labs.Controls" />
+        <PackageReference Include="Avalonia.Themes.Fluent"/>
+        <PackageReference Include="Avalonia.Fonts.Inter"/>
+        <PackageReference Include="AvaloniaUI.DiagnosticsSupport">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm"/>
+        <PackageReference Include="DialogHost.Avalonia" />
+        <PackageReference Include="DotNetty.Common" />
+        <PackageReference Include="Serilog.Extensions.Logging" />
+        <PackageReference Include="Serilog.Sinks.File" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\External\Shiki\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
+      <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
+      <ProjectReference Include="..\..\Core\UniScan.Platform.DependencyInjection\UniScan.Platform.DependencyInjection.csproj" />
+      <ProjectReference Include="..\..\Network\UniScan.Network.Client\UniScan.Network.Client.csproj" />
+      <ProjectReference Include="..\..\Network\UniScan.Network\UniScan.Network.csproj" />
+      <ProjectReference Include="..\UniScan.Client.Core\UniScan.Client.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Config\" />
+      <Folder Include="DI\" />
+      <Folder Include="DI\Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Pages\MainRemotePageView.axaml.cs">
+        <DependentUpon>MainRemotePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Pages\DisconnectedRemotePageView.axaml.cs">
+        <DependentUpon>DisconnectedRemotePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+</Project>

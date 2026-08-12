@@ -1,0 +1,25 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:UniScan.Client"
+             x:Class="UniScan.Client.App.UniScanApp"
+             RequestedThemeVariant="Default"
+             xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             xmlns:labs="clr-namespace:Avalonia.Labs.Controls;assembly=Avalonia.Labs.Controls"
+             xmlns:controls="clr-namespace:UniScan.Client.App.Views.Controls"
+             xmlns:app="clr-namespace:UniScan.Client.App"
+             xmlns:util="clr-namespace:UniScan.Client.App.Util">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <app:ViewLocator/>
+    </Application.DataTemplates>
+             
+             <Application.Resources>
+                 <util:RelativeUnitConverter x:Key="RelativeUnitConverter"/>
+             </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        <dialogHostAvalonia:DialogHostStyles />
+    </Application.Styles>
+</Application>

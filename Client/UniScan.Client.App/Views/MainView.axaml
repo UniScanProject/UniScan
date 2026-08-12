@@ -1,0 +1,66 @@
+<Border xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:UniScan.Client.App.ViewModels"
+        xmlns:controls="clr-namespace:UniScan.Client.App.Views.Controls"
+        xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+        x:Class="UniScan.Client.App.Views.MainView"
+        xmlns:labs="clr-namespace:Avalonia.Labs.Controls;assembly=Avalonia.Labs.Controls"
+        xmlns:viewModels="clr-namespace:UniScan.Client.App.ViewModels"
+        xmlns:controls1="clr-namespace:UniScan.Client.App.Views.Controls"
+        xmlns:controls2="clr-namespace:UniScan.Client.App.ViewModels.Controls"
+        xmlns:types="clr-namespace:UniScan.Client.Core.Config.Types;assembly=UniScan.Client.Core"
+        xmlns:vm1="clr-namespace:UniScan.Client.App.ViewModels"
+        xmlns:controls3="clr-namespace:UniScan.Client.App.Views.Controls"
+        xmlns:controls21="clr-namespace:UniScan.Client.App.ViewModels.Controls"
+        x:DataType="vm1:MainViewModel">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm1:MainViewModel />
+    </Design.DataContext>
+
+    <dialogHostAvalonia:DialogHost Identifier="MainDialogHost" DialogMargin="16">
+        <DrawerPage Content="{Binding CurrentSubpage}"
+                    DrawerLayoutBehavior="CompactInline">
+
+            <DrawerPage.Drawer>
+                <StackPanel Spacing="8" Margin="12">
+                    <controls3:HeadedSeparatorControl Text="Local" />
+                    <Button Content="Home" Command="{Binding OnHomeClicked}" />
+
+                    <controls3:HeadedSeparatorControl Text="Remote" />
+                    <!-- create remote list -->
+                    <ItemsControl x:Name="RemotesList" ItemsSource="{Binding RemotesView}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type controls21:RemoteControlViewModel}">
+                                <controls3:RemoteControlView />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        
+                        <ItemsControl.Styles>
+                            <Style Selector="controls3|RemoteControlView">
+                                <Setter Property="FlyoutBase.AttachedFlyout">
+                                    <MenuFlyout>
+                                        <MenuItem x:DataType="controls21:RemoteControlViewModel" Header="Connect" Command="{ReflectionBinding #RemotesList.((vm1:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
+                                        <MenuItem x:DataType="controls21:RemoteControlViewModel" Header="Remove" Command="{ReflectionBinding #RemotesList.((vm1:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
+                                    </MenuFlyout>
+                                </Setter>
+                                
+                                <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" />
+                            </Style>
+                        </ItemsControl.Styles>
+                    </ItemsControl>
+                    <StackPanel VerticalAlignment="Bottom">
+                        <Button Content="Add Remote" Command="{Binding OnAddRemoteClicked}" />
+                    </StackPanel>
+
+                    <controls3:HeadedSeparatorControl Text="Other" />
+                    <Button Content="Settings" Command="{Binding OnSettingsClicked}" />
+                </StackPanel>
+            </DrawerPage.Drawer>
+        </DrawerPage>
+    </dialogHostAvalonia:DialogHost>
+</Border>

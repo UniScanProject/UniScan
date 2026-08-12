@@ -1,0 +1,3 @@
+[submodule "External/Shiki"]
+	path = External/Shiki
+	url = https://git.dexrn.me/Dexrn/Shiki

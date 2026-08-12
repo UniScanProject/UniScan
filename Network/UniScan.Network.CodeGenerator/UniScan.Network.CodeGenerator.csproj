@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
+
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <IsRoslynComponent>true</IsRoslynComponent>
+        <Description>Codegen for UniScan.Network</Description>
+        <Copyright>DexrnZacAttack</Copyright>
+        <PackageProjectUrl>https://github.com/UniScanProject/UniScan</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/UniScanProject/UniScan/tree/main/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/UniScanProject/UniScan</RepositoryUrl>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <FileVersion>0.0.1</FileVersion>
+
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+        <Version>0.0.1</Version>
+        <Authors>DexrnZacAttack</Authors>
+        <Company>UniScan</Company>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Humanizer.Core" Version="3.0.10" GeneratePathProperty="true" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="5.6.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.6.0" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+            <ProjectReference Include="..\..\External\Shiki\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" />
+            <ProjectReference Include="..\..\External\Shiki\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" GeneratePathProperty="true" PrivateAssets="all" />
+    </ItemGroup>
+
+    <!-- https://github.com/dotnet/roslyn/issues/52017 -->
+    <PropertyGroup>
+        <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+    </PropertyGroup>
+
+    <Target Name="GetDependencyTargetPaths">
+        <MSBuild Projects="..\..\External\Shiki\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" Targets="GetTargetPath">
+            <Output TaskParameter="TargetOutputs" ItemName="ShikiOutput" />
+        </MSBuild>
+        
+        <ItemGroup>
+            <TargetPathWithTargetPlatformMoniker Include="$(PKGHumanizer_Core)\lib\netstandard2.0\Humanizer.dll" IncludeRuntimeDependency="false" />
+            <TargetPathWithTargetPlatformMoniker Include="@(ShikiOutput)" IncludeRuntimeDependency="false" />
+        </ItemGroup>
+    </Target>
+
+</Project>

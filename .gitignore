@@ -1,0 +1,11 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+/run
+.idea/
+.run/
+Client/UniScan.Client.App.Platform.Browser/
+Client/UniScan.Client.iOS/
+Client/UniScan.Client.App.Platform.iOS/
