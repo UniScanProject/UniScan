@@ -63,13 +63,13 @@ public class RemoteServer
     
     private readonly IServiceProvider _serviceProvider;
 
-    public RemoteServer(string displayName, IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators, IServiceProvider serviceProvider)
+    public RemoteServer(string displayName, IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider)
     {
         DisplayName = displayName;
         ConnectionMethod = connectionMethod;
         _serviceProvider = serviceProvider;
         
-        Socket = new ClientSocket(new UniScanClientChannelInitializer(PacketRegistry.Instance, configurators, _serviceProvider), ConnectionMethod);
+        Socket = new ClientSocket(new UniScanClientChannelInitializer(packetRegistry, configurators, _serviceProvider), ConnectionMethod);
         Socket.ConnectionState.Connected += (sender, args) =>
         {
             _connected.Value = true;
@@ -83,7 +83,7 @@ public class RemoteServer
         };
     }
     
-    public RemoteServer(RemoteDto dto, IEnumerable<IPipelineConfigurator> configurators, IServiceProvider serviceProvider) : this(dto.DisplayName, dto.ConnectionMethod, configurators, serviceProvider) {}
+    public RemoteServer(RemoteDto dto, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider) : this(dto.DisplayName, dto.ConnectionMethod, configurators, packetRegistry, serviceProvider) {}
 
     public async Task RunConnectionAsync()
     {

@@ -5,6 +5,7 @@ using UniScan.Network;
 using UniScan.Network.Client;
 using UniScan.Network.Client.Remote.Connection.Methods;
 using UniScan.Network.Packet.Packets.Serverbound;
+using UniScan.Network.Registry.Source.Sources;
 using UniScan.Network.Server;
 using UniScan.Server.Core;
 using UniScan.Server.Core.Module;
@@ -44,10 +45,11 @@ public class ServerConnectionTest
 
         ServiceCollection services = new();
         var sv = services.BuildServiceProvider();
+
+        PacketRegistry reg = new PacketRegistry();
+        reg.RegisterFromSource<AssembliesPacketSource>();
         
-        BuiltinPacketRegistrar.Register(PacketRegistry.Instance);
-        
-        ClientSocket client = new(new UniScanClientChannelInitializer(PacketRegistry.Instance, [], sv),
+        ClientSocket client = new(new UniScanClientChannelInitializer(reg, [], sv),
                                   new TCPRemoteConnectionMethod(new IPEndPoint(IPAddress.Any, 9000)));
         await client.StartAsync();
 

@@ -13,6 +13,7 @@ using UniScan.Client.Core.Module.Modules.Internal;
 using UniScan.Core.Serialization;
 using UniScan.Network;
 using UniScan.Network.Data.Info.Software;
+using UniScan.Network.Registry.Source.Sources;
 using UniScan.Network.Socket.Configuration;
 using UniScan.Platform;
 using Constants = UniScan.Core.Constants;
@@ -64,16 +65,14 @@ public class UniScanClient(
         
         services.AddKeyedSingleton("PolymorphicJsonOptions", PolymorphicJsonOptionsFactory.Get());
         services.AddSingleton<IRemoteFactory, RemoteFactory>();
+
+        services.AddSingleton<PacketRegistry>();
         
         ServiceProvider serviceProvider = services.BuildServiceProvider();
         
         logger.Information("Registering packets");
-
-        var packetConfigurators = serviceProvider.GetServices<IPacketConfigurator>();
-        foreach (IPacketConfigurator configurator in packetConfigurators)
-        {
-            configurator.ConfigurePackets(PacketRegistry.Instance);
-        }
+        PacketRegistry registry = serviceProvider.GetRequiredService<PacketRegistry>();
+        registry.RegisterFromSource<AssembliesPacketSource>();
 
         IRemoteFactory rf = serviceProvider.GetRequiredService<IRemoteFactory>();
         JsonSerializerOptions opt = serviceProvider.GetRequiredKeyedService<JsonSerializerOptions>("PolymorphicJsonOptions");

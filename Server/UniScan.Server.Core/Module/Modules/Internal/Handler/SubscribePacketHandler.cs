@@ -26,7 +26,7 @@ public class SubscribePacketHandler(ScannerHostManager scannerHostManager) : Sim
         {
             ctx.WriteAsync(new AcknowledgePacket(new TransportableBooleanResult(null), msg.RequestId));
             
-            ctx.WriteAsync(new ScannerInfoPacket(host.DisplayName, msg.RequestId, msg.ScannerIdentifier));
+            ctx.WriteAsync(new ScannerRegistrationPacket(host.DisplayName, msg.RequestId, msg.ScannerIdentifier));
             ctx.WriteAsync(new StatePacket(host.Scanner.State, msg.RequestId, host.Identifier));
             ctx.Flush();
             

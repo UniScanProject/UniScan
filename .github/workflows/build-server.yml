@@ -1,0 +1,102 @@
+# This starter workflow is for a CMake project running on multiple platforms. There is a different starter workflow if you just want a single platform.
+# See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-single-platform.yml
+name: Build UniScan Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: "Create release"
+        type: boolean
+        required: false
+        default: false
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-server:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        id: [
+          "win-x64", "win-x86", "win-arm64",
+          "linux-x64", "linux-arm", "linux-arm64", "linux-musl-x64", "linux-musl-arm64", "linux-bionic-arm64",
+          "osx-x64", "osx-arm64"
+        ]
+        type: ["Release", "Debug"]
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: 'recursive'
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Set reusable strings
+        # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/publish/${{matrix.id}}" >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+        run: >
+          dotnet publish ${{github.workspace}}/Server/UniScan.Server.Host
+          -c ${{matrix.type}}
+          -r ${{matrix.id}}
+          -o ${{steps.strings.outputs.build-output-dir}}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: UniScan.Server.Host_${{matrix.type}}_${{matrix.id}}
+          path: |
+            ${{steps.strings.outputs.build-output-dir}}
+            
+  release-server:
+    needs: build-server
+    if: ${{ inputs.create_release == true }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: 'recursive'
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: ./artifacts
+          pattern: UniScan.Server.Host_*
+          skip-decompress: true
+
+      - name: Move zips
+        run: |
+          mkdir -p ./zip
+          
+          find ./artifacts/ -mindepth 2 -maxdepth 2 -name "*.zip" -exec mv -t ./zip {} +
+
+      - name: Create release
+        if: ${{ inputs.create_release == true }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(dotnet msbuild ${{github.workspace}}/Server/UniScan.Server.Host/UniScan.Server.Host.csproj -nologo -getProperty:AssemblyVersion | xargs)
+          TAG=$(echo UniScan.Server.Host/$VERSION)
+          
+          gh release create "$TAG" \
+            ./zip/* \
+            --title "UniScan Server v$VERSION" \
+            --generate-notes

@@ -6,6 +6,7 @@ using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
 using UniScan.Core.Serialization;
 using UniScan.Network;
+using UniScan.Network.Registry.Source.Sources;
 using UniScan.Network.Server;
 using UniScan.Server.Authentication.Session;
 using UniScan.Server.Core;
@@ -25,6 +26,7 @@ class UniScanHost
     
     private readonly ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> _moduleStorage;
     private readonly ScannerMeta _scannerMeta;
+    private readonly PacketRegistry _packetRegistry;
 
     public UniScanHost(string rootDirectory)
     {
@@ -37,8 +39,10 @@ class UniScanHost
         //todo channel init????
         
         _jsonOptions = PolymorphicJsonOptionsFactory.Get();
+
+        _packetRegistry = new PacketRegistry();
         
-        _server = new UniScanServer(new SessionManager(), initializer => new ServerSocket(initializer, 9000), PacketRegistry.Instance, _moduleStorage);
+        _server = new UniScanServer(new SessionManager(), initializer => new ServerSocket(initializer, 9000), _packetRegistry, _moduleStorage);
         _scannerMeta = new ScannerMeta(_rootDirectory, _jsonOptions);
 
     }

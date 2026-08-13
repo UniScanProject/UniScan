@@ -15,6 +15,7 @@ using UniScan.Device.Device;
 using UniScan.Network;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Packet.Packets.Clientbound.Remote;
+using UniScan.Network.Registry.Source.Sources;
 using UniScan.Network.Server;
 using UniScan.Network.Server.Group;
 using UniScan.Network.Socket;
@@ -78,11 +79,7 @@ public class UniScanServer
         
         
         //init packets
-        var packetConfigurators = _serviceProvider.GetServices<IPacketConfigurator>();
-        foreach (IPacketConfigurator configurator in packetConfigurators)
-        {
-            configurator.ConfigurePackets(_packetRegistry);
-        } 
+        _packetRegistry.RegisterFromSource<AssembliesPacketSource>();
         
         //now init channel initializer
         var configurators = _serviceProvider.GetServices<IPipelineConfigurator>().ToImmutableList();

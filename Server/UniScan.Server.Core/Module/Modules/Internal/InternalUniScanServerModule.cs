@@ -27,7 +27,6 @@ public class InternalUniScanServerModule : IUniScanServerModule
 
         services.AddSingleton(new AcceptedClientPacketFilter());
         
-        services.AddSingleton<IPacketConfigurator, InternalUniScanServerPacketConfigurator>();
         services.AddSingleton<IPipelineConfigurator, InternalUniScanServerPipelineConfigurator>();
     }
 }
