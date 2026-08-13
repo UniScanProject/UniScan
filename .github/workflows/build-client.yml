@@ -107,7 +107,7 @@ jobs:
         with:
           name: UniScan.Client_${{matrix.type}}_${{matrix.id}}
           path: |
-            ${{steps.strings.outputs.build-output-dir}}
+            ${{steps.strings.outputs.build-output-dir}}/*.apk
   
   release-client:
     needs: [build-client-desktop, build-client-android]

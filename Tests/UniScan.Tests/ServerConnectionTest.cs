@@ -46,7 +46,7 @@ public class ServerConnectionTest
         ServiceCollection services = new();
         var sv = services.BuildServiceProvider();
 
-        PacketRegistry reg = new PacketRegistry();
+        PacketRegistry reg = new();
         reg.RegisterFromSource<AssembliesPacketSource>();
         
         ClientSocket client = new(new UniScanClientChannelInitializer(reg, [], sv),

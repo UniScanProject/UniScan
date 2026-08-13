@@ -2,8 +2,6 @@ using System.Reflection;
 using Serilog;
 using Shiki.Common.Collections;
 using Shiki.Common.Identity;
-using Shiki.Common.Util;
-using UniScan.Network.Registry;
 using UniScan.Network.Registry.Source;
 
 namespace UniScan.Network;
@@ -31,22 +29,7 @@ public class PacketRegistry
     public void RegisterFromSource(IPacketSource packetSource)
     {
         foreach ((Type pk, RegistryPacketAttribute? rpk) in packetSource.GetPacketTypes())
-        {
-            if (rpk == null)
-            {
-                throw new
-                    ArgumentException($"Attempted to register packet with type {pk.FullName}, however required attribute {typeof(RegistryPacketAttribute).FullName} is NOT present");
-            }
-
-            if (_packets.PrimaryContainsKey(rpk.Id))
-            {
-                throw new
-                    InvalidOperationException($"Attempted to register packet of type '{pk.FullName}' with id '{rpk.Id}' that is already registered by packet with type '{_packets[rpk.Id].FullName}'");
-            }
-            
-            _packets.Add(rpk.Id, pk);
-            _logger.Information("Registered packet type {Id}", rpk.Id);
-        }
+            Register(pk, rpk);
     }
 
 
@@ -59,7 +42,20 @@ public class PacketRegistry
                 ArgumentException($"Attempted to register packet with type {packetType.FullName}, however required attribute {typeof(RegistryPacketAttribute).FullName} is NOT present");
         }
 
-        this._packets.Add(p.Id, packetType);
-        _logger.Information("Registered packet type {Id}", p.Id);
+        this.Register(packetType, p);
+    }
+
+    private void Register(Type packet, RegistryPacketAttribute attr)
+    {
+        ArgumentNullException.ThrowIfNull(attr);
+
+        if (_packets.PrimaryContainsKey(attr.Id))
+        {
+            throw new
+                InvalidOperationException($"Attempted to register packet of type '{packet.FullName}' with id '{attr.Id}' that is already registered by packet with type '{_packets[attr.Id].FullName}'");
+        }
+            
+        _packets.Add(attr.Id, packet);
+        _logger.Information("Registered packet type {Id}", attr.Id);
     }
 }
