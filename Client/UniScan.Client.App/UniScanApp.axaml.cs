@@ -47,7 +47,7 @@ public partial class UniScanApp : Application
     public static readonly ClientSoftwareInfo SoftwareInfo = new(
                                                                  Identifier,
                                                                  SemVersion.FromVersion(Assembly.GetCallingAssembly().Version),
-                                                                 1,
+                                                                 Network.Constants.ProtocolVersion,
                                                                  "UniScan Client",
                                                                  "https://github.com/UniScanProject/UniScan"
                                                                 );
