@@ -128,7 +128,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           path: ./artifacts
-          pattern: UniScan.Client_Release_*
+          pattern: UniScan.Client_*
           skip-decompress: true
           
       - name: Move zips
