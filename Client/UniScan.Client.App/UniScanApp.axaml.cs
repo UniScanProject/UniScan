@@ -127,24 +127,6 @@ public partial class UniScanApp : Application
         
         ServiceProvider = services.BuildServiceProvider();
 
-        await using Stream stream =
-            await _hostEnvironment.FileManager.GetStreamAsync("test.shit", FileMode.Create, FileAccess.Write,
-                                                              FileShare.None);
-
-
-        var garbage = new
-        {
-            Hello = "World"
-        };
-        try
-        {
-            await JsonSerializer.SerializeAsync(stream, garbage);
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "dhfjshfjkd");
-        }
-
         await client.RemoteManagerFile.SaveAsync(client.RemoteManager);
         LoadingComplete?.Invoke();
     }
