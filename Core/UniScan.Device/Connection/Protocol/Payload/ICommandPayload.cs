@@ -1,4 +1,4 @@
-using UniScan.Device.Connection.Protocol.Command;
+using UniScan.Device.Connection.Command.Protocol;
 
 namespace UniScan.Device.Connection.Protocol.Payload;
 

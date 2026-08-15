@@ -1,13 +1,12 @@
 using System.Buffers;
 using System.IO.Ports;
 using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 using Shiki.Common.Serialization.Polymorphism;
 
-namespace UniScan.Device.Connection.Method;
+namespace UniScan.Device.Connection.Transport;
 
 [PolymorphicSerializable<ITransport>("Serial")]
-public class SerialTransport : ITransport
+public class SerialTransport : ITransport<ReadOnlyMemory<byte>>
 {
     [JsonPropertyName("port")]
     [JsonInclude]

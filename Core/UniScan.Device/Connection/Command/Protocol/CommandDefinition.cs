@@ -1,12 +1,10 @@
 using System.Buffers;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using Shiki.Common.Result;
 using UniScan.Device.Connection.Protocol.Payload;
 using UniScan.Device.Connection.Protocol.Payload.IO;
 using UniScan.Device.Connection.Protocol.Payload.IO.Exception;
 
-namespace UniScan.Device.Connection.Protocol.Command;
+namespace UniScan.Device.Connection.Command.Protocol;
 
 public interface ICommandDefinition<TOpCode>
     where TOpCode : notnull

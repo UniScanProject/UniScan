@@ -1,11 +1,11 @@
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using Serilog;
-using UniScan.Device.Connection.Protocol.Command;
+using UniScan.Device.Connection.Protocol;
 using UniScan.Device.Connection.Protocol.Payload;
 using UniScan.Device.Connection.Protocol.Payload.IO.Exception;
 
-namespace UniScan.Device.Connection.Protocol;
+namespace UniScan.Device.Connection.Command.Protocol;
 
 public class CommandPacketReceivedEventArgs<TOpCode>(TOpCode opCode, IScannerPayload payload) : PacketReceivedEventArgs(payload)
 where TOpCode : notnull

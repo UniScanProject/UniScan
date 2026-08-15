@@ -6,7 +6,8 @@ using Serilog;
 using UniScan.Core.State;
 using UniScan.Core.State.Display;
 using UniScan.Device.Connection;
-using UniScan.Device.Connection.Method;
+using UniScan.Device.Connection.Command;
+using UniScan.Device.Connection.Transport;
 
 namespace UniScan.Device.Device;
 

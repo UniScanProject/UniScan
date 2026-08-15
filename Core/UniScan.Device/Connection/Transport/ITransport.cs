@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace UniScan.Device.Connection.Method;
+namespace UniScan.Device.Connection.Transport;
 
 /// <summary>
 /// Connection method, used to connect and send data to a Scanner
@@ -22,8 +22,6 @@ public interface ITransport : IAsyncDisposable, IDisposable
     /// Closes the connection
     /// </summary>
     public Task CloseAsync();
-
-    public ValueTask SendAsync(ReadOnlyMemory<byte> buffer, CancellationToken ct = default);
     
     /// <summary>
     /// Fired when the connection state changes
@@ -31,12 +29,18 @@ public interface ITransport : IAsyncDisposable, IDisposable
     public event EventHandler<bool>? ConnectionStateChanged;
     
     /// <summary>
-    /// Fired when the there is data ready to read
-    /// </summary>
-    public event EventHandler<ReadOnlyMemory<byte>>? DataReceived;
-    
-    /// <summary>
     /// Fired when an error was encountered in transport
     /// </summary>
     public event EventHandler<Exception>? Error;
+}
+
+public interface ITransport<TData> : ITransport
+{
+    /// <summary>
+    /// Fired when the there is data ready to read
+    /// </summary>
+    public event EventHandler<TData>? DataReceived;
+    
+    public ValueTask SendAsync(TData data, CancellationToken ct = default);
+
 }
