@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <CompressionEnabled>false</CompressionEnabled>
+        <PublishTrimmed>false</PublishTrimmed>
+        <RunAOTCompilation>false</RunAOTCompilation>
+
+        <CompressionEnabled>false</CompressionEnabled>
+        <WasmEnableHotReload>false</WasmEnableHotReload>
+        <Version>0.0.1</Version>
+        <Title>UniScan Web</Title>
+        <Authors>UniScanProject</Authors>
+        <Description>Web frontend for UniScan</Description>
+        <Copyright>UniScanProject</Copyright>
+        <PackageProjectUrl>https://uniscan.dexrn.me</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/UniScanProject/UniScan</RepositoryUrl>
+        <Company>UniScanProject</Company>
+        <Product>UniScan Web</Product>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <TrimmerRootAssembly Include="UniScan.Client.App" />
+        <TrimmerRootAssembly Include="UniScan.Client.Core" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Avalonia.Browser" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" />
+        <PackageReference Include="Serilog.Sinks.Avalonia.Browser" />
+        <PackageReference Include="SpawnDev.SpawnJS" />
+        <PackageReference Include="SpawnDev.SpawnJS.WebWorkers" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\UniScan.Client.App\UniScan.Client.App.csproj" />
+    </ItemGroup>
+</Project>

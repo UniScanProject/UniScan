@@ -4,20 +4,20 @@ using UniScan.Device.Connection.Protocol.Payload;
 
 namespace UniScan.Device.Connection.Protocol;
 
-public class PacketReceivedEventArgs(IScannerPayload payload) : EventArgs
+public class PacketReceivedEventArgs<TPayload>(TPayload payload) : EventArgs
 {
-    public IScannerPayload Payload { get; } = payload;
+    public TPayload Payload { get; } = payload;
 }
 
 /// <summary>
 /// Decodes received payloads from the remote scanner for the Connection to use.
 /// </summary>
-public interface IScannerProtocol
+public interface IScannerProtocol<TPayload>
 {
     /// <summary>
     /// Fired when a payload has been decoded into a Packet and is ready for handlers to use
     /// </summary>
-    public event EventHandler<PacketReceivedEventArgs> PacketReceived;
+    public event EventHandler<PacketReceivedEventArgs<TPayload>> PacketReceived;
 
     /// <summary>
     /// Logger for the protocol

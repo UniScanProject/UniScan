@@ -40,11 +40,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScan.Tests", "Tests\UniS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScan.Modules.DebugModule", "Modules\UniScan.Modules.DebugModule\UniScan.Modules.DebugModule.csproj", "{A437AC3A-3E9C-4415-9EA4-9102FE2F2B2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScan.Platform", "Core\UniScan.Platform\UniScan.Platform.csproj", "{6CFBCD30-49F0-41C9-8F4C-E5DFA85821F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScan.Platform", "Core\Platform\UniScan.Platform\UniScan.Platform.csproj", "{6CFBCD30-49F0-41C9-8F4C-E5DFA85821F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScan.Platform.Implementations.Native", "Core\UniScan.Platform.Implementations.Native\UniScan.Platform.Implementations.Native.csproj", "{887FE3AC-F5FA-486C-AB91-D150C4D44ECB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScan.Platform.Implementations.Native", "Core\Platform\UniScan.Platform.Implementations.Native\UniScan.Platform.Implementations.Native.csproj", "{887FE3AC-F5FA-486C-AB91-D150C4D44ECB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScan.Platform.DependencyInjection", "Core\UniScan.Platform.DependencyInjection\UniScan.Platform.DependencyInjection.csproj", "{0E944EB4-F96B-4974-9D3B-0A69A04B6EC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScan.Platform.DependencyInjection", "Core\Platform\UniScan.Platform.DependencyInjection\UniScan.Platform.DependencyInjection.csproj", "{0E944EB4-F96B-4974-9D3B-0A69A04B6EC0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{B3BDC4BB-0FAA-497D-9899-1C9AFD4FB846}"
 EndProject
@@ -71,6 +71,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{1CB42219-C615-4DA3-9D58-E8F029118BB6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shiki.Extensions.MessagePack", "External\Shiki\Extensions\Shiki.Extensions.MessagePack\Shiki.Extensions.MessagePack.csproj", "{90BA2CC2-6F59-4413-A816-D4C736AF4C61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniScan.Client.App.Platform.Browser", "Client\UniScan.Client.App.Platform.Browser\UniScan.Client.App.Platform.Browser.csproj", "{0C1C6F1B-F856-427D-9024-6590B3ACCEE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -178,6 +180,10 @@ Global
 		{90BA2CC2-6F59-4413-A816-D4C736AF4C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90BA2CC2-6F59-4413-A816-D4C736AF4C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90BA2CC2-6F59-4413-A816-D4C736AF4C61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C1C6F1B-F856-427D-9024-6590B3ACCEE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C1C6F1B-F856-427D-9024-6590B3ACCEE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C1C6F1B-F856-427D-9024-6590B3ACCEE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C1C6F1B-F856-427D-9024-6590B3ACCEE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,5 +218,6 @@ Global
 		{A2277F84-222B-42B1-82F8-D9EAF78756B6} = {9FD5F972-08C7-4585-A029-8201B2C344D0}
 		{1CB42219-C615-4DA3-9D58-E8F029118BB6} = {9FD5F972-08C7-4585-A029-8201B2C344D0}
 		{90BA2CC2-6F59-4413-A816-D4C736AF4C61} = {1CB42219-C615-4DA3-9D58-E8F029118BB6}
+		{0C1C6F1B-F856-427D-9024-6590B3ACCEE1} = {5BDC23D5-43E0-4A5D-BB4E-A3CF43D12389}
 	EndGlobalSection
 EndGlobal

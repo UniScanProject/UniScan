@@ -4,5 +4,9 @@ public interface IPlatformFileManager
 {
     public Task<bool> ExistsAsync(string path);
     public Task CopyAsync(string from, string to, bool overwrite);
+    public Task MoveAsync(string from, string to, bool overwrite);
+
+    Task DeleteAsync(string path);
+
     public Task<Stream> GetStreamAsync(string path, FileMode mode, FileAccess access, FileShare share);
 }

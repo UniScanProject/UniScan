@@ -1,0 +1,15 @@
+{
+    "runtimeOptions": {
+      "configProperties": {
+        "System.Threading.Tasks.TaskScheduler.ThrowOnUnobservedTaskException": true
+      }
+    },
+    "wasmHostProperties": {
+        "perHostConfig": [
+            {
+                "name": "browser",
+                "Host": "browser"
+            }
+        ]
+    }
+}

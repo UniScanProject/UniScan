@@ -1,44 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-    <!-- https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management -->
-    <PropertyGroup>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    </PropertyGroup>
-    <ItemGroup>
-        <!-- Avalonia packages -->
-        <!-- Important: keep version in sync! -->
-        <PackageVersion Include="Avalonia" Version="12.1.1"/>
-        <PackageVersion Include="Avalonia.Browser.Blazor" Version="11.3.20"/>
-        <PackageVersion Include="Avalonia.Labs.Controls" Version="12.0.2"/>
-        <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.1"/>
-        <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.1.1"/>
-        <PackageVersion Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3"/>
-        <PackageVersion Include="Avalonia.Desktop" Version="12.1.1"/>
-        <PackageVersion Include="Avalonia.iOS" Version="12.1.1"/>
-        <PackageVersion Include="Avalonia.Browser" Version="12.1.1"/>
-        <PackageVersion Include="Avalonia.Android" Version="12.1.1"/>
-        <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
-        <PackageVersion Include="DialogHost.Avalonia" Version="0.12.3"/>
-        <PackageVersion Include="DotNetty.Common" Version="0.7.6"/>
-        <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.11"/>
-        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11"/>
-        <PackageVersion Include="ObservableCollections.R3" Version="3.3.4"/>
-        <PackageVersion Include="R3" Version="1.3.1"/>
-        <PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0"/>
-        <PackageVersion Include="Serilog.Sinks.Avalonia.Browser" Version="2.0.0"/>
-        <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0"/>
-        <PackageVersion Include="SpawnDev.SpawnJS" Version="1.1.13"/>
-        <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.2.0.3"/>
-
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Common" Version="2.11.0.1"/>
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Common.Jvm" Version="2.11.0.1"/>
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.LiveData.Core" Version="2.11.0.1"/>
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Process" Version="2.11.0.1"/>
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Runtime" Version="2.11.0.1"/>
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Runtime.Android" Version="2.11.0.1"/>
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.ViewModel" Version="2.11.0.1"/>
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.ViewModel.Android" Version="2.11.0.1"/>
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.ViewModelSavedState" Version="2.11.0.1"/>
-        <PackageVersion Include="Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android" Version="2.11.0.1"/>
-    </ItemGroup>
+  <!-- https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Avalonia packages -->
+    <!-- Important: keep version in sync! -->
+    <PackageVersion Include="Avalonia" Version="12.1.1" />
+    <PackageVersion Include="Avalonia.Browser.Blazor" Version="11.3.20" />
+    <PackageVersion Include="Avalonia.Labs.Controls" Version="12.0.2" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.1" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.1.1" />
+    <PackageVersion Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.1.1" />
+    <PackageVersion Include="Avalonia.iOS" Version="12.1.1" />
+    <PackageVersion Include="Avalonia.Browser" Version="12.1.1" />
+    <PackageVersion Include="Avalonia.Android" Version="12.1.1" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageVersion Include="DialogHost.Avalonia" Version="0.12.3" />
+    <PackageVersion Include="DotNetty.Common" Version="0.7.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11" />
+    <PackageVersion Include="ObservableCollections.R3" Version="3.3.4" />
+    <PackageVersion Include="R3" Version="1.3.1" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Avalonia.Browser" Version="2.0.0" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageVersion Include="SpawnDev.SpawnJS" Version="2.1.8" />
+    <PackageVersion Include="SpawnDev.SpawnJS.WebWorkers" Version="2.1.3" />
+    <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.2.0.3" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Common" Version="2.11.0.1" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Common.Jvm" Version="2.11.0.1" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.LiveData.Core" Version="2.11.0.1" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Process" Version="2.11.0.1" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Runtime" Version="2.11.0.1" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Runtime.Android" Version="2.11.0.1" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.ViewModel" Version="2.11.0.1" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.ViewModel.Android" Version="2.11.0.1" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.ViewModelSavedState" Version="2.11.0.1" />
+    <PackageVersion Include="Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android" Version="2.11.0.1" />
+  </ItemGroup>
 </Project>

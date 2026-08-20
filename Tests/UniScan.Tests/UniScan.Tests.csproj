@@ -39,8 +39,8 @@
       <ProjectReference Include="..\..\Client\UniScan.Client.App\UniScan.Client.App.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
-      <ProjectReference Include="..\..\Core\UniScan.Platform.DependencyInjection\UniScan.Platform.DependencyInjection.csproj" />
-      <ProjectReference Include="..\..\Core\UniScan.Platform.Implementations.Native\UniScan.Platform.Implementations.Native.csproj" />
+      <ProjectReference Include="..\..\Core\Platform\UniScan.Platform.DependencyInjection\UniScan.Platform.DependencyInjection.csproj" />
+      <ProjectReference Include="..\..\Core\Platform\UniScan.Platform.Implementations.Native\UniScan.Platform.Implementations.Native.csproj" />
       <ProjectReference Include="..\..\Modules\UniScan.Modules.DebugModule\UniScan.Modules.DebugModule.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network.Client\UniScan.Network.Client.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network.Server\UniScan.Network.Server.csproj" />

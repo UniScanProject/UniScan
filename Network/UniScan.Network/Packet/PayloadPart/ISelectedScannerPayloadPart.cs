@@ -1,4 +1,6 @@
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 
 namespace UniScan.Network.Packet.PayloadPart;
 
@@ -13,5 +15,5 @@ public interface ISelectedScannerPayloadPart
     // TODO turn into Identifier and require an Identifier on each Host, move Name from Scanner to Host if not already done
     // They should consist of a display name and internal ID
     
-    public abstract Identifier ScannerIdentifier { get; }
+    public abstract Slug<SnakeSlugFormatter> ScannerIdentifier { get; }
 };

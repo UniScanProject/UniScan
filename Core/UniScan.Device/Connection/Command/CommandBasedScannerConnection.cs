@@ -10,7 +10,7 @@ using UniScan.Device.Connection.Transport;
 
 namespace UniScan.Device.Connection.Command;
 
-public abstract class CommandBasedScannerConnection<TOpCode, TProtocol> : ScannerConnection<ReadOnlyMemory<byte>>, ICommandBasedScannerConnection<TOpCode>
+public abstract class CommandBasedScannerConnection<TOpCode, TProtocol> : ScannerConnection<ReadOnlyMemory<byte>, IScannerPayload>, ICommandBasedScannerConnection<TOpCode>
     where TOpCode : notnull
     where TProtocol : CommandBasedScannerProtocol<TOpCode>
 {

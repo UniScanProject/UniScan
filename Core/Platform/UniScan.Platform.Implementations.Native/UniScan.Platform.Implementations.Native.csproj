@@ -5,8 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Company>UniScan</Company>
-        <AssemblyVersion>0.0.1</AssemblyVersion>
-        <FileVersion>0.0.1</FileVersion>
+        <AssemblyVersion>0.0.2</AssemblyVersion>
+        <FileVersion>0.0.2</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>

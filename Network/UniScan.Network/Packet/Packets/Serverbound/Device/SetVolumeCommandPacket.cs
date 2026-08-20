@@ -1,4 +1,6 @@
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Network.Packet.PayloadPart;
 using UniScan.Network.User.Permission;
 
@@ -6,4 +8,4 @@ namespace UniScan.Network.Packet.Packets.Serverbound.Device;
 
 [RegistryPacket("UniScan", "packet", "serverbound", "device", "set_volume")]
 [RequiredHandlerPermission("UniScan", "permission", "device", "set_volume")]
-public record SetVolumeCommandPacket(int Volume, Identifier ScannerIdentifier) : IServerboundPacket, ISelectedScannerPayloadPart, IRequiresAuthenticationPayloadPart<SetVolumeCommandPacket>;
+public record SetVolumeCommandPacket(int Volume, Slug<SnakeSlugFormatter> ScannerIdentifier) : IServerboundPacket, ISelectedScannerPayloadPart, IRequiresAuthenticationPayloadPart<SetVolumeCommandPacket>;

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>UniScan Web</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel='shortcut icon' type='image/png' href='/assets/logo_512x512.png'>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded">
+        
+        <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Roboto:wght@400;500;700&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
+        
+        <link rel="stylesheet" href="./material/material.css"/>
+        <link rel="stylesheet" href="./material/light.css"/>
+        <link rel="stylesheet" href="./material/dark.css"/>
+        <link rel="stylesheet" href="./app.css"/>
+
+        <meta name='keywords' content='uniden, police scanner, webapp, avalonia, avaloniaui, client, police-scanner, police-scanner-audio, radio, radioreference, scanner, server'>
+        <meta name='description' content='Modular remote scanner/radio client'>
+        <meta name='url' content='https://uniscan.dexrn.me'>
+        <meta name='pagename' content='UniScan Web'>
+
+        <meta name='og:title' content='UniScan Web'>
+        <meta name='og:url' content='https://uniscan.dexrn.me'>
+        <meta name='og:site_name' content='UniScan Web'>
+        <meta name='og:description' content='Modular remote scanner/radio client'>
+
+        <meta name='application-name' content='UniScan'>
+        <meta name="apple-mobile-web-app-title" content="UniScan">
+        <meta name='apple-mobile-web-app-capable' content='yes'>
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name='apple-touch-fullscreen' content='yes'>
+        
+        <link rel='apple-touch-icon'                 href='/assets/logo_512x512.png'>
+        <link rel="apple-touch-icon" sizes="128x128" href="/assets/logo_128x128.png">
+        <link rel="apple-touch-icon" sizes="192x192" href="/assets/logo_192x192.png">
+        <link rel="apple-touch-icon" sizes="400x400" href="/assets/logo_400x400.png">
+        <link rel="apple-touch-icon" sizes="512x512" href="/assets/logo_512x512.png">
+        <link rel='apple-touch-startup-image' href='/assets/logo.png'>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <meta name="theme-color" content="#FFF0EE" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#231918" media="(prefers-color-scheme: dark)">
+
+        <link rel="manifest" href="/app.webmanifest" crossorigin="use-credentials" />
+
+        <meta name='msapplication-tooltip' content='Launch UniScan (Web)'>
+        
+        <script type="importmap">
+            {
+              "imports": {
+                "@material/web/": "https://esm.run/@material/web/",
+                "/avalonia.js": "./_framework/avalonia.js"
+              }
+            }
+        </script>
+        <script type="module">
+            import '@material/web/all.js';
+            import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+
+            document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+        </script>
+    </head>
+    
+    <body class="md-typescale-body-large">
+        <main class="content">
+            <md-appbar id="topbar" class="topbar">
+                <md-icon class="logo">cell_tower</md-icon><!-- TODO replace with actual monochrome icon!!!! -->
+                <h3>UniScan Web</h3>
+            </md-appbar>
+            
+            <div id="out" class="pane">
+                <div id="avalonia-progress-notifier" class="avalonia-splash loading">
+                    <div class="downloading-splash">
+                        <md-icon class="downloading-icon">downloading</md-icon>
+                        <h1 class="md-typescale-headline-large">Fetching WASM files</h1>
+                    </div>
+                    <md-linear-progress class="loading-progress" indeterminate aria-label="indeterminate downloading progress bar"></md-linear-progress>
+                </div>
+            </div>
+        </main>
+        <script type="module" src="js/reactivity.js"></script>
+        <script type="module" src="js/catch.js"></script>
+        <script type="module" src="main.module.js"></script>
+    </body>
+</html>

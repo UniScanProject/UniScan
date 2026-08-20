@@ -17,7 +17,7 @@ namespace UniScan.Network.Data.Info.Software;
 /// <param name="Url">Download/Info URL of the server software</param>
 [MessagePackObject]
 public record ServerSoftwareInfo(
-    [property: Key(0), MessagePackFormatter(typeof(IdentifierFormatter))]
+    [property: Key(0), MessagePackFormatter(typeof(IdentifierMessagePackFormatter))]
     Identifier Identifier,
     [property: Key(1), MessagePackFormatter(typeof(SemVersionFormatter))]
     SemVersion Version,

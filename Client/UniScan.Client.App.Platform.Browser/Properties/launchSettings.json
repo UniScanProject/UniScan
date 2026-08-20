@@ -1,0 +1,15 @@
+{
+    "profiles": {
+    "UniScan.Client.Browser": {
+        "commandName": "Project",
+        "launchBrowser": true,
+        "hotReloadEnabled": false,
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        },
+        "applicationUrl": "https://0.0.0.0:7169;http://0.0.0.0:5235",
+        "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+        "commandLineArgs": "--apply-cop-headers"
+      }
+    }
+}

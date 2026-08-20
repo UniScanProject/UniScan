@@ -13,5 +13,19 @@ public class NativeFileManager : IPlatformFileManager
         return Task.CompletedTask;
     }
 
+    public Task MoveAsync(string from, string to, bool overwrite)
+    {
+        File.Move(from, to, overwrite);
+        
+        return Task.CompletedTask;
+    }
+
+    public Task DeleteAsync(string path)
+    {
+        File.Delete(path);
+        
+        return Task.CompletedTask;
+    }
+
     public Task<Stream> GetStreamAsync(string path, FileMode mode, FileAccess access, FileShare share) => Task.FromResult<Stream>(File.Open(path, mode, access, share));
 }

@@ -17,7 +17,7 @@ namespace UniScan.Network.Data.Info.Software;
 /// <param name="Url">Download/Info URL of the client software</param>
 [MessagePackObject]
 public record ClientSoftwareInfo(
-    [property: Key(0), MessagePackFormatter(typeof(IdentifierFormatter))] Identifier Identifier,
+    [property: Key(0), MessagePackFormatter(typeof(IdentifierMessagePackFormatter))] Identifier Identifier,
     [property: Key(1), MessagePackFormatter(typeof(SemVersionFormatter))] SemVersion Version,
     [property: Key(2)] int ProtocolVersion,
     [property: Key(3)] string DisplayName,

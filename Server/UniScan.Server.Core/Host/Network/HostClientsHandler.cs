@@ -2,6 +2,8 @@ using DotNetty.Common.Concurrency;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Groups;
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Common.Util;
 using UniScan.Core.State;
 using UniScan.Device.Device;
@@ -12,12 +14,12 @@ namespace UniScan.Server.Core.Host.Network;
 
 public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
 {
-    private readonly Identifier _scannerId;
+    private readonly Slug<SnakeSlugFormatter> _scannerId;
     private readonly Scanner _scanner;
 
     private readonly SubscribableGroup _subscribers = new();
 
-    public HostClientsHandler(Identifier scannerId, Scanner scanner)
+    public HostClientsHandler(Slug<SnakeSlugFormatter> scannerId, Scanner scanner)
     {
         _scannerId = scannerId;
         _scanner = scanner;

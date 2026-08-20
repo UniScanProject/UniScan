@@ -49,18 +49,18 @@ class UniScanHost
     
     public async Task StartAsync()
     {
-        await this._scannerMeta.WriteSchemaAsync();
+        await _scannerMeta.WriteSchemaAsync();
         
-        foreach (var scanner in await this._scannerMeta.LoadDtosAsync())
+        foreach (var scanner in await _scannerMeta.LoadDtosAsync())
         {
             _server.ScannerManager.AddScanner(scanner.Key, scanner.Value.DisplayName, scanner.Value.Scanner);
         }
 
         //start scanners
-        await this._server.ScannerManager.StartAllAsync();
+        await _server.ScannerManager.StartAllAsync();
         
         //start server
-        await this._server.RunAsync();
+        await _server.RunAsync();
     }
 
     public async Task Stop()
@@ -68,7 +68,7 @@ class UniScanHost
         Log.Logger.Information("Stopping server...");
         
         _cts.Cancel();
-        await this._server.ExitAsync();
+        await _server.ExitAsync();
     }
 
     private static async Task Main(string[] args)

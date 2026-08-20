@@ -1,0 +1,25 @@
+{
+  "short_name": "UniScan",
+  "name": "UniScan Web",
+  "icons": [
+    {
+      "src": "/assets/logo_128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/logo_512x512.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/logo_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#231918",
+  "background_color": "#231918"
+}

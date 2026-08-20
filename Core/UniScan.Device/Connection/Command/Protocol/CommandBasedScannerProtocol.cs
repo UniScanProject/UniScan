@@ -7,7 +7,7 @@ using UniScan.Device.Connection.Protocol.Payload.IO.Exception;
 
 namespace UniScan.Device.Connection.Command.Protocol;
 
-public class CommandPacketReceivedEventArgs<TOpCode>(TOpCode opCode, IScannerPayload payload) : PacketReceivedEventArgs(payload)
+public class CommandPacketReceivedEventArgs<TOpCode>(TOpCode opCode, IScannerPayload payload) : PacketReceivedEventArgs<IScannerPayload>(payload)
 where TOpCode : notnull
 {
     public TOpCode OpCode { get; } = opCode;
@@ -20,11 +20,11 @@ where TOpCode : notnull
 /// 
 /// This base implementation provides helpers for command-based protocols
 /// </summary>
-public abstract class CommandBasedScannerProtocol<TOpCode> : IScannerProtocol
+public abstract class CommandBasedScannerProtocol<TOpCode> : IScannerProtocol<IScannerPayload>
     where TOpCode : notnull
 {
     /// <inheritdoc/>
-    public event EventHandler<PacketReceivedEventArgs>? PacketReceived;
+    public event EventHandler<PacketReceivedEventArgs<IScannerPayload>>? PacketReceived;
     public event EventHandler<CommandPacketReceivedEventArgs<TOpCode>>? CommandPacketReceived;
 
     /// <summary>

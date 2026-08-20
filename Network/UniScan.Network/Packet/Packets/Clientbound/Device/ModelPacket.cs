@@ -1,5 +1,7 @@
 using MessagePack;
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Network.Packet.PayloadPart;
 
 namespace UniScan.Network.Packet.Packets.Clientbound.Device;
@@ -8,6 +10,6 @@ namespace UniScan.Network.Packet.Packets.Clientbound.Device;
 [MessagePackObject]
 public readonly record struct ModelPacket(
     [property: Key(0)] string Model,
-    [property: Key(1)] Identifier ScannerIdentifier,
+    [property: Key(1)] Slug<SnakeSlugFormatter> ScannerIdentifier,
     [property: Key(2)] Guid? RequestId
 ) : IClientboundPacket, IResponsePayloadPart, ISelectedScannerPayloadPart;

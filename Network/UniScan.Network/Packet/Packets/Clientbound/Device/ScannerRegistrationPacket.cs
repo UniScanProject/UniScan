@@ -1,4 +1,6 @@
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Network.Packet.PayloadPart;
 
 namespace UniScan.Network.Packet.Packets.Clientbound.Device;
@@ -7,5 +9,5 @@ namespace UniScan.Network.Packet.Packets.Clientbound.Device;
 public record ScannerRegistrationPacket(
     string? DisplayName,
     Guid? RequestId,
-    Identifier ScannerIdentifier
+    Slug<SnakeSlugFormatter> ScannerIdentifier
 ) : IClientboundPacket, IResponsePayloadPart, ISelectedScannerPayloadPart;

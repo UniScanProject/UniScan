@@ -2,6 +2,8 @@ using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using Serilog;
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Common.Util;
 using UniScan.Device.Device;
 
@@ -9,10 +11,10 @@ namespace UniScan.Server.Core.Host;
 
 public class ScannerHostManager
 {
-    private readonly ConcurrentDictionary<Identifier, ScannerHost> _scanners = [];
-    public IReadOnlyDictionary<Identifier, ScannerHost> Scanners => _scanners;
+    private readonly ConcurrentDictionary<Slug<SnakeSlugFormatter>, ScannerHost> _scanners = [];
+    public IReadOnlyDictionary<Slug<SnakeSlugFormatter>, ScannerHost> Scanners => _scanners;
 
-    public bool AddScanner(Identifier identifier, string? displayName, Scanner scanner)
+    public bool AddScanner(Slug<SnakeSlugFormatter> identifier, string? displayName, Scanner scanner)
     {
         try
         {
@@ -33,7 +35,7 @@ public class ScannerHostManager
         }
     }
 
-    public bool AddScanner(Identifier identifier, Scanner scanner) =>
+    public bool AddScanner(Slug<SnakeSlugFormatter> identifier, Scanner scanner) =>
         AddScanner(identifier, null, scanner);
 
     public async Task StartAllAsync(CancellationToken ct = default)

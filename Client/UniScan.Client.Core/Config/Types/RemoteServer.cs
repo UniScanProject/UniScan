@@ -8,6 +8,8 @@ using R3;
 using Serilog;
 using Shiki.Common.Collections;
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Client.Core.Config.Remote;
 using UniScan.Core.State;
 using UniScan.Network;
@@ -51,7 +53,7 @@ public class RemoteServer
     /// <summary>
     /// cached list of devices
     /// </summary>
-    public ObservableDictionary<Identifier, DeviceDto> Devices { get; } = [];
+    public ObservableDictionary<Slug<SnakeSlugFormatter>, DeviceDto> Devices { get; } = [];
     
     //todo Make it cached
     public ServerSoftwareInfo? SoftwareInfo { get; private set; }

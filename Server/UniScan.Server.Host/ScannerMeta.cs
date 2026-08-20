@@ -2,6 +2,8 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Schema;
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Common.Util;
 using UniScan.Device.Device;
 using UniScan.Server.Core.Host;
@@ -21,7 +23,7 @@ public class ScannerMeta(string root, JsonSerializerOptions jsonOptions)
 
     public async Task WriteSchemaAsync() => await File.WriteAllTextAsync(Path.Combine(root, "scanner.schema.json"), GetSchema());
 
-    public async Task<Dictionary<Identifier, ScannerHostDto>> LoadDtosAsync()
+    public async Task<Dictionary<Slug<SnakeSlugFormatter>, ScannerHostDto>> LoadDtosAsync()
     {
         string p = Path.Combine(root, "scanners.json");
         
@@ -30,7 +32,7 @@ public class ScannerMeta(string root, JsonSerializerOptions jsonOptions)
             throw new FileNotFoundException("No scanners meta found");
         }
 
-        return JsonSerializer.Deserialize<Dictionary<Identifier, ScannerHostDto>>(await File.ReadAllTextAsync(p), jsonOptions) ?? [];
+        return JsonSerializer.Deserialize<Dictionary<Slug<SnakeSlugFormatter>, ScannerHostDto>>(await File.ReadAllTextAsync(p), jsonOptions) ?? [];
     }
 
     public async Task SaveAsync(ScannerHostManager hostManager)

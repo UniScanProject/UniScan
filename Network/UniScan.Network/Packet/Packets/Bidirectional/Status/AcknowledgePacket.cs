@@ -9,6 +9,6 @@ namespace UniScan.Network.Packet.Packets.Bidirectional.Status;
 [RegistryPacket("UniScan", "packet", "bidirectional", "status", "ack")]
 [MessagePackObject]
 public readonly record struct AcknowledgePacket(
-    [property: Key(0), MessagePackFormatter(typeof(TransportableBooleanResultFormatter))] TransportableBooleanResult Result,
+    [property: Key(0), MessagePackFormatter(typeof(TransportableBooleanResultMessagePackFormatter))] TransportableBooleanResult Result,
     [property: Key(1)] Guid? RequestId
 ) : IBidirectionalPacket, IResponsePayloadPart;

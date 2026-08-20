@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using Semver;
 using Serilog;
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Common.Util;
 using UniScan.Device.Device;
 using UniScan.Server.Core.Host.Network;
@@ -12,7 +14,7 @@ namespace UniScan.Server.Core.Host;
 public sealed class ScannerHost
 {
     [JsonIgnore]
-    public Identifier Identifier { get; } //when serialized, used as key in record instead
+    public Slug<SnakeSlugFormatter> Identifier { get; } //when serialized, used as key in record instead
     
     [JsonPropertyName("displayName")]
     public string? DisplayName { get; }
@@ -30,9 +32,9 @@ public sealed class ScannerHost
     
     public string DisplayString => DisplayName != null ? $"{DisplayName} ({Identifier})" : Identifier.ToString();
     
-    public ScannerHost(Identifier identifier, Scanner scanner) : this(identifier, null, scanner) {}
+    public ScannerHost(Slug<SnakeSlugFormatter> identifier, Scanner scanner) : this(identifier, null, scanner) {}
     
-    public ScannerHost(Identifier identifier, string? displayName, Scanner scanner)
+    public ScannerHost(Slug<SnakeSlugFormatter> identifier, string? displayName, Scanner scanner)
     {
         Identifier = identifier;
         DisplayName = displayName;

@@ -30,18 +30,19 @@ public class RemotesListFile(string root, IPlatformFileManager fileManager, IRem
         var r = new List<RemoteDto>();
         try
         {
-            await using Stream stream = await fileManager.GetStreamAsync(_path, FileMode.OpenOrCreate, FileAccess.Read, FileShare.None);
-            
+            await using Stream stream =
+                await fileManager.GetStreamAsync(_path, FileMode.OpenOrCreate, FileAccess.Read, FileShare.None);
+
             var deserialize = await JsonSerializer.DeserializeAsync<List<RemoteDto>>(stream, _jsonOptions);
             if (deserialize != null)
                 r = deserialize;
 
             await stream.FlushAsync();
         }
-        catch (JsonException ex)
+        catch (Exception ex)
         {
             _logger.Error(ex, "Failed to load remotes list! Will backup and create new file.");
-            
+
             await BackupAsync();
             return await SaveNewAsync();
         }
@@ -61,20 +62,27 @@ public class RemotesListFile(string root, IPlatformFileManager fileManager, IRem
         ArgumentNullException.ThrowIfNull(stored);
         
         await _lock.WaitAsync();
-        
+
         try
         {
-            await using Stream stream = await fileManager.GetStreamAsync(_path, FileMode.Create, FileAccess.Write, FileShare.None);
+            await using Stream stream =
+                await fileManager.GetStreamAsync(_path, FileMode.Create, FileAccess.Write, FileShare.None);
 
             Log.Information("{s}", stream);
-            
-            await JsonSerializer.SerializeAsync(stream, stored.Remotes.Select(RemoteDto.FromRemoteServer), _jsonOptions);
+
+            await JsonSerializer.SerializeAsync(stream, stored.Remotes.Select(RemoteDto.FromRemoteServer),
+                                                _jsonOptions);
 
             await stream.FlushAsync();
+
+            _logger.Information("Saved remotes to {Path}", _path);
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "Failed to save remotes to {Path}", _path);
         }
         finally
         {
-            _logger.Information("Saved remotes to {Path}", _path);
             _lock.Release();
         }
     }
@@ -85,9 +93,17 @@ public class RemotesListFile(string root, IPlatformFileManager fileManager, IRem
         {
             return;
         }
-        
-        await fileManager.CopyAsync(_path, GetBackupPath(), true);
-        _logger.Information("[BK] {Path} => {BackupPath}", _path, GetBackupPath());
+
+        try
+        {
+            await fileManager.CopyAsync(_path, GetBackupPath(), true);
+            _logger.Information("[BK] {Path} => {BackupPath}", _path, GetBackupPath());
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "Failed to backup remotes to {Path}", _path);
+            throw ex;
+        }
     }
 
     private string GetBackupPath() => Path.Combine(_root, $"remotes.{DateTime.Now:yyyyMMdd_HHmmss}.json.bak");
