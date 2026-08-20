@@ -51,6 +51,7 @@ jobs:
     needs: build-client-web
     permissions:
       id-token: write
+      pages: write
       contents: read
     steps:
       - name: Deploy to GitHub Pages
