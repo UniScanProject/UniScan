@@ -86,7 +86,7 @@ public class BrowserFileManager(WebWorkerService workerService, SpawnJSRuntime r
                 throw new NullReferenceException();
             
             IOPFSWorkerService f = worker.GetService<IOPFSWorkerService>();
-            string id = await f.OpenAsync(path, mode);
+            int id = await f.OpenAsync(path, mode);
             
             return new OriginPrivateFileStream(f, id, await f.GetSizeAsync(id));
         }

@@ -6,9 +6,10 @@ namespace UniScan.Client.App.Platform.Browser.Filesystem.Stream;
 public class OPFSWorkerService(BrowserFileManager fileManager) : IOPFSWorkerService
 {
     //I don't like this
-    private readonly Dictionary<string, FileSystemSyncAccessHandle> _handles = [];
+    private readonly Dictionary<int, FileSystemSyncAccessHandle> _handles = [];
+    private int _lastHandleId = 0;
     
-    public async Task<string> OpenAsync(string path, FileMode mode)
+    public async Task<int> OpenAsync(string path, FileMode mode)
     {
         if (mode == FileMode.CreateNew && await fileManager.ExistsAsync(path)) {
             throw new InvalidOperationException("File already exists");
@@ -27,13 +28,11 @@ public class OPFSWorkerService(BrowserFileManager fileManager) : IOPFSWorkerServ
             handle.Flush();
         }
 
-        string id = Guid.NewGuid().ToString();
-        _handles.Add(id, handle);
-        
-        return id;
+        _handles.Add(_lastHandleId, handle);
+        return _lastHandleId++;
     }
     
-    public async Task<byte[]> ReadAsync(string id, long offset, int count)
+    public async Task<byte[]> ReadAsync(int id, long offset, int count)
     {
         if (!_handles.TryGetValue(id, out _)) throw new ObjectDisposedException(nameof(id));
         
@@ -48,7 +47,7 @@ public class OPFSWorkerService(BrowserFileManager fileManager) : IOPFSWorkerServ
         return buffer;
     }
     
-    private Task<long> ReadIntoAsync(string id, byte[] buffer, long offset)
+    private Task<long> ReadIntoAsync(int id, byte[] buffer, long offset)
     {
         if (!_handles.TryGetValue(id, out FileSystemSyncAccessHandle? handle)) throw new ObjectDisposedException(nameof(id));
         
@@ -58,14 +57,14 @@ public class OPFSWorkerService(BrowserFileManager fileManager) : IOPFSWorkerServ
     }
 
     
-    public Task<long> WriteAsync(string id, byte[] buffer, int offset)
+    public Task<long> WriteAsync(int id, byte[] buffer, int offset)
     {
         if (!_handles.TryGetValue(id, out FileSystemSyncAccessHandle? handle)) throw new ObjectDisposedException(nameof(id));
         
         return Task.FromResult(handle.Write(buffer, new FileSystemSyncReadWriteOptions { At = offset }));
     }
 
-    public Task FlushAsync(string id)
+    public Task FlushAsync(int id)
     {
         if (!_handles.TryGetValue(id, out FileSystemSyncAccessHandle? handle)) throw new ObjectDisposedException(nameof(id));
         
@@ -74,7 +73,7 @@ public class OPFSWorkerService(BrowserFileManager fileManager) : IOPFSWorkerServ
         return Task.CompletedTask;
     }
 
-    public Task TruncateAsync(string id, long c)
+    public Task TruncateAsync(int id, long c)
     {
         if (!_handles.TryGetValue(id, out FileSystemSyncAccessHandle? handle)) throw new ObjectDisposedException(nameof(id));
         
@@ -83,7 +82,7 @@ public class OPFSWorkerService(BrowserFileManager fileManager) : IOPFSWorkerServ
         return Task.CompletedTask;
     }
 
-    public Task CloseAsync(string id)
+    public Task CloseAsync(int id)
     {
         if (_handles.Remove(id, out FileSystemSyncAccessHandle? handle))
         {
@@ -95,7 +94,7 @@ public class OPFSWorkerService(BrowserFileManager fileManager) : IOPFSWorkerServ
         return Task.CompletedTask;
     }
     
-    public Task<long> GetSizeAsync(string id)
+    public Task<long> GetSizeAsync(int id)
     {
         if (!_handles.TryGetValue(id, out FileSystemSyncAccessHandle? handle)) throw new ObjectDisposedException(nameof(id));   
         

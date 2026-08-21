@@ -3,7 +3,7 @@ using Array = System.Array;
 
 namespace UniScan.Client.App.Platform.Browser.Filesystem.Stream;
 
-public class OriginPrivateFileStream(IOPFSWorkerService worker, string id, long initialLength) : System.IO.Stream
+public class OriginPrivateFileStream(IOPFSWorkerService worker, int id, long initialLength) : System.IO.Stream
 {
     private bool _disposed;
     
@@ -115,6 +115,4 @@ public class OriginPrivateFileStream(IOPFSWorkerService worker, string id, long 
         
         base.Dispose(disposing);
     }
-
-
 }
