@@ -43,10 +43,11 @@ public partial class UniScanApp : Application
     private HostEnvironment _hostEnvironment = null!;
     
     public static readonly Identifier Identifier = UniScanClient.ClientIdentifier.Derived("app");
+    public static readonly SemVersion PlatformVersion = SemVersion.FromVersion(Assembly.GetEntryAssembly()!.Version);
     
     public static readonly ClientSoftwareInfo SoftwareInfo = new(
                                                                  Identifier,
-                                                                 SemVersion.FromVersion(Assembly.GetCallingAssembly().Version),
+                                                                 SemVersion.FromVersion(typeof(UniScanApp).Assembly.Version),
                                                                  Network.Constants.ProtocolVersion,
                                                                  "UniScan Client",
                                                                  "https://github.com/UniScanProject/UniScan"
