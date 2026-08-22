@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using UniScan.Client.App.ViewModels;
 
-namespace UniScan.Client.App;
+namespace UniScan.Client.App.UI;
 
 /// <summary>
 /// Given a view model, returns the corresponding view if possible.

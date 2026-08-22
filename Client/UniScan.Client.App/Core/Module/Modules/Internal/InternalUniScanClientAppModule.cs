@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shiki.Common.Identity;
 
-namespace UniScan.Client.App.Module.Modules.Internal;
+namespace UniScan.Client.App.Core.Module.Modules.Internal;
 
 public class InternalUniScanClientAppModule : IUniScanClientAppModule
 {

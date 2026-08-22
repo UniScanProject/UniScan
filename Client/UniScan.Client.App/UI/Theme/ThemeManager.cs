@@ -1,4 +1,4 @@
-namespace UniScan.Client.App.Theme;
+namespace UniScan.Client.App.UI.Theme;
 
 public class ThemeManager(ISystemAccentSource systemAccentSource)
 {

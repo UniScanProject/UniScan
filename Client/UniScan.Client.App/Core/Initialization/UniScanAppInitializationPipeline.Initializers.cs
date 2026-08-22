@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using UniScan.Client.App.ViewModels;
 using UniScan.Client.App.Views;
 
-namespace UniScan.Client.App.Initialization;
+namespace UniScan.Client.App.Core.Initialization;
 
 public partial class UniScanAppInitializationPipeline
 {

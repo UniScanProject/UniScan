@@ -1,8 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Shiki.Common.Factory;
 
-namespace UniScan.Client.App.Pipeline;
+namespace UniScan.Client.App.Core.Pipeline;
 
 public class TaskPipelineBuilder<TContext>
     where TContext : class, ITaskContext

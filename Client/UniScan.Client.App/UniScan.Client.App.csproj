@@ -4,9 +4,9 @@
         <Nullable>enable</Nullable>
         <LangVersion>14</LangVersion>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <Company>UniScan</Company>
-        <AssemblyVersion>0.0.8</AssemblyVersion>
-        <FileVersion>0.0.8</FileVersion>
+        <Company>UniScanProject</Company>
+        <AssemblyVersion>0.0.9</AssemblyVersion>
+        <FileVersion>0.0.9</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -44,12 +44,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Config\" />
-      <Folder Include="DI\" />
-      <Folder Include="DI\Services\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Update="Views\Pages\MainRemotePageView.axaml.cs">
         <DependentUpon>MainRemotePageView.axaml</DependentUpon>
         <SubType>Code</SubType>
@@ -81,5 +75,17 @@
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(UniScanPlatform)' != ''">
+        <DefineConstants>$(DefineConstants);$(UniScanPlatform)</DefineConstants>
+    </PropertyGroup>
+
+    <!-- THIS TOOK SO FUCKING LONG TO GET WORKING MY GOD -->
+    <ItemGroup Condition="'$(UniScanPlatform)' == 'browser'">
+        <Compile Remove="Views\ConnectionMethod\TCPConnectionMethodFactoryView.axaml.cs" />
+        <Compile Remove="Views\ConnectionMethod\TCPConnectionMethodFactoryView.axaml" />
+        
+        <AvaloniaXaml Remove="Views\ConnectionMethod\TCPConnectionMethodFactoryView.axaml" />
     </ItemGroup>
 </Project>

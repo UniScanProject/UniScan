@@ -1,6 +1,6 @@
 using R3;
 
-namespace UniScan.Client.App.Pipeline;
+namespace UniScan.Client.App.Core.Pipeline;
 
 public interface ITaskContext
 {

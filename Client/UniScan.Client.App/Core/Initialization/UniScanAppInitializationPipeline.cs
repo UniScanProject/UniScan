@@ -1,13 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using R3;
 using Serilog;
-using UniScan.Client.App.Pipeline;
-using UniScan.Client.App.ViewModels;
-using UniScan.Client.App.Views;
+using UniScan.Client.App.Core.Pipeline;
 
-namespace UniScan.Client.App.Initialization;
+namespace UniScan.Client.App.Core.Initialization;
 
 public partial class UniScanAppInitializationPipeline
 {

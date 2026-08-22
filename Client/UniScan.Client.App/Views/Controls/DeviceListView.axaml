@@ -7,7 +7,7 @@
              xmlns:pages="clr-namespace:UniScan.Client.App.ViewModels.Pages"
              xmlns:controls2="clr-namespace:UniScan.Client.App.ViewModels.Controls"
              xmlns:controls3="clr-namespace:UniScan.Client.App.Views.Controls"
-             xmlns:util="clr-namespace:UniScan.Client.App.Util"
+             xmlns:util="clr-namespace:UniScan.Client.App.UI.Util"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Controls.DeviceListView"
              x:DataType="controls2:DeviceListViewModel">

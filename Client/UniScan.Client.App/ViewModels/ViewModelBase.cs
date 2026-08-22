@@ -2,6 +2,6 @@
 
 namespace UniScan.Client.App.ViewModels;
 
-public abstract class ViewModelBase : ObservableObject
+public abstract class ViewModelBase : ObservableValidator
 {
 }

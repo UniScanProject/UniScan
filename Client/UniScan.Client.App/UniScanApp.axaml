@@ -7,12 +7,13 @@
              xmlns:labs="clr-namespace:Avalonia.Labs.Controls;assembly=Avalonia.Labs.Controls"
              xmlns:controls="clr-namespace:UniScan.Client.App.Views.Controls"
              xmlns:app="clr-namespace:UniScan.Client.App"
-             xmlns:util="clr-namespace:UniScan.Client.App.Util"
+             xmlns:ui="clr-namespace:UniScan.Client.App.UI"
+             xmlns:util="clr-namespace:UniScan.Client.App.UI.Util"
              Name="UniScan">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
-        <app:ViewLocator/>
+        <ui:ViewLocator/>
     </Application.DataTemplates>
              
              <Application.Resources>

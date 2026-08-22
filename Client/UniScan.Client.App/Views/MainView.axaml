@@ -21,45 +21,55 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm1:MainViewModel />
     </Design.DataContext>
-
+    
     <dialogHostAvalonia:DialogHost Identifier="MainDialogHost" DialogMargin="16">
         <DrawerPage Content="{Binding CurrentSubpage}"
-                    DrawerLayoutBehavior="CompactInline">
-
+                    DrawerLayoutBehavior="CompactOverlay" x:Name="MainDrawerPage">
             <DrawerPage.Drawer>
-                <StackPanel Spacing="8" Margin="12">
-                    <controls3:HeadedSeparatorControl Text="Local" />
-                    <Button Content="Home" Command="{Binding OnHomeClicked}" />
-
-                    <controls3:HeadedSeparatorControl Text="Remote" />
-                    <!-- create remote list -->
-                    <ItemsControl x:Name="RemotesList" ItemsSource="{Binding RemotesView}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="{x:Type controls21:RemoteControlViewModel}">
-                                <controls3:RemoteControlView />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        
-                        <ItemsControl.Styles>
-                            <Style Selector="controls3|RemoteControlView">
-                                <Setter Property="FlyoutBase.AttachedFlyout">
-                                    <MenuFlyout>
-                                        <MenuItem x:DataType="controls21:RemoteControlViewModel" Header="Connect" Command="{ReflectionBinding #RemotesList.((vm1:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
-                                        <MenuItem x:DataType="controls21:RemoteControlViewModel" Header="Remove" Command="{ReflectionBinding #RemotesList.((vm1:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
-                                    </MenuFlyout>
-                                </Setter>
-                                
-                                <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" />
-                            </Style>
-                        </ItemsControl.Styles>
-                    </ItemsControl>
-                    <StackPanel VerticalAlignment="Bottom">
-                        <Button Content="Add Remote" Command="{Binding OnAddRemoteClicked}" />
+                <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="12" RowSpacing="10">
+                    <StackPanel Spacing="10">
+                        <Button Content="Home" Command="{Binding OnHomeClicked}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Row="1" Spacing="10">
+                        <controls3:HeadedSeparatorControl Text="Local" />
+                        <!-- TODO local scanners!!! -->
                     </StackPanel>
 
-                    <controls3:HeadedSeparatorControl Text="Other" />
-                    <Button Content="Settings" Command="{Binding OnSettingsClicked}" />
-                </StackPanel>
+                    <Grid RowDefinitions="Auto, *, Auto" Grid.Row="2" RowSpacing="10">
+                        <controls3:HeadedSeparatorControl Text="Remote" Grid.Row="0" />
+                        <!-- create remote list -->
+                        <ScrollViewer Grid.Row="1">
+                            <ItemsControl x:Name="RemotesList" ItemsSource="{Binding RemotesView}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="{x:Type controls21:RemoteControlViewModel}">
+                                        <controls3:RemoteControlView />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                
+                                <ItemsControl.Styles>
+                                    <Style Selector="controls3|RemoteControlView">
+                                        <Setter Property="FlyoutBase.AttachedFlyout">
+                                            <MenuFlyout>
+                                                <MenuItem x:DataType="controls21:RemoteControlViewModel" Header="Connect" Command="{ReflectionBinding #RemotesList.((vm1:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
+                                                <MenuItem x:DataType="controls21:RemoteControlViewModel" Header="Remove" Command="{ReflectionBinding #RemotesList.((vm1:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
+                                            </MenuFlyout>
+                                        </Setter>
+                                        
+                                        <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" />
+                                    </Style>
+                                </ItemsControl.Styles>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        <StackPanel VerticalAlignment="Bottom" Grid.Row="2">
+                            <Button Content="Add Remote" Command="{Binding OnAddRemoteClicked}" HorizontalAlignment="Stretch" />
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Grid.Row="3" Spacing="10">
+                        <Button Content="Settings" Command="{Binding OnSettingsClicked}" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </Grid>
             </DrawerPage.Drawer>
         </DrawerPage>
     </dialogHostAvalonia:DialogHost>

@@ -1,4 +1,4 @@
-using UniScan.Client.App.Pipeline;
+using UniScan.Client.App.Core.Pipeline;
 
 namespace UniScan.Client.App.ViewModels;
 

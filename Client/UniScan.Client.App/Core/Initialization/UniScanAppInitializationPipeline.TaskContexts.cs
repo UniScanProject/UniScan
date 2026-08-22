@@ -1,10 +1,10 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
-using UniScan.Client.App.Pipeline;
+using UniScan.Client.App.Core.Pipeline;
 using UniScan.Client.Core;
 
-namespace UniScan.Client.App.Initialization;
+namespace UniScan.Client.App.Core.Initialization;
 
 public partial class UniScanAppInitializationPipeline
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace UniScan.Client.App.Pipeline;
+namespace UniScan.Client.App.Core.Pipeline;
 
 public class TaskStage<TOldContext, TContext> : ITaskStage
     where TOldContext : class, ITaskContext
