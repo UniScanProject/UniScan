@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Shiki.Common.Factory;
 
 namespace UniScan.Client.App.Pipeline;
 
@@ -35,6 +36,10 @@ public class TaskPipelineBuilder<TContext>
     public TaskPipelineBuilder<TNewContext> ThenTransitionTo<TNewContext>(Func<TContext, TNewContext> transition)
         where TNewContext : class, ITaskContext
     => new(_pipeline, new TaskStage<ITaskContext, TNewContext>(ctx => transition((TContext)ctx)));
-
+    
+    public TaskPipelineBuilder<TNewContext> ThenTransitionTo<TNewContext>()
+        where TNewContext : class, ITaskContext<TNewContext, TContext>
+        => new(_pipeline, new TaskStage<ITaskContext, TNewContext>(ctx => TNewContext.TransitionFrom((TContext)ctx)));
+    
     public TaskPipeline Build() => _pipeline;
 }

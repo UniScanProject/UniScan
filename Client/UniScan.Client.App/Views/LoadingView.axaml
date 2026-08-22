@@ -14,8 +14,8 @@
             <Image Source="../Assets/logo_512x512.png" Width="128" Height="128" VerticalAlignment="Top" Margin="0 0 0 10" />
             <TextBlock>Loading...</TextBlock>
             
-            <TextBlock Text="{Binding App.LoadPipeline.Pipeline.Status.Value}"/>
-            <ProgressBar Value="{Binding App.LoadPipeline.Pipeline.Progress.Value}" />
+            <TextBlock Text="{Binding TaskPipeline.Status.Value}"/>
+            <ProgressBar Value="{Binding TaskPipeline.Progress.Value}" />
         </StackPanel>
         
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Spacing="10">

@@ -1,16 +1,14 @@
 using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
-using Serilog;
 using UniScan.Client.App.Pipeline;
 using UniScan.Client.Core;
 
-namespace UniScan.Client.App;
+namespace UniScan.Client.App.Initialization;
 
-public class UniScanAppLoadPipeline
+public partial class UniScanAppInitializationPipeline
 {
-    internal static class LoadContexts
+    internal static partial class TaskContexts
     {
         public class Early : ITaskContext
         {
@@ -19,7 +17,7 @@ public class UniScanAppLoadPipeline
             public ServiceCollection ServiceCollection { get; } = new();
         }
 
-        public class PreClient(string status, ServiceCollection serviceCollection) : ITaskContext
+        public class PreClient(string status, ServiceCollection serviceCollection) : ITaskContext<PreClient, Early>
         {
             public BindableReactiveProperty<string> Status { get; } = new(status);
 
@@ -30,13 +28,15 @@ public class UniScanAppLoadPipeline
             public PreClient(Early ctx) : this(ctx.Status.CurrentValue, ctx.ServiceCollection)
             {
             }
+
+            public static PreClient TransitionFrom(Early oldContext) => new(oldContext);
         }
 
         public class PostClient(
             string status,
             ServiceCollection serviceCollection,
             UniScanClient client)
-            : ITaskContext
+            : ITaskContext<PostClient, PreClient>
         {
             public BindableReactiveProperty<string> Status { get; } = new(status);
 
@@ -48,13 +48,15 @@ public class UniScanAppLoadPipeline
                                                     ctx.Client ?? throw new NullReferenceException())
             {
             }
+
+            public static PostClient TransitionFrom(PreClient oldContext) => new(oldContext);
         }
 
         public class PreServiceProvider(
             string status,
             ServiceCollection serviceCollection,
             UniScanClient client)
-            : ITaskContext
+            : ITaskContext<PreServiceProvider, PostClient>
         {
             public BindableReactiveProperty<string> Status { get; } = new(status);
 
@@ -68,6 +70,8 @@ public class UniScanAppLoadPipeline
                                                              ctx.Client ?? throw new NullReferenceException())
             {
             }
+
+            public static PreServiceProvider TransitionFrom(PostClient oldContext) => new(oldContext);
         }
 
         public class PostServiceProvider(
@@ -75,7 +79,7 @@ public class UniScanAppLoadPipeline
             ServiceCollection serviceCollection,
             UniScanClient client,
             IServiceProvider provider)
-            : ITaskContext
+            : ITaskContext<PostServiceProvider, PreServiceProvider>
         {
             public BindableReactiveProperty<string> Status { get; } = new(status);
 
@@ -91,53 +95,8 @@ public class UniScanAppLoadPipeline
                                                                       throw new NullReferenceException())
             {
             }
+
+            public static PostServiceProvider TransitionFrom(PreServiceProvider oldContext) => new(oldContext);
         }
-    }
-
-    public TaskPipeline Pipeline { get; }
-    private ILogger? _logger = null;
-    private IDisposable _subscription;
-
-    public UniScanAppLoadPipeline(UniScanApp app)
-    {
-        Pipeline = new TaskPipelineBuilder<LoadContexts.Early>()
-                  .ThenRun(app.InitializeEnvironment)
-                  .ThenRun((ctx) =>
-                   {
-                       _logger = Log.ForContext<UniScanAppLoadPipeline>();
-        
-                       return Task.CompletedTask;
-                   })
-                  .ThenRun(app.InitializeSoftwareInfo)
-                  .ThenRun(app.InitializeModules)
-                  .ThenTransitionTo<LoadContexts.PreClient>(ctx => new(ctx))
-                  .ThenRun(app.InitializeClient)
-                  .ThenTransitionTo<
-                       LoadContexts.PostClient>(ctx => new(ctx))
-                  .ThenRun(app.InitializeUI)
-                  .ThenTransitionTo<
-                       LoadContexts.PreServiceProvider>(ctx => new(ctx))
-                  .ThenRun(app.InitializeServiceProvider)
-                  .ThenTransitionTo<
-                       LoadContexts.PostServiceProvider>(ctx => new(ctx))
-                  .ThenRun(app.InitializeRemotes)
-                  .ThenRun(app.FinishInitialization)
-                  .ThenRun((ctx) =>
-                   {
-                       _subscription?.Dispose();
-        
-                       return Task.CompletedTask;
-                   })
-                  .Build();
-        
-        _subscription = Pipeline.Status.Subscribe(s =>
-        {
-            _logger?.Information("{Status}", s);
-        });
-    }
-
-    public async Task RunAsync()
-    {
-        await Pipeline.RunAsync(new LoadContexts.Early());
     }
 }
