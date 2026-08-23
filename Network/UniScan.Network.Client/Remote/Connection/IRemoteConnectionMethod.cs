@@ -7,4 +7,6 @@ public interface IRemoteConnectionMethod
 {
     void Apply(Bootstrap bootstrap);
     Task<IChannel> ConnectAsync(Bootstrap bootstrap);
+
+    string ToDisplayString();
 }

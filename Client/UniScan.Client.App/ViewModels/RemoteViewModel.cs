@@ -21,7 +21,7 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
     
     public DeviceListViewModel DeviceList { get; }
 
-    public RemoteViewModel(RemoteServer remote) : base(new NotConnectedRemotePageViewModel(remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(remote.DisplayName)))
+    public RemoteViewModel(RemoteServer remote) : base(new NotConnectedRemotePageViewModel(remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
     {
         this._notConnectedPage = (NotConnectedRemotePageViewModel)CurrentSubpage;
         this.Remote = remote;

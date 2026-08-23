@@ -40,10 +40,7 @@ public class ServerAttributes
 
 public class RemoteServer
 {
-    /// <summary>
-    /// The remote's display name
-    /// </summary>
-    public string DisplayName { get; }
+    public string DisplayName => ConnectionMethod.ToDisplayString();//todo cache
     
     /// <summary>
     /// connection method
@@ -65,9 +62,8 @@ public class RemoteServer
     
     private readonly IServiceProvider _serviceProvider;
 
-    public RemoteServer(string displayName, IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider)
+    public RemoteServer(IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider)
     {
-        DisplayName = displayName;
         ConnectionMethod = connectionMethod;
         _serviceProvider = serviceProvider;
         
@@ -75,17 +71,17 @@ public class RemoteServer
         Socket.ConnectionState.Connected += (sender, args) =>
         {
             _connected.Value = true;
-            Log.Information("Connected to {Remote} ({RemoteAddress}) over {ConnectionMethod}", DisplayName, args.Channel.RemoteAddress, ConnectionMethod);
+            Log.Information("Connected to {RemoteAddress} over {ConnectionMethod}", args.Channel.RemoteAddress, ConnectionMethod);
         };
         
         Socket.ConnectionState.Disconnected += (sender, args) =>
         {
             _connected.Value = false;
-            Log.Information("Disconnected from {Remote} ({RemoteAddress})", DisplayName, args.Channel.RemoteAddress);
+            Log.Information("Disconnected from {RemoteAddress}", args.Channel.RemoteAddress);
         };
     }
     
-    public RemoteServer(RemoteDto dto, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider) : this(dto.DisplayName, dto.ConnectionMethod, configurators, packetRegistry, serviceProvider) {}
+    public RemoteServer(RemoteDto dto, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider) : this(dto.ConnectionMethod, configurators, packetRegistry, serviceProvider) {}
 
     public async Task RunConnectionAsync()
     {

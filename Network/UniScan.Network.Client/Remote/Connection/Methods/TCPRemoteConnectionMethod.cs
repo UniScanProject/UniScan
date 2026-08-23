@@ -24,5 +24,7 @@ public class TCPRemoteConnectionMethod(IPEndPoint endPoint) : IRemoteConnectionM
     }
 
     public Task<IChannel> ConnectAsync(Bootstrap bootstrap) => bootstrap.ConnectAsync(EndPoint);
+
+    public string ToDisplayString() => EndPoint.ToString();
 }
 #endif

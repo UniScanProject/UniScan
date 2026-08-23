@@ -14,10 +14,6 @@
              Padding="6">
     <Grid RowDefinitions="*, Auto">
         <StackPanel Orientation="Vertical" Spacing="10" Grid.Row="0">
-            <TextBlock Text="Display name"></TextBlock>
-            <TextBox Text="{Binding DisplayName, TargetNullValue={x:Static system:String.Empty}}"
-                     PlaceholderText="Display Name (optional)" />
-
             <TextBlock Text="Connection Method"></TextBlock>
             <Expander HorizontalAlignment="Stretch" IsExpanded="True">
                 <Expander.Header>

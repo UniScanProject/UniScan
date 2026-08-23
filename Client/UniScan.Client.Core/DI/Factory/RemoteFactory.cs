@@ -11,10 +11,10 @@ namespace UniScan.Client.Core.DI.Factory;
 
 public interface IRemoteFactory
 {
-    public RemoteServer Create(string displayName, IRemoteConnectionMethod connectionMethod);
+    public RemoteServer Create(IRemoteConnectionMethod connectionMethod);
 }
 
 public class RemoteFactory(IServiceProvider provider) : IRemoteFactory
 {
-    public RemoteServer Create(string displayName, IRemoteConnectionMethod connectionMethod) => new(displayName, connectionMethod, provider.GetServices<IPipelineConfigurator>(), provider.GetRequiredService<PacketRegistry>(), provider);
+    public RemoteServer Create(IRemoteConnectionMethod connectionMethod) => new(connectionMethod, provider.GetServices<IPipelineConfigurator>(), provider.GetRequiredService<PacketRegistry>(), provider);
 }

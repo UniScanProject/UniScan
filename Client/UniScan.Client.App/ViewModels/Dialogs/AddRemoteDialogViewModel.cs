@@ -16,9 +16,6 @@ public partial class AddRemoteDialogViewModel : ViewModelBase
     private readonly IRemoteFactory _remoteFactory;
     
     [ObservableProperty]
-    public partial string? DisplayName { get; set; }
-    
-    [ObservableProperty]
     public partial ConnectionMethodFactoryViewModelSource.ConnectionMethodViewModelFactoryPair? SelectedMethodFactory { get; set; }
     
     [ObservableProperty]
@@ -47,7 +44,7 @@ public partial class AddRemoteDialogViewModel : ViewModelBase
             return;
         }
         
-        CreatedRemote = _remoteFactory.Create(DisplayName ?? "New Remote", method);
+        CreatedRemote = _remoteFactory.Create(method);
         DialogHost.Close("MainDialogHost", CreatedRemote);
     }
     

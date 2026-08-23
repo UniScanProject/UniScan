@@ -47,14 +47,7 @@ public class RemotesListFile(string root, IPlatformFileManager fileManager, IRem
             return await SaveNewAsync();
         }
         
-        #if DEBUG
-        foreach (RemoteDto remoteDto in r)
-        {
-            _logger.Debug("Loaded remote {Name} ({ConnectionMethod})", remoteDto.DisplayName, remoteDto.ConnectionMethod);
-        }
-        #endif
-        
-        return new RemoteManager(r.Select(d => _remoteFactory.Create(d.DisplayName, d.ConnectionMethod)));
+        return new RemoteManager(r.Select(d => _remoteFactory.Create(d.ConnectionMethod)));
     }
 
     public async Task SaveAsync(IRemoteManager stored)
