@@ -1,10 +1,12 @@
+using System.Runtime.Versioning;
 using Serilog;
 using SpawnDev.SpawnJS;
 using SpawnDev.SpawnJS.JSObjects;
 using UniScan.Platform.Filesystem;
 
-namespace UniScan.Client.App.Platform.Browser.Filesystem;
+namespace UniScan.Platform.Implementations.Web.Filesystem;
 
+[SupportedOSPlatform("browser")]
 public class BrowserDirectoryManager : IPlatformDirectoryManager
 {
     public SpawnJSRuntime Runtime { get; }

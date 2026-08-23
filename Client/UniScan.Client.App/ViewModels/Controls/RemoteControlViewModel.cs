@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -5,7 +6,7 @@ using UniScan.Client.Core.Config.Types;
 
 namespace UniScan.Client.App.ViewModels.Controls;
 
-public partial class RemoteControlViewModel : ViewModelBase
+public partial class RemoteControlViewModel : ViewModelBase, IDisposable
 {
     public RemoteServer Remote { get; }
 
@@ -28,5 +29,10 @@ public partial class RemoteControlViewModel : ViewModelBase
     public async Task OnConnectClicked()
     {
 
+    }
+
+    public void Dispose()
+    {
+        _viewModel.Dispose();
     }
 }

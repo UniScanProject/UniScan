@@ -1,0 +1,35 @@
+<Project>
+    <PropertyGroup>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    </PropertyGroup>
+
+    <Target Name="AppendHash"
+            AfterTargets="GetAssemblyVersion"
+            BeforeTargets="GetAssemblyAttributes"
+            Condition="!$(MSBuildProjectDirectory.Contains('External'))">
+
+        <Exec Command="git tag --points-at HEAD -l &quot;$(MSBuildProjectName)/$(AssemblyVersion)&quot;"
+              WorkingDirectory="$(MSBuildThisFileDirectory)"
+              ConsoleToMSBuild="true"
+              StandardOutputImportance="Low"
+              IgnoreExitCode="true">
+            <Output TaskParameter="ConsoleOutput" PropertyName="Tag" />
+        </Exec>
+
+        <Exec Command="git rev-parse --short HEAD"
+              WorkingDirectory="$(MSBuildThisFileDirectory)"
+              ConsoleToMSBuild="true"
+              StandardOutputImportance="Low"
+              IgnoreExitCode="true">
+            <Output TaskParameter="ConsoleOutput" PropertyName="Hash" />
+        </Exec>
+        
+        <PropertyGroup Condition="'$(Tag)' == '' and '$(Hash)' != ''">
+            <InformationalVersion>$(AssemblyVersion)+$(Hash)</InformationalVersion>
+        </PropertyGroup>
+
+        <PropertyGroup Condition="'$(Tag)' != '' or '$(Hash)' == ''">
+            <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
+        </PropertyGroup>
+    </Target>
+</Project>

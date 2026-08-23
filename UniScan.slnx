@@ -1,0 +1,50 @@
+<Solution>
+  <Folder Name="/Client/">
+    <Project Path="Client/UniScan.Client.App/UniScan.Client.App.csproj" />
+    <Project Path="Client/UniScan.Client.Core/UniScan.Client.Core.csproj" />
+  </Folder>
+  <Folder Name="/Client/Platform/">
+    <Project Path="Client/UniScan.Client.App.Platform.Android/UniScan.Client.App.Platform.Android.csproj" />
+    <Project Path="Client/UniScan.Client.App.Platform.Browser/UniScan.Client.App.Platform.Browser.csproj" />
+    <Project Path="Client/UniScan.Client.App.Platform.Desktop/UniScan.Client.App.Platform.Desktop.csproj" />
+  </Folder>
+  <Folder Name="/Core/">
+    <Project Path="Core/UniScan.Core/UniScan.Core.csproj" />
+    <Project Path="Core/UniScan.Device/UniScan.Device.csproj" />
+  </Folder>
+  <Folder Name="/Core/Platform/">
+    <Project Path="Core/Platform/UniScan.Platform.DependencyInjection/UniScan.Platform.DependencyInjection.csproj" />
+    <Project Path="Core/Platform/UniScan.Platform.Implementations.Native/UniScan.Platform.Implementations.Native.csproj" />
+    <Project Path="Core/Platform/UniScan.Platform.Implementations.Web/UniScan.Platform.Implementations.Web.csproj" />
+    <Project Path="Core/Platform/UniScan.Platform/UniScan.Platform.csproj" />
+  </Folder>
+  <Folder Name="/External/" />
+  <Folder Name="/External/Shiki/">
+    <Project Path="External/Shiki/Shiki.CodeGenerator.Core/Shiki.CodeGenerator.Core.csproj" />
+    <Project Path="External/Shiki/Shiki.CodeGenerator/Shiki.CodeGenerator.csproj" />
+    <Project Path="External/Shiki/Shiki.Common/Shiki.Common.csproj" />
+    <Project Path="External/Shiki/Shiki.ModuleManagement.Implementations/Shiki.ModuleManagement.Implementations.csproj" />
+    <Project Path="External/Shiki/Shiki.ModuleManagement/Shiki.ModuleManagement.csproj" />
+    <Project Path="External/Shiki/Shiki.Tests/Shiki.Tests.csproj" />
+  </Folder>
+  <Folder Name="/External/Shiki/Extensions/">
+    <Project Path="External/Shiki/Extensions/Shiki.Extensions.MessagePack/Shiki.Extensions.MessagePack.csproj" />
+  </Folder>
+  <Folder Name="/Modules/">
+    <Project Path="Modules/UniScan.Modules.DebugModule/UniScan.Modules.DebugModule.csproj" />
+  </Folder>
+  <Folder Name="/Network/">
+    <Project Path="Network/UniScan.Network.Client/UniScan.Network.Client.csproj" />
+    <Project Path="Network/UniScan.Network.CodeGenerator/UniScan.Network.CodeGenerator.csproj" />
+    <Project Path="Network/UniScan.Network.Server/UniScan.Network.Server.csproj" />
+    <Project Path="Network/UniScan.Network/UniScan.Network.csproj" />
+  </Folder>
+  <Folder Name="/Server/">
+    <Project Path="Server/UniScan.Server.Authentication/UniScan.Server.Authentication.csproj" />
+    <Project Path="Server/UniScan.Server.Core/UniScan.Server.Core.csproj" />
+    <Project Path="Server/UniScan.Server.Host/UniScan.Server.Host.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/UniScan.Tests/UniScan.Tests.csproj" />
+  </Folder>
+</Solution>

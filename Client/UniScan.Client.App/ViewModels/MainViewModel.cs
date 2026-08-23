@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using ObservableCollections;
@@ -31,8 +32,25 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
         
         RemoteFactory = remoteFactory;
         Settings = clientSettingsViewModel;
-        
-        RemotesView = Client.RemoteManager.Remotes.CreateView(remote => new RemoteControlViewModel(remote)).ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
+    
+        RemotesView = Client.RemoteManager.Remotes.CreateView(remote => new RemoteControlViewModel(remote))
+                            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
+
+        RemotesView.CollectionChanged += (sender, args) =>
+        {
+            if (args is { Action: NotifyCollectionChangedAction.Remove, OldItems: not null })
+            {
+                foreach (RemoteControlViewModel vm in args.OldItems)
+                {
+                    if (CurrentSubpage is RemoteViewModel rvm && rvm.Remote == vm.Remote)
+                    {
+                        OnHomeClicked();
+                    }
+
+                    vm.Dispose();
+                }
+            }
+        };
         
         _mainPage = new MainPageViewModel(Client.RemoteManager);
         CurrentSubpage = _mainPage;
@@ -66,7 +84,7 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
     {
         if (rcvm?.Remote == null)
             throw new NullReferenceException("Remote is null, how?");
-
+        
         Client.RemoteManager.Remotes.Remove(rcvm.Remote);
         await Client.RemoteManagerFile.SaveAsync(Client.RemoteManager);
         

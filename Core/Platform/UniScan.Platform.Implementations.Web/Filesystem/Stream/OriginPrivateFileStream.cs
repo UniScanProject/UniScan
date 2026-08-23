@@ -1,8 +1,9 @@
-using DotNetty.Common.Utilities;
 using Array = System.Array;
+using System.Runtime.Versioning;
 
-namespace UniScan.Client.App.Platform.Browser.Filesystem.Stream;
+namespace UniScan.Platform.Implementations.Web.Filesystem.Stream;
 
+[SupportedOSPlatform("browser")]
 public class OriginPrivateFileStream(IOPFSWorkerService worker, int id, long initialLength) : System.IO.Stream
 {
     private bool _disposed;
@@ -21,29 +22,33 @@ public class OriginPrivateFileStream(IOPFSWorkerService worker, int id, long ini
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
         
-        byte[] read = await worker.ReadAsync(id, _pos, count);
+        (byte[] Buffer, long Length) read = await worker.ReadAsync(id, _pos, count);
+        if (read.Length == 0) return 0;
+        
         _pos += read.Length;
         
-        Array.Copy(read, 0, buffer, offset, read.Length);
-        return read.Length;
+        Array.Copy(read.Buffer, 0, buffer, offset, read.Length);
+        return (int)read.Length;
     }
 
     public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
         
-        byte[] read = await worker.ReadAsync(id, _pos, buffer.Length);
+        (byte[] Buffer, long Length) read = await worker.ReadAsync(id, _pos, buffer.Length);
+        if (read.Length == 0) return 0;
+        
         _pos += read.Length;
         
-        read.AsSpan().CopyTo(buffer.Span);
-        return read.Length;
+        read.Buffer.AsSpan(0, (int)read.Length).CopyTo(buffer.Span);
+        return (int)read.Length;
     }
 
     public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
         
-        byte[] b = buffer.Slice(offset, offset + count);
+        byte[] b = buffer[offset..(offset + count)];
         long written = await worker.WriteAsync(id, b, (int)_pos);
         
         _pos += written;

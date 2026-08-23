@@ -38,7 +38,7 @@ public class RequestManager : IAsyncDisposable
 
     public static Guid CreateRequestId() => Guid.NewGuid();
     
-    public async Task<Result<TResponse, Exception>> MakeRequestAsync<TResponse>(IChannel? channel, IRequestPayloadPart<TResponse> request)
+    public async Task<Result<TResponse, Exception>> MakeRequestAsync<TResponse>(IChannel? channel, IRequestPayloadPart<TResponse> request, CancellationToken ct = default)
     where TResponse : IPacket, IResponsePayloadPart
     {
         if (channel is null)
@@ -60,7 +60,7 @@ public class RequestManager : IAsyncDisposable
             await channel.WriteAndFlushAsync(packet);
             
             //wait, if packet comes in too quickly I think it should be fine because task will be fulfilled already anyway
-            TResponse res = await r.Task.WaitAsync(TimeSpan.FromSeconds(10));
+            TResponse res = await r.Task.WaitAsync(TimeSpan.FromSeconds(10), ct);
             return new Result<TResponse, Exception>(res);
         }
         catch (TimeoutException ex)

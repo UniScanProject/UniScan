@@ -67,9 +67,7 @@ public class RemotesListFile(string root, IPlatformFileManager fileManager, IRem
         {
             await using Stream stream =
                 await fileManager.GetStreamAsync(_path, FileMode.Create, FileAccess.Write, FileShare.None);
-
-            Log.Information("{s}", stream);
-
+            
             await JsonSerializer.SerializeAsync(stream, stored.Remotes.Select(RemoteDto.FromRemoteServer),
                                                 _jsonOptions);
 
@@ -102,7 +100,7 @@ public class RemotesListFile(string root, IPlatformFileManager fileManager, IRem
         catch (Exception ex)
         {
             _logger.Error(ex, "Failed to backup remotes to {Path}", _path);
-            throw ex;
+            throw;
         }
     }
 

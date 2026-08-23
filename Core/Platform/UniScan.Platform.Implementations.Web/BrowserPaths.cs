@@ -1,9 +1,4 @@
-using System;
-using System.IO;
-using UniScan.Client.Core;
-using UniScan.Platform;
-
-namespace UniScan.Client.App.Platform.Browser;
+namespace UniScan.Platform.Implementations.Web;
 
 public class BrowserPaths : IPlatformStandardPaths
 {
