@@ -23,13 +23,25 @@
               IgnoreExitCode="true">
             <Output TaskParameter="ConsoleOutput" PropertyName="Hash" />
         </Exec>
+
+        <Exec Command="git branch --show-current"
+              WorkingDirectory="$(MSBuildThisFileDirectory)"
+              ConsoleToMSBuild="true"
+              StandardOutputImportance="Low"
+              IgnoreExitCode="true">
+            <Output TaskParameter="ConsoleOutput" PropertyName="Branch" />
+        </Exec>
+        
+        <PropertyGroup>
+            <BranchTag Condition="'$(Branch)' != 'main' and '$(Branch)' != ''">-$(Branch.Replace('/', '-').Replace('_', '-'))</BranchTag>
+        </PropertyGroup>
         
         <PropertyGroup Condition="'$(Tag)' == '' and '$(Hash)' != ''">
-            <InformationalVersion>$(AssemblyVersion)+$(Hash)</InformationalVersion>
+            <InformationalVersion>$(AssemblyVersion)$(BranchTag)+$(Hash)</InformationalVersion>
         </PropertyGroup>
 
         <PropertyGroup Condition="'$(Tag)' != '' or '$(Hash)' == ''">
-            <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
+            <InformationalVersion>$(AssemblyVersion)$(BranchTag)</InformationalVersion>
         </PropertyGroup>
     </Target>
 </Project>
