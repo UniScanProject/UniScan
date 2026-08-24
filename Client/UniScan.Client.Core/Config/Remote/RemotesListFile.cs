@@ -47,7 +47,7 @@ public class RemotesListFile(string root, IPlatformFileManager fileManager, IRem
             return await SaveNewAsync();
         }
         
-        return new RemoteManager(r.Select(d => _remoteFactory.Create(d.ConnectionMethod)));
+        return new RemoteManager(r.Select(d => _remoteFactory.Create(d)));
     }
 
     public async Task SaveAsync(IRemoteManager stored)

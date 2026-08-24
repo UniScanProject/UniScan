@@ -1,5 +1,6 @@
 using DotNetty.Transport.Channels;
 using Microsoft.Extensions.DependencyInjection;
+using UniScan.Client.Core.Config.Remote;
 using UniScan.Client.Core.Module.Modules.Internal.Handler;
 using UniScan.Network.Socket.Configuration;
 

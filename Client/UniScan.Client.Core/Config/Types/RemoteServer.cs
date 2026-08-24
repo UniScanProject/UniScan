@@ -96,6 +96,12 @@ public class RemoteServer : IRemoteServerMutationProxy
             Log.Information("Disconnected from {RemoteAddress}", args.Channel.RemoteAddress);
         };
     }
+
+    public RemoteServer(IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators,
+                        PacketRegistry packetRegistry, IServiceProvider serviceProvider, RemoteInfo? info) : this(connectionMethod, configurators, packetRegistry, serviceProvider)
+    {
+        _remoteInfo.Value = info;
+    }
     
     public RemoteServer(RemoteDto dto, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider) : this(dto.ConnectionMethod, configurators, packetRegistry, serviceProvider) {}
 
