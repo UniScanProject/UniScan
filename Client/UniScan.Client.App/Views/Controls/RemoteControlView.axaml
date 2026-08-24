@@ -11,7 +11,7 @@
     <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Command="{Binding OnClicked}">
         <Grid ColumnDefinitions="*, Auto">
             <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
-                <TextBlock Text="{Binding Remote.DisplayName}" />
+                <TextBlock Text="{Binding Remote.DisplayName.Value}" />
             </StackPanel>
             
             <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">

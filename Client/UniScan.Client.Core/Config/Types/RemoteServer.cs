@@ -16,6 +16,7 @@ using UniScan.Network;
 using UniScan.Network.Client;
 using UniScan.Network.Client.Remote.Connection;
 using UniScan.Network.Data;
+using UniScan.Network.Data.Info.Remote;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Packet.Packets.Clientbound;
 using UniScan.Network.Packet.Packets.Clientbound.Remote;
@@ -31,6 +32,9 @@ public class ServerAttributes
     public static readonly AttributeKey<ServerSoftwareInfo> SoftwareInfoAttribute =
         AttributeKey<ServerSoftwareInfo>.ValueOf("software");
     
+    public static readonly AttributeKey<RemoteInfo> RemoteInfoAttribute =
+        AttributeKey<RemoteInfo>.ValueOf("remote_info");
+    
     public static readonly AttributeKey<RemoteServer> ServerAttribute =
         AttributeKey<RemoteServer>.ValueOf("server");
     
@@ -41,11 +45,13 @@ public class ServerAttributes
 public interface IRemoteServerMutationProxy
 {
     void SetSoftwareInfo(ServerSoftwareInfo softwareInfo);
+
+    void SetRemoteInfo(RemoteInfo info);
 }
 
 public class RemoteServer : IRemoteServerMutationProxy
 {
-    public string DisplayName => ConnectionMethod.ToDisplayString();//todo cache
+    public IReadOnlyBindableReactiveProperty<string> DisplayName { get; }
     
     /// <summary>
     /// connection method
@@ -57,8 +63,10 @@ public class RemoteServer : IRemoteServerMutationProxy
     /// </summary>
     public ObservableDictionary<Slug<SnakeSlugFormatter>, DeviceDto> Devices { get; } = [];
     
-    //todo Make it cached
     public ServerSoftwareInfo? SoftwareInfo { get; private set; }
+    
+    private readonly ReactiveProperty<RemoteInfo?> _remoteInfo = new();
+    public ReadOnlyReactiveProperty<RemoteInfo?> RemoteInfo => _remoteInfo;
     
     public ClientSocket Socket { get; }
 
@@ -70,6 +78,9 @@ public class RemoteServer : IRemoteServerMutationProxy
     public RemoteServer(IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider)
     {
         ConnectionMethod = connectionMethod;
+        DisplayName = _remoteInfo.Select(info => info?.DisplayName ?? ConnectionMethod.ToDisplayString())
+                                 .ToReadOnlyBindableReactiveProperty(ConnectionMethod.ToDisplayString());
+        
         _serviceProvider = serviceProvider;
         
         Socket = new ClientSocket(new UniScanClientChannelInitializer(packetRegistry, configurators, _serviceProvider), ConnectionMethod);
@@ -92,5 +103,11 @@ public class RemoteServer : IRemoteServerMutationProxy
     {
         Socket.Channel!.GetAttribute(ServerAttributes.SoftwareInfoAttribute).Set(info);
         SoftwareInfo = info;
+    }
+
+    void IRemoteServerMutationProxy.SetRemoteInfo(RemoteInfo info)
+    {
+        Socket.Channel!.GetAttribute(ServerAttributes.RemoteInfoAttribute).Set(info);
+        _remoteInfo.Value = info;
     }
 }

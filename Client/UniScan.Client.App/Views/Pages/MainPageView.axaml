@@ -18,7 +18,7 @@
                     <Expander IsExpanded="True" HorizontalAlignment="Stretch" Margin="5" CornerRadius="5">
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Remote.DisplayName}" />
+                                <TextBlock Text="{Binding Remote.DisplayName.Value}" />
                             </StackPanel>
                         </Expander.Header>
                         

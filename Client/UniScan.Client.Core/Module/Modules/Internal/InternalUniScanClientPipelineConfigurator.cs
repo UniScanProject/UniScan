@@ -23,5 +23,7 @@ public class InternalUniScanClientPipelineConfigurator : IPipelineConfigurator
     public void ConfigureHandlers(IChannelPipeline pipeline)
     {
         pipeline.AddLast(nameof(DisconnectPacketHandler), _serviceProvider.GetRequiredService<DisconnectPacketHandler>());
+        pipeline.AddLast(nameof(RemoteInfoPacketHandler), _serviceProvider.GetRequiredService<RemoteInfoPacketHandler>());
+
     }
 }

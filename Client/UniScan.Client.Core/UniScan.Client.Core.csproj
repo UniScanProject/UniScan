@@ -23,8 +23,10 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
       <PackageReference Include="ObservableCollections.R3" />
       <PackageReference Include="R3" />
+      <PackageReference Include="Serilog.Extensions.Logging" />
     </ItemGroup>
 
     <ItemGroup>

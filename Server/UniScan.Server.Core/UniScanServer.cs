@@ -13,6 +13,7 @@ using Shiki.Common.Util;
 using Shiki.ModuleManagement;
 using UniScan.Device.Device;
 using UniScan.Network;
+using UniScan.Network.Data.Info.Remote;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Packet.Packets.Clientbound.Remote;
 using UniScan.Network.Registry.Source.Sources;
@@ -55,6 +56,14 @@ public class UniScanServer
                                                                  "UniScan Server",
                                                                  "https://github.com/UniScanProject/UniScan"
                                                                  );
+    
+    public static readonly RemoteInfo RemoteInfo = new(
+                                                                 "Hello, world!",
+                                                                 "Example description",
+                                                                 new RemoteSettings(true),
+                                                                 new RemoteBranding(null, []),
+                                                                 new RemoteSocial("Hello, world!", [])
+                                                                );
     
     public UniScanServer(SessionManager sessionManager, ServerSocketInitializer socketInitializer, PacketRegistry packetRegistry, ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> moduleStorage)
     {

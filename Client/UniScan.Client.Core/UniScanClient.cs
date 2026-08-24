@@ -58,6 +58,8 @@ public class UniScanClient(
         ServiceCollection services = new();
         services.AddSingleton(softwareInfo);
         
+        services.AddLogging(logging => logging.AddSerilog(Log.Logger));
+        
         foreach (IUniScanClientModule module in moduleStorage.Modules)
         {
             module.ConfigureDi(services);

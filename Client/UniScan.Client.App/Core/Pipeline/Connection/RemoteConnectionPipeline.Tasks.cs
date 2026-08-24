@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DotNetty.Transport.Channels;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using UniScan.Client.Core.Config.Types;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Packet.Packets.Serverbound;
 using UniScan.Network.Packet.Packets.Serverbound.Client;
@@ -22,6 +23,8 @@ public partial class RemoteConnectionPipeline
         {
             throw new InvalidOperationException("Connection failed!");
         }
+        
+        ctx.RemoteServer.Socket.Channel?.GetAttribute(ServerAttributes.ServerAttribute).Set(ctx.RemoteServer);
     }
     
     public async Task Handshake(TaskContexts.NegotiationContext ctx, CancellationToken ct = default)

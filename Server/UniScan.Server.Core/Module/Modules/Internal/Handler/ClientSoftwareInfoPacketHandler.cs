@@ -39,5 +39,6 @@ public class ClientSoftwareInfoPacketHandler : SimpleChannelInboundHandler<Clien
         ctx.Channel.GetAttribute(ClientAttributes.SoftwareInfoAttribute).Set(msg.Info);
 
         ctx.WriteAndFlushAsync(new ServerSoftwareInfoPacket(UniScanServer.SoftwareInfo, msg.RequestId));
+        ctx.WriteAndFlushAsync(new RemoteInfoPacket(UniScanServer.RemoteInfo));
     }
 }
