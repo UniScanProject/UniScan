@@ -50,7 +50,7 @@ public class UniScanServer
     public static readonly Identifier Identifier = Constants.IdentifierNamespace.Derived("server");
     public static readonly ServerSoftwareInfo SoftwareInfo = new(
                                                                  Identifier,
-                                                                 SemVersion.FromVersion(Assembly.GetCallingAssembly().Version),
+                                                                 SemVersion.Parse(Assembly.GetCallingAssembly().InformationalVersionString),
                                                                  Network.Constants.ProtocolVersion,
                                                                  "UniScan Server",
                                                                  "https://github.com/UniScanProject/UniScan"

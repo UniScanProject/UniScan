@@ -34,7 +34,7 @@ public class SerialTransport : ITransport<ReadOnlyMemory<byte>>
         
         _port = new SerialPort(Port, BaudRate)
         {
-            ReadTimeout = 500,
+            ReadTimeout = 500,//TODO make this configurable
             WriteTimeout = 500,
             DtrEnable = true,
             RtsEnable = true,

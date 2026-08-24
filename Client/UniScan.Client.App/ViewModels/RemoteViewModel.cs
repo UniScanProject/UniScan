@@ -75,5 +75,7 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
             state.Disconnected -= OnDisconnected;
             state.Connected -= OnConnected;
         }
+        
+        DeviceList.Dispose();
     }
 }

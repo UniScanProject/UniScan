@@ -1,13 +1,15 @@
+using System.Runtime.Versioning;
 using Serilog;
 using SpawnDev.SpawnJS;
 using SpawnDev.SpawnJS.JSObjects;
 using SpawnDev.SpawnJS.WebWorkers;
-using UniScan.Client.App.Platform.Browser.Filesystem.Stream;
 using UniScan.Platform.Filesystem;
+using UniScan.Platform.Implementations.Web.Filesystem.Stream;
 using File = SpawnDev.SpawnJS.JSObjects.File;
 
-namespace UniScan.Client.App.Platform.Browser.Filesystem;
+namespace UniScan.Platform.Implementations.Web.Filesystem;
 
+[SupportedOSPlatform("browser")]
 public class BrowserFileManager(WebWorkerService workerService, SpawnJSRuntime runtime, BrowserDirectoryManager directoryManager) : IPlatformFileManager
 {
     public SpawnJSRuntime Runtime { get; } = runtime;
@@ -93,7 +95,7 @@ public class BrowserFileManager(WebWorkerService workerService, SpawnJSRuntime r
         catch (Exception ex)
         {
             Log.Error(ex, "Failed to open file");
-            throw ex;
+            throw;
         }
     }
 

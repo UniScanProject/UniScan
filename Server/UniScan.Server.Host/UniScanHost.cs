@@ -28,6 +28,9 @@ class UniScanHost
     private readonly ScannerMeta _scannerMeta;
     private readonly PacketRegistry _packetRegistry;
 
+    private bool _stopping = false;
+    private SemaphoreSlim _stopSemaphore = new(1, 1);
+
     public UniScanHost(string rootDirectory)
     {
         _rootDirectory = rootDirectory;
@@ -60,15 +63,29 @@ class UniScanHost
         await _server.ScannerManager.StartAllAsync();
         
         //start server
-        await _server.RunAsync();
+        await _server.RunAsync(_cts.Token);
     }
 
     public async Task Stop()
     {
-        Log.Logger.Information("Stopping server...");
-        
-        _cts.Cancel();
-        await _server.ExitAsync();
+        await _stopSemaphore.WaitAsync();
+
+        try
+        {
+            if (_stopping)
+                return;
+
+            _stopping = true;
+
+            Log.Information("Stopping server...");
+
+            _cts.Cancel();
+            await _server.ExitAsync();
+        }
+        finally
+        {
+            _stopSemaphore.Release();
+        }
     }
 
     private static async Task Main(string[] args)
@@ -85,15 +102,15 @@ class UniScanHost
                     .ForContext("SourceContext", typeof(UniScanServer).Namespace);
         UniScanHost host = new(Environment.CurrentDirectory);
         
-        AppDomain.CurrentDomain.ProcessExit += async (_, _) =>
+        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
         {
-            host.Stop();
+            host.Stop().GetAwaiter().GetResult();
         };
         
-        Console.CancelKeyPress += async (_, e) =>
+        Console.CancelKeyPress += (_, e) =>
         {
             e.Cancel = true;
-            host.Stop();
+            host.Stop().GetAwaiter().GetResult();
         };
         
         await host.StartAsync();

@@ -4,16 +4,19 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Browser;
 using Avalonia.Threading;
+using DotNetty.Common.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using SpawnDev;
 using SpawnDev.SpawnJS;
 using SpawnDev.SpawnJS.WebWorkers;
-using UniScan.Client.App.Platform.Browser.Filesystem;
-using UniScan.Client.App.Platform.Browser.Filesystem.Stream;
 using UniScan.Client.App.Platform.Browser.Interop;
 using UniScan.Client.Core;
+using UniScan.Core;
 using UniScan.Platform;
+using UniScan.Platform.Implementations.Web;
+using UniScan.Platform.Implementations.Web.Filesystem;
+using UniScan.Platform.Implementations.Web.Filesystem.Stream;
 
 namespace UniScan.Client.App.Platform.Browser;
 
@@ -47,10 +50,17 @@ internal sealed partial class Program
         
         await ServiceProvider.StartBackgroundServices();
         
-        UniScanApp.InitializePlatform += async () =>
+        UniScanApp.InitializePlatform += () =>
         {
-            return new HostEnvironment(new BrowserPaths(), new BrowserPlatformSerilogInitializer(),
-                                                       ServiceProvider.GetRequiredService<BrowserDirectoryManager>(), ServiceProvider.GetRequiredService<BrowserFileManager>());
+            try
+            {
+                return Task.FromResult(new HostEnvironment(new BrowserPaths(), new BrowserPlatformSerilogInitializer(Constants.ConsoleOutputTemplate),
+                                                           ServiceProvider.GetRequiredService<BrowserDirectoryManager>(), ServiceProvider.GetRequiredService<BrowserFileManager>()));
+            }
+            catch (Exception exception)
+            {
+                return Task.FromException<HostEnvironment>(exception);
+            }
         };
         
         await BuildAvaloniaApp()
