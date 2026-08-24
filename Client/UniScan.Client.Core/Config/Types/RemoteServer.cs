@@ -38,7 +38,12 @@ public class ServerAttributes
         AttributeKey<string>.ValueOf("disconnectReason");
 }
 
-public class RemoteServer
+public interface IRemoteServerMutationProxy
+{
+    void SetSoftwareInfo(ServerSoftwareInfo softwareInfo);
+}
+
+public class RemoteServer : IRemoteServerMutationProxy
 {
     public string DisplayName => ConnectionMethod.ToDisplayString();//todo cache
     
@@ -83,37 +88,9 @@ public class RemoteServer
     
     public RemoteServer(RemoteDto dto, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider) : this(dto.ConnectionMethod, configurators, packetRegistry, serviceProvider) {}
 
-    public async Task RunConnectionAsync()
+    void IRemoteServerMutationProxy.SetSoftwareInfo(ServerSoftwareInfo info)
     {
-        var clientSoftware = _serviceProvider.GetRequiredService<ClientSoftwareInfo>();
-        
-        var serverSoftware =
-            await Socket.SendRequestAsync(ClientSoftwareInfoPacket.CreateRequest(clientSoftware));
-
-        if (!serverSoftware.HasValue)
-        {
-            await Socket.StopAsync();
-            return;
-        }
-        
-        Socket.Channel!.GetAttribute(ServerAttributes.SoftwareInfoAttribute).Set(serverSoftware.Value.Info);
-        this.SoftwareInfo = serverSoftware.Value.Info;
-        Log.Information("Received server software info {SoftwareInfo}", serverSoftware.Value.Info);
-        
-        var devices = await Socket.SendRequestAsync(GetDeviceListPacket.CreateRequest());
-
-        if (devices.HasValue)
-        {
-            Log.Debug("Received devices list: [{Devices}]", string.Join(", ", devices.Value.Devices));
-
-            foreach (var deviceInfoDto in devices.Value.Devices)
-            {
-                Devices.Add(deviceInfoDto);    
-            }
-        }
-        else
-        {
-            Log.Error(devices.Error, "Exception returned when trying to get devices list");
-        }
+        Socket.Channel!.GetAttribute(ServerAttributes.SoftwareInfoAttribute).Set(info);
+        SoftwareInfo = info;
     }
 }

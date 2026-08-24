@@ -2,9 +2,8 @@ using System;
 using System.Threading.Tasks;
 using R3;
 using Serilog;
-using UniScan.Client.App.Core.Pipeline;
 
-namespace UniScan.Client.App.Core.Initialization;
+namespace UniScan.Client.App.Core.Pipeline.Initialization;
 
 public partial class UniScanAppInitializationPipeline
 {
@@ -17,7 +16,7 @@ public partial class UniScanAppInitializationPipeline
         Pipeline = new TaskPipelineBuilder<TaskContexts.Early>()
                    //early
                       .ThenRun(app.InitializeEnvironment)
-                      .ThenRun(_ =>
+                      .ThenRun((_, _) =>
                        {
                            _logger = Log.ForContext<UniScanAppInitializationPipeline>();
 
@@ -34,7 +33,7 @@ public partial class UniScanAppInitializationPipeline
                   .ThenTransitionTo<TaskContexts.PostServiceProvider>()
                       .ThenRun(InitializeRemotes)
                       .ThenRun(app.FinishInitialization)
-                      .ThenRun(_ =>
+                      .ThenRun((_, _) =>
                        {
                            _subscription?.Dispose();
 

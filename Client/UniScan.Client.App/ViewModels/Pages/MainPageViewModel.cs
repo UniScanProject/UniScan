@@ -24,11 +24,11 @@ public partial class MainPageViewModel : ViewModelBase, IDisposable
 
     private readonly IRemoteManager _remoteManager;
     
-    public MainPageViewModel(IRemoteManager remoteManager)
+    public MainPageViewModel(IServiceProvider provider, IRemoteManager remoteManager)
     {
         _remoteManager = remoteManager;
         
-        _remotesView = remoteManager.Remotes.CreateView(remote => new RemoteViewModel(remote));
+        _remotesView = remoteManager.Remotes.CreateView(remote => new RemoteViewModel(provider, remote));
         _remotesView.AttachFilter(new RemoteConnectionStateFilter());
 
         ConnectedRemotesView = _remotesView.ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);

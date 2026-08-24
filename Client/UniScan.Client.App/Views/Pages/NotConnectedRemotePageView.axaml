@@ -10,7 +10,7 @@
     <Border VerticalAlignment="Center" HorizontalAlignment="Center">
         <StackPanel>
             <TextBlock Text="Not connected" />
-            <Button Content="Connect as guest" IsEnabled="{Binding HasConnectionMethod}" Command="{Binding OnAnonymousConnectClicked}" />
+            <Button Content="Connect" IsEnabled="{Binding HasConnectionMethod}" Command="{Binding OnConnectClicked}" />
         </StackPanel>
     </Border>
 </UserControl>

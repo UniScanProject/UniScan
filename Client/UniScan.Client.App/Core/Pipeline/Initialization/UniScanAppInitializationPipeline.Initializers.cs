@@ -1,13 +1,14 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using UniScan.Client.App.ViewModels;
 using UniScan.Client.App.Views;
 
-namespace UniScan.Client.App.Core.Initialization;
+namespace UniScan.Client.App.Core.Pipeline.Initialization;
 
 public partial class UniScanAppInitializationPipeline
 {
-    internal static async Task InitializeViews(TaskContexts.PostClient ctx)
+    internal static async Task InitializeViews(TaskContexts.PostClient ctx, CancellationToken ct = default)
     {
         ctx.Status.Value = "Initializing UI";
         
@@ -17,14 +18,14 @@ public partial class UniScanAppInitializationPipeline
         ctx.ServiceCollection.AddSingleton<ClientSettingsViewModel>();
     }
     
-    internal static async Task InitializeServiceProvider(TaskContexts.PreServiceProvider ctx)
+    internal static async Task InitializeServiceProvider(TaskContexts.PreServiceProvider ctx, CancellationToken ct = default)
     {
         ctx.Status.Value = "Building ServiceProvider";
 
         ctx.Services = ctx.ServiceCollection.BuildServiceProvider();
     }
 
-    internal static async Task InitializeRemotes(TaskContexts.PostServiceProvider ctx)
+    internal static async Task InitializeRemotes(TaskContexts.PostServiceProvider ctx, CancellationToken ct = default)
     {
         ctx.Status.Value = "Saving remotes";
 

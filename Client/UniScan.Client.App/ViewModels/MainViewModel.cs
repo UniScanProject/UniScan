@@ -33,7 +33,7 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
         RemoteFactory = remoteFactory;
         Settings = clientSettingsViewModel;
     
-        RemotesView = Client.RemoteManager.Remotes.CreateView(remote => new RemoteControlViewModel(remote))
+        RemotesView = Client.RemoteManager.Remotes.CreateView(remote => new RemoteControlViewModel(Client.ServiceProvider, remote))
                             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
 
         RemotesView.CollectionChanged += (sender, args) =>
@@ -52,7 +52,7 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
             }
         };
         
-        _mainPage = new MainPageViewModel(Client.RemoteManager);
+        _mainPage = new MainPageViewModel(Client.ServiceProvider, Client.RemoteManager);
         CurrentSubpage = _mainPage;
     }
     

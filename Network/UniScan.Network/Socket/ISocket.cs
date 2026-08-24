@@ -20,6 +20,6 @@ public interface ISocket
     
     Task<bool> SendPacketAsync(IChannel? channel, IPacket packet);
 
-    public Task<Result<TResponse, Exception>> SendRequestAsync<TResponse>(IChannel? channel, IRequestPayloadPart<TResponse> packet)
+    public Task<Result<TResponse, Exception>> SendRequestAsync<TResponse>(IChannel? channel, IRequestPayloadPart<TResponse> packet, CancellationToken ct = default)
         where TResponse : IPacket, IResponsePayloadPart;
 }

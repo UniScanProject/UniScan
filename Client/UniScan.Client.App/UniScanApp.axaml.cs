@@ -14,8 +14,8 @@ using Shiki.Common.Extensions;
 using Shiki.Common.Identity;
 using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
-using UniScan.Client.App.Core.Initialization;
 using UniScan.Client.App.Core.Module;
+using UniScan.Client.App.Core.Pipeline.Initialization;
 using UniScan.Client.App.ViewModels;
 using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
@@ -75,7 +75,7 @@ public partial class UniScanApp : Application
     {
         Log.Information("Loading root view");
 
-        RootViewModel = new RootViewModel(new LoadingViewModel(InitializationPipeline.Pipeline));
+        RootViewModel = new RootViewModel(new LoadingViewModel("Loading...", InitializationPipeline.Pipeline));
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:

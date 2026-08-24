@@ -12,11 +12,11 @@ public partial class RemoteControlViewModel : ViewModelBase, IDisposable
 
     private readonly RemoteViewModel _viewModel;
 
-    public RemoteControlViewModel(RemoteServer remote)
+    public RemoteControlViewModel(IServiceProvider provider, RemoteServer remote)
     {
         this.Remote = remote;
 
-        _viewModel = new RemoteViewModel(Remote);
+        _viewModel = new RemoteViewModel(provider, Remote);
     }
 
     [RelayCommand]
@@ -28,7 +28,6 @@ public partial class RemoteControlViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     public async Task OnConnectClicked()
     {
-
     }
 
     public void Dispose()

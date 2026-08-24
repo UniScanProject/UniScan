@@ -12,7 +12,7 @@
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
             <Image Source="../Assets/logo_512x512.png" Width="128" Height="128" VerticalAlignment="Top" Margin="0 0 0 10" />
-            <TextBlock>Loading...</TextBlock>
+            <TextBlock Text="{Binding LoadingText}" />
             
             <TextBlock Text="{Binding TaskPipeline.Status.Value}"/>
             <ProgressBar Value="{Binding TaskPipeline.Progress.Value}" />

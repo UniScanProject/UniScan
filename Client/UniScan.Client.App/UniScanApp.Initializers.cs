@@ -1,13 +1,14 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
-using UniScan.Client.App.Core.Initialization;
 using UniScan.Client.App.Core.Module;
 using UniScan.Client.App.Core.Module.Modules.Internal;
+using UniScan.Client.App.Core.Pipeline.Initialization;
 using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
 using UniScan.Platform.DependencyInjection;
@@ -16,7 +17,7 @@ namespace UniScan.Client.App;
 
 public partial class UniScanApp
 {
-    internal async Task InitializeEnvironment(UniScanAppInitializationPipeline.TaskContexts.Early context)
+    internal async Task InitializeEnvironment(UniScanAppInitializationPipeline.TaskContexts.Early context, CancellationToken ct = default)
     {
         context.Status.Value = "Initializing environment";
 
@@ -36,7 +37,7 @@ public partial class UniScanApp
         Log.Logger.Debug("Initialized Environment {Env}", _hostEnvironment);
     }
 
-    internal async Task InitializeSoftwareInfo(UniScanAppInitializationPipeline.TaskContexts.Early ctx)
+    internal async Task InitializeSoftwareInfo(UniScanAppInitializationPipeline.TaskContexts.Early ctx, CancellationToken ct = default)
     {
         ctx.Status.Value = "Initializing SoftwareInfo";
 
@@ -44,7 +45,7 @@ public partial class UniScanApp
         Log.Information("{Info}", SoftwareInfo);
     }
 
-    internal async Task InitializeModules(UniScanAppInitializationPipeline.TaskContexts.Early ctx)
+    internal async Task InitializeModules(UniScanAppInitializationPipeline.TaskContexts.Early ctx, CancellationToken ct = default)
     {
         ctx.Status.Value = "Initializing modules";
 
@@ -75,7 +76,7 @@ public partial class UniScanApp
         }
     }
 
-    internal async Task InitializeClient(UniScanAppInitializationPipeline.TaskContexts.PreClient ctx)
+    internal async Task InitializeClient(UniScanAppInitializationPipeline.TaskContexts.PreClient ctx, CancellationToken ct = default)
     {
         ctx.Status.Value = "Initializing client and loading remotes";
 
@@ -84,7 +85,7 @@ public partial class UniScanApp
         ctx.ServiceCollection.AddSingleton<IRemoteFactory>(_ => ctx.Client.ServiceProvider.GetRequiredService<IRemoteFactory>());
     }
 
-    internal Task FinishInitialization(UniScanAppInitializationPipeline.TaskContexts.PostServiceProvider ctx)
+    internal Task FinishInitialization(UniScanAppInitializationPipeline.TaskContexts.PostServiceProvider ctx, CancellationToken ct = default)
     {
         try
         {

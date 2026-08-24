@@ -80,6 +80,8 @@ class UniScanHost
             Log.Information("Stopping server...");
 
             _cts.Cancel();
+            
+            Log.Information("Exiting...");
             await _server.ExitAsync();
         }
         finally

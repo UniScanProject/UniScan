@@ -21,9 +21,25 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
     
     public DeviceListViewModel DeviceList { get; }
 
-    public RemoteViewModel(RemoteServer remote) : base(new NotConnectedRemotePageViewModel(remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
+    public RemoteViewModel(IServiceProvider provider, RemoteServer remote) : base(new NotConnectedRemotePageViewModel(provider, remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
     {
         this._notConnectedPage = (NotConnectedRemotePageViewModel)CurrentSubpage;
+        this._notConnectedPage.OnConnecting += (pipeline) =>
+        {
+            this.CurrentSubpage = new LoadingViewModel("Connecting...", pipeline.Pipeline);
+        };
+
+        this._notConnectedPage.OnConnectFailed += (ex) =>
+        {
+            this.CurrentSubpage = new DisconnectedRemotePageViewModel("Failed to connect to server! " + ex.Message)
+            {
+                OkClicked = new RelayCommand(() =>
+                {
+                    this.CurrentSubpage = _notConnectedPage;
+                })
+            };
+        };
+        
         this.Remote = remote;
         
         DeviceList = new DeviceListViewModel(remote);

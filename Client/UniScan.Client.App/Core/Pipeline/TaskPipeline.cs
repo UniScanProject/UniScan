@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using R3;
+using Serilog;
 
 namespace UniScan.Client.App.Core.Pipeline;
 
@@ -17,7 +19,7 @@ public class TaskPipeline
 
     internal void Add(ITaskStage stage) => _stages.Add(stage);
 
-    public async Task RunAsync(ITaskContext initial)
+    public async Task RunAsync(ITaskContext initial, CancellationToken ct = default)
     {
         ITaskContext currentContext = initial;
         IDisposable? subscription = null;
@@ -36,13 +38,22 @@ public class TaskPipeline
 
                 foreach (var task in stage.Tasks)
                 {
-                    await task(currentContext);
+                    ct.ThrowIfCancellationRequested();
+                    
+                    await task(currentContext, ct);
 
                     completed++;
                     Progress.Value = (completed * 100) / tasks;
                 }
             }
-        }//todo catch exception? idk how to get this fucking exception to bubble
+        }
+        catch (Exception ex)
+        {
+            Status.Value = "Failed! Check the logs for more info.";
+            Log.Error(ex, "Task failed.");
+            
+            throw;
+        }
         finally
         {
             subscription?.Dispose();

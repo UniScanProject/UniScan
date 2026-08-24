@@ -1,39 +1,34 @@
 using System;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using Serilog;
+using UniScan.Client.App.Core.Pipeline.Connection;
 using UniScan.Client.Core.Config.Types;
 
 namespace UniScan.Client.App.ViewModels.Pages;
 
-public partial class NotConnectedRemotePageViewModel(RemoteServer remote) : ViewModelBase
+public partial class NotConnectedRemotePageViewModel(IServiceProvider provider, RemoteServer remote) : ViewModelBase
 {
     public RemoteServer Remote { get; set; } = remote;
 
     public bool HasConnectionMethod { get; set; } = remote.ConnectionMethod != null;
+
+    public event Action<RemoteConnectionPipeline>? OnConnecting;
+    public event Action<Exception>? OnConnectFailed; 
     
     [RelayCommand]
-    public async Task OnAnonymousConnectClicked()
+    public async Task OnConnectClicked()
     {
-        if (Remote.Socket.Connected)
-            return;
+        RemoteConnectionPipeline pipeline = new();
+        OnConnecting?.Invoke(pipeline);
 
         try
         {
-            await Remote.Socket.StartAsync();
-
-            if (Remote.Socket.Connected)
-            {
-                _ = Remote.RunConnectionAsync();
-            }
-            else
-            {
-                Log.Error("Failed to connect!");
-            }
+            await pipeline.Pipeline.RunAsync(new RemoteConnectionPipeline.TaskContexts.ConnectionContext(provider,
+                                                      remote));
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Log.Information(ex, "FUCK!");
+            OnConnectFailed?.Invoke(e);
         }
     }
 }

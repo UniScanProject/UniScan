@@ -1,5 +1,7 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace UniScan.Client.App.Core.Pipeline;
 
@@ -25,7 +27,7 @@ public class TaskPipelineBuilder<TContext>
         _pipeline.Add(_stage);
     }
 
-    public TaskPipelineBuilder<TContext> ThenRun(Func<TContext, Task> task)
+    public TaskPipelineBuilder<TContext> ThenRun(Func<TContext, CancellationToken, Task> task)
     {
         _stage.Add(task);
         return this;

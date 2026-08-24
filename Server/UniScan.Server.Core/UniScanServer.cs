@@ -101,7 +101,10 @@ public class UniScanServer
 
     public async Task ExitAsync()
     {
+        Log.Information("Closing socket...");
         await Socket.StopAsync();
+        
+        Log.Information("Disconnecting scanners...");
         await ScannerManager.DisconnectAllAsync();
     }
 }
