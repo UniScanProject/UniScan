@@ -38,7 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Platform\UniScan.Platform.Implementations.Web\UniScan.Platform.Implementations.Web.csproj" />
+        <ProjectReference Include="..\..\Platform\UniScan.Platform.Implementations.Web\UniScan.Platform.Implementations.Web.csproj" />
         <ProjectReference Include="..\UniScan.Client.App\UniScan.Client.App.csproj" AdditionalProperties="UniScanPlatform=browser" />
     </ItemGroup>
 </Project>

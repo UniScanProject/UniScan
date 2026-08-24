@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Platform\UniScan.Platform.Implementations.Native\UniScan.Platform.Implementations.Native.csproj" />
+        <ProjectReference Include="..\..\Platform\UniScan.Platform.Implementations.Native\UniScan.Platform.Implementations.Native.csproj" />
         <ProjectReference Include="..\UniScan.Client.App\UniScan.Client.App.csproj" />
     </ItemGroup>
 

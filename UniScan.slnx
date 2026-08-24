@@ -12,12 +12,6 @@
     <Project Path="Core/UniScan.Core/UniScan.Core.csproj" />
     <Project Path="Core/UniScan.Device/UniScan.Device.csproj" />
   </Folder>
-  <Folder Name="/Core/Platform/">
-    <Project Path="Core/Platform/UniScan.Platform.DependencyInjection/UniScan.Platform.DependencyInjection.csproj" />
-    <Project Path="Core/Platform/UniScan.Platform.Implementations.Native/UniScan.Platform.Implementations.Native.csproj" />
-    <Project Path="Core/Platform/UniScan.Platform.Implementations.Web/UniScan.Platform.Implementations.Web.csproj" />
-    <Project Path="Core/Platform/UniScan.Platform/UniScan.Platform.csproj" />
-  </Folder>
   <Folder Name="/External/" />
   <Folder Name="/External/Shiki/">
     <Project Path="External/Shiki/Shiki.CodeGenerator.Core/Shiki.CodeGenerator.Core.csproj" />
@@ -38,6 +32,12 @@
     <Project Path="Network/UniScan.Network.CodeGenerator/UniScan.Network.CodeGenerator.csproj" />
     <Project Path="Network/UniScan.Network.Server/UniScan.Network.Server.csproj" />
     <Project Path="Network/UniScan.Network/UniScan.Network.csproj" />
+  </Folder>
+  <Folder Name="/Platform/">
+    <Project Path="Platform/UniScan.Platform.DependencyInjection/UniScan.Platform.DependencyInjection.csproj" />
+    <Project Path="Platform/UniScan.Platform.Implementations.Native/UniScan.Platform.Implementations.Native.csproj" />
+    <Project Path="Platform/UniScan.Platform.Implementations.Web/UniScan.Platform.Implementations.Web.csproj" />
+    <Project Path="Platform/UniScan.Platform/UniScan.Platform.csproj" />
   </Folder>
   <Folder Name="/Server/">
     <Project Path="Server/UniScan.Server.Authentication/UniScan.Server.Authentication.csproj" />
