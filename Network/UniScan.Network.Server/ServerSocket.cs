@@ -99,9 +99,9 @@ public class ServerSocket : ISocket
         return true;
     }
     
-    public async Task<Result<TResponse, Exception>> SendRequestAsync<TResponse>(IChannel? client, IRequestPayloadPart<TResponse> packet)
+    public async Task<Result<TResponse, Exception>> SendRequestAsync<TResponse>(IChannel? client, IRequestPayloadPart<TResponse> packet, CancellationToken ct = default)
         where TResponse : IPacket, IResponsePayloadPart
     {
-        return await _requestManager.MakeRequestAsync(client, packet);
+        return await _requestManager.MakeRequestAsync(client, packet, ct);
     }
 }
