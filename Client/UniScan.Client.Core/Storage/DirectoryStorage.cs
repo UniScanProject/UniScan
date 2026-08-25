@@ -15,7 +15,7 @@ public class DirectoryStorage<TValue>(string directory, IPlatformDirectoryManage
             return null;
 
         List<TValue> d = [];
-        foreach (string file in await directoryManager.EnumerateFilesAsync(Directory, serializer.FileExtensionGlob))
+        await foreach (string file in directoryManager.EnumerateAsync(Directory, serializer.FileExtensionGlob, IPlatformDirectoryManager.DirectoryEnumerationType.FILES))
         {
             try
             {

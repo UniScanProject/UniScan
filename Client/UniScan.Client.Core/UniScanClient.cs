@@ -102,7 +102,7 @@ public partial class UniScanClient(
                                                  DirectoryKeyValueStorage<RemoteDto>>>()
                                         ),
                                     new DirectoryKeyValueStorage<RemoteCacheDto>(
-                                         Path.Combine(environment.StandardPaths.ConfigPath, "remote_cache"),
+                                         Path.Combine(environment.StandardPaths.CachePath, "remotes"),
                                          environment.DirectoryManager,
                                          environment.FileManager,
                                          new JsonStorageSerializer<RemoteCacheDto>(opt),

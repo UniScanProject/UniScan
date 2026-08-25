@@ -1,8 +1,7 @@
 namespace UniScan.Platform.Filesystem;
 
-public interface IPlatformFileManager
+public interface IPlatformFileManager : IPlatformFileSystemManager
 {
-    public Task<bool> ExistsAsync(string path);
     public Task CopyAsync(string from, string to, bool overwrite);
     public Task MoveAsync(string from, string to, bool overwrite);
 

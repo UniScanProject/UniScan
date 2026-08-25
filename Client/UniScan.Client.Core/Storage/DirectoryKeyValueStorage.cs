@@ -16,15 +16,15 @@ public class DirectoryKeyValueStorage<TValue>(string directory, IPlatformDirecto
 
     public async Task<Dictionary<string, TValue>?> LoadAsync()
     {
-        if (!System.IO.Directory.Exists(Directory))
+        if (!await directoryManager.ExistsAsync(Directory))
             return null;
 
         Dictionary<string, TValue> d = [];
-        foreach (string file in await directoryManager.EnumerateFilesAsync(Directory, serializer.FileExtensionGlob))
+        await foreach (string file in directoryManager.EnumerateAsync(Directory, serializer.FileExtensionGlob, IPlatformDirectoryManager.DirectoryEnumerationType.FILES))
         {
             try
             {
-                await using FileStream fs = new(file, FileMode.Open, FileAccess.Read);
+                await using Stream fs = await fileManager.GetStreamAsync(file, FileMode.Open, FileAccess.Read, FileShare.None);
                 TValue? data = await serializer.DeserializeAsync(fs);
 
                 if (data != null)
@@ -46,9 +46,9 @@ public class DirectoryKeyValueStorage<TValue>(string directory, IPlatformDirecto
         if (data is null)
             return;
         
-        if (!System.IO.Directory.Exists(Directory))
+        if (!await directoryManager.ExistsAsync(Directory))
         {
-            System.IO.Directory.CreateDirectory(Directory);
+            await directoryManager.CreateDirectoryAsync(Directory);
         }
 
         foreach (KeyValuePair<string, TValue> d in data)
@@ -57,7 +57,7 @@ public class DirectoryKeyValueStorage<TValue>(string directory, IPlatformDirecto
 
             try
             {
-                await using FileStream fs = new(path, FileMode.Create, FileAccess.Write);
+                await using Stream fs = await fileManager.GetStreamAsync(path, FileMode.Create, FileAccess.Write, FileShare.None);
                 await serializer.SerializeAsync(fs, d.Value);
             }
             catch (Exception e)
@@ -72,16 +72,16 @@ public class DirectoryKeyValueStorage<TValue>(string directory, IPlatformDirecto
         if (data is null)
             return;
         
-        if (!System.IO.Directory.Exists(Directory))
+        if (!await directoryManager.ExistsAsync(Directory))
         {
-            System.IO.Directory.CreateDirectory(Directory);
+            await directoryManager.CreateDirectoryAsync(Directory);
         }
         
         string path = Path.Combine(Directory, $"{id}.{serializer.FileExtension}");
 
         try
         {
-            await using FileStream fs = new(path, FileMode.Create, FileAccess.Write);
+            await using Stream fs = await fileManager.GetStreamAsync(path, FileMode.Create, FileAccess.Write, FileShare.None);
             await serializer.SerializeAsync(fs, data);
         }
         catch (Exception e)
