@@ -1,31 +1,19 @@
-using System.Collections.Immutable;
-using System.Collections.ObjectModel;
-using System.Text.Json.Serialization;
 using DotNetty.Common.Utilities;
-using Microsoft.Extensions.DependencyInjection;
 using ObservableCollections;
 using R3;
 using Serilog;
-using Shiki.Common.Collections;
-using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Client.Core.Config.Remote;
-using UniScan.Core.State;
 using UniScan.Network;
 using UniScan.Network.Client;
 using UniScan.Network.Client.Remote.Connection;
 using UniScan.Network.Data;
 using UniScan.Network.Data.Info.Remote;
 using UniScan.Network.Data.Info.Software;
-using UniScan.Network.Packet.Packets.Clientbound;
-using UniScan.Network.Packet.Packets.Clientbound.Remote;
-using UniScan.Network.Packet.Packets.Serverbound;
-using UniScan.Network.Packet.Packets.Serverbound.Client;
-using UniScan.Network.Request;
 using UniScan.Network.Socket.Configuration;
 
-namespace UniScan.Client.Core.Config.Types;
+namespace UniScan.Client.Core.Remote;
 
 public class ServerAttributes
 {
@@ -53,6 +41,8 @@ public class RemoteServer : IRemoteServerMutationProxy
 {
     public IReadOnlyBindableReactiveProperty<string> DisplayName { get; }
     
+    public Guid Id { get; }
+    
     /// <summary>
     /// connection method
     /// </summary>
@@ -75,8 +65,10 @@ public class RemoteServer : IRemoteServerMutationProxy
     
     private readonly IServiceProvider _serviceProvider;
 
-    public RemoteServer(IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider)
+    public RemoteServer(Guid id, IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider)
     {
+        Id = id;
+        
         ConnectionMethod = connectionMethod;
         DisplayName = _remoteInfo.Select(info => info?.DisplayName ?? ConnectionMethod.ToDisplayString())
                                  .ToReadOnlyBindableReactiveProperty(ConnectionMethod.ToDisplayString());
@@ -97,13 +89,13 @@ public class RemoteServer : IRemoteServerMutationProxy
         };
     }
 
-    public RemoteServer(IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators,
-                        PacketRegistry packetRegistry, IServiceProvider serviceProvider, RemoteInfo? info) : this(connectionMethod, configurators, packetRegistry, serviceProvider)
+    public RemoteServer(Guid id, IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators,
+                        PacketRegistry packetRegistry, IServiceProvider serviceProvider, RemoteInfo? info) : this(id, connectionMethod, configurators, packetRegistry, serviceProvider)
     {
         _remoteInfo.Value = info;
     }
     
-    public RemoteServer(RemoteDto dto, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider) : this(dto.ConnectionMethod, configurators, packetRegistry, serviceProvider) {}
+    public RemoteServer(Guid id, RemoteDto dto, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider) : this(id, dto.ConnectionMethod, configurators, packetRegistry, serviceProvider) {}
 
     void IRemoteServerMutationProxy.SetSoftwareInfo(ServerSoftwareInfo info)
     {

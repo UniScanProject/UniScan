@@ -1,3 +1,4 @@
+using Shiki.TaskPipeline;
 using UniScan.Client.App.Core.Pipeline;
 
 namespace UniScan.Client.App.ViewModels;

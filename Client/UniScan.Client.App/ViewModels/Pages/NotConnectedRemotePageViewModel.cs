@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using UniScan.Client.App.Core.Pipeline.Connection;
-using UniScan.Client.Core.Config.Types;
+using UniScan.Client.Core.Remote;
+using UniScan.Client.Core.Remote.Pipeline;
 
 namespace UniScan.Client.App.ViewModels.Pages;
 

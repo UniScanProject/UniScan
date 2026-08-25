@@ -5,8 +5,8 @@ using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
 using ObservableCollections;
 using UniScan.Client.App.UI.ConnectionMethod;
-using UniScan.Client.Core.Config.Types;
 using UniScan.Client.Core.DI.Factory;
+using UniScan.Client.Core.Remote;
 using UniScan.Network.Client.Remote.Connection;
 
 namespace UniScan.Client.App.ViewModels.Dialogs;
@@ -44,7 +44,7 @@ public partial class AddRemoteDialogViewModel : ViewModelBase
             return;
         }
         
-        CreatedRemote = _remoteFactory.Create(method);
+        CreatedRemote = _remoteFactory.Create(Guid.NewGuid(), method);
         DialogHost.Close("MainDialogHost", CreatedRemote);
     }
     

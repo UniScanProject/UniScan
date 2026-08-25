@@ -1,12 +1,11 @@
 using ObservableCollections;
-using UniScan.Client.Core.Config.Types;
 
-namespace UniScan.Client.Core.Config.Remote;
+namespace UniScan.Client.Core.Remote;
 
 public interface IRemoteManager
 {
     ObservableList<RemoteServer> Remotes { get; }
-    
+
     // void AddRemote(RemoteServer remote);
     // bool RemoveRemote(Types.RemoteServer remote);
     // bool RemoveRemote(Identifier id, out RemoteServer? remote);

@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
+using Shiki.TaskPipeline;
 using UniScan.Client.Core;
 
 namespace UniScan.Client.App.Core.Pipeline.Initialization;

@@ -24,6 +24,8 @@ public class BrowserDirectoryManager : IPlatformDirectoryManager
 
     public async Task CreateDirectoryAsync(string path) => await Get(path, true);
     
+    public Task<IEnumerable<string>> EnumerateFilesAsync(string path, string glob = "*") => throw new NotImplementedException();
+
     public async Task<FileSystemDirectoryHandle> GetRoot() => await Navigator.Storage.GetDirectory();
 
     public async Task<FileSystemDirectoryHandle> GetExistingDirOrRoot(string? path) => path != null ? await Get(path.Split([Path.PathSeparator, Path.AltDirectorySeparatorChar], StringSplitOptions.RemoveEmptyEntries), false) ?? await GetRoot() : await GetRoot();

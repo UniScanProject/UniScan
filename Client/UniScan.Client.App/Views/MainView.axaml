@@ -10,7 +10,6 @@
         xmlns:viewModels="clr-namespace:UniScan.Client.App.ViewModels"
         xmlns:controls1="clr-namespace:UniScan.Client.App.Views.Controls"
         xmlns:controls2="clr-namespace:UniScan.Client.App.ViewModels.Controls"
-        xmlns:types="clr-namespace:UniScan.Client.Core.Config.Types;assembly=UniScan.Client.Core"
         xmlns:vm1="clr-namespace:UniScan.Client.App.ViewModels"
         xmlns:controls3="clr-namespace:UniScan.Client.App.Views.Controls"
         xmlns:controls21="clr-namespace:UniScan.Client.App.ViewModels.Controls"

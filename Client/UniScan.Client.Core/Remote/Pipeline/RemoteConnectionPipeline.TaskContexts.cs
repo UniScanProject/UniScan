@@ -1,8 +1,7 @@
-using System;
 using R3;
-using UniScan.Client.Core.Config.Types;
+using Shiki.TaskPipeline;
 
-namespace UniScan.Client.App.Core.Pipeline.Connection;
+namespace UniScan.Client.Core.Remote.Pipeline;
 
 public partial class RemoteConnectionPipeline
 {

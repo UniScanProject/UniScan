@@ -7,7 +7,7 @@ using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Client.App.ViewModels.Controls;
 using UniScan.Client.App.ViewModels.Pages;
 using UniScan.Client.Core;
-using UniScan.Client.Core.Config.Types;
+using UniScan.Client.Core.Remote;
 using UniScan.Network.Util;
 
 namespace UniScan.Client.App.ViewModels;

@@ -29,6 +29,6 @@ public partial class UniScanAppInitializationPipeline
     {
         ctx.Status.Value = "Saving remotes";
 
-        await ctx.Client!.RemoteManagerFile.SaveAsync(ctx.Client.RemoteManager);
+        // await ctx.Client!.RemoteManagerFile.SaveAsync(ctx.Client.RemoteManager);
     }
 }

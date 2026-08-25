@@ -1,9 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using R3;
 using Serilog;
+using Shiki.TaskPipeline;
 
-namespace UniScan.Client.App.Core.Pipeline.Connection;
+namespace UniScan.Client.Core.Remote.Pipeline;
 
 public partial class RemoteConnectionPipeline
 {

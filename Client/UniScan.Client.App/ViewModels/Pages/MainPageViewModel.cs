@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ObservableCollections;
 using R3;
 using UniScan.Client.Core.Config.Remote;
-using UniScan.Client.Core.Config.Types;
+using UniScan.Client.Core.Remote;
 
 namespace UniScan.Client.App.ViewModels.Pages;
 

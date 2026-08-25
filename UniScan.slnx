@@ -19,6 +19,7 @@
     <Project Path="External/Shiki/Shiki.Common/Shiki.Common.csproj" />
     <Project Path="External/Shiki/Shiki.ModuleManagement.Implementations/Shiki.ModuleManagement.Implementations.csproj" />
     <Project Path="External/Shiki/Shiki.ModuleManagement/Shiki.ModuleManagement.csproj" />
+    <Project Path="External/Shiki/Shiki.TaskPipeline/Shiki.TaskPipeline.csproj" />
     <Project Path="External/Shiki/Shiki.Tests/Shiki.Tests.csproj" />
   </Folder>
   <Folder Name="/External/Shiki/Extensions/">

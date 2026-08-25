@@ -1,4 +1,4 @@
-using UniScan.Client.Core.Config.Types;
+using UniScan.Client.Core.Remote;
 using UniScan.Network.Data;
 
 namespace UniScan.Client.App.ViewModels.Controls;

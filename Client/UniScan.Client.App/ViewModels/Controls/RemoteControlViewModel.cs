@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using UniScan.Client.Core.Config.Types;
+using UniScan.Client.Core.Remote;
 
 namespace UniScan.Client.App.ViewModels.Controls;
 

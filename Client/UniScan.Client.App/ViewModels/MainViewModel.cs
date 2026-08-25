@@ -73,7 +73,7 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
         if (vm.CreatedRemote != null)
         {
             Client.RemoteManager.Remotes.Add(vm.CreatedRemote);
-            await Client.RemoteManagerFile.SaveAsync(Client.RemoteManager);
+            // await Client.RemoteManagerFile.SaveAsync(Client.RemoteManager);
             
             Log.Logger.Information("Added new remote {Remote}", vm.CreatedRemote);
         }
@@ -86,7 +86,7 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
             throw new NullReferenceException("Remote is null, how?");
         
         Client.RemoteManager.Remotes.Remove(rcvm.Remote);
-        await Client.RemoteManagerFile.SaveAsync(Client.RemoteManager);
+        // await Client.RemoteManagerFile.SaveAsync(Client.RemoteManager);
         
         Log.Logger.Information("Removed remote {Remote}", rcvm.Remote);
     }

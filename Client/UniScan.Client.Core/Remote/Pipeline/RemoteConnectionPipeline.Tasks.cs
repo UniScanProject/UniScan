@@ -1,16 +1,10 @@
-using System;
-using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
-using DotNetty.Transport.Channels;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using UniScan.Client.Core.Config.Types;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Packet.Packets.Serverbound;
 using UniScan.Network.Packet.Packets.Serverbound.Client;
 
-namespace UniScan.Client.App.Core.Pipeline.Connection;
+namespace UniScan.Client.Core.Remote.Pipeline;
 
 public partial class RemoteConnectionPipeline
 {

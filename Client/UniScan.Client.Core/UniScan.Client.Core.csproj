@@ -16,6 +16,7 @@
       <ProjectReference Include="..\..\External\Shiki\Shiki.ModuleManagement\Shiki.ModuleManagement.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
+      <ProjectReference Include="..\..\External\Shiki\Shiki.TaskPipeline\Shiki.TaskPipeline.csproj" />
       <ProjectReference Include="..\..\Platform\UniScan.Platform\UniScan.Platform.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network.Client\UniScan.Network.Client.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network\UniScan.Network.csproj" />
@@ -30,7 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Config\Types\" />
       <Folder Include="Platform\" />
-      <Folder Include="Remote\" />
     </ItemGroup>
 </Project>

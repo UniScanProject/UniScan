@@ -1,5 +1,5 @@
 using UniScan.Client.App.ViewModels.Controls;
-using UniScan.Client.Core.Config.Types;
+using UniScan.Client.Core.Remote;
 
 namespace UniScan.Client.App.ViewModels.Pages;
 

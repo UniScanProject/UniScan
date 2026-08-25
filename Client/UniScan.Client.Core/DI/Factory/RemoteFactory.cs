@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shiki.Common.Identity;
 using UniScan.Client.Core.Config.Remote;
-using UniScan.Client.Core.Config.Types;
+using UniScan.Client.Core.Remote;
 using UniScan.Network;
 using UniScan.Network.Client.Remote.Connection;
 using UniScan.Network.Data.Info.Software;
@@ -12,13 +12,13 @@ namespace UniScan.Client.Core.DI.Factory;
 
 public interface IRemoteFactory
 {
-    public RemoteServer Create(IRemoteConnectionMethod connectionMethod);
+    public RemoteServer Create(Guid id, IRemoteConnectionMethod connectionMethod);
     
-    public RemoteServer Create(RemoteDto dto);
+    public RemoteServer Create(Guid id, RemoteDto dto, RemoteCacheDto? cache);
 }
 
 public class RemoteFactory(IServiceProvider provider) : IRemoteFactory
 {
-    public RemoteServer Create(IRemoteConnectionMethod connectionMethod) => new(connectionMethod, provider.GetServices<IPipelineConfigurator>(), provider.GetRequiredService<PacketRegistry>(), provider);
-    public RemoteServer Create(RemoteDto dto) => new(dto.ConnectionMethod, provider.GetServices<IPipelineConfigurator>(), provider.GetRequiredService<PacketRegistry>(), provider, dto.Cache.RemoteInfo);
+    public RemoteServer Create(Guid id, IRemoteConnectionMethod connectionMethod) => new(id, connectionMethod, provider.GetServices<IPipelineConfigurator>(), provider.GetRequiredService<PacketRegistry>(), provider);
+    public RemoteServer Create(Guid id, RemoteDto dto, RemoteCacheDto? cache) => new(id, dto.ConnectionMethod, provider.GetServices<IPipelineConfigurator>(), provider.GetRequiredService<PacketRegistry>(), provider, cache?.RemoteInfo);
 }
