@@ -33,6 +33,7 @@ public partial class UniScanAppInitializationPipeline
                     .ThenRun(InitializeServiceProvider)
                   .ThenTransitionTo<TaskContexts.PostServiceProvider>()
                       .ThenRun(InitializeRemotes)
+                      .ThenRun(RegisterPackets)
                       .ThenRun(app.FinishInitialization)
                       .ThenRun((_, _) =>
                        {

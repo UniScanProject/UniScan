@@ -11,6 +11,7 @@ using UniScan.Client.App.ViewModels.Pages;
 using UniScan.Client.App.Views.Dialogs;
 using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
+using UniScan.Client.Core.Remote;
 
 namespace UniScan.Client.App.ViewModels;
 
@@ -18,6 +19,8 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
 {
     public ClientSettingsViewModel Settings { get; }
     public UniScanClient Client { get; }
+    
+    public IRemoteManager RemoteManager { get; }
     public IRemoteFactory RemoteFactory { get; }
     
     public new static Identifier Identifier { get; } = UniScanApp.Identifier.Derived("view_model", "main");
@@ -26,33 +29,32 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
 
     private readonly MainPageViewModel _mainPage;
     
-    public MainViewModel(UniScanClient client, ClientSettingsViewModel clientSettingsViewModel, IRemoteFactory remoteFactory) : base(new EmptyPageViewModel())
+    public MainViewModel(IServiceProvider provider, IRemoteManager remoteManager, ClientSettingsViewModel clientSettingsViewModel, IRemoteFactory remoteFactory) : base(new EmptyPageViewModel())
     {
-        Client = client;
-        
+        RemoteManager = remoteManager;
         RemoteFactory = remoteFactory;
         Settings = clientSettingsViewModel;
     
-        RemotesView = Client.RemoteManager.Remotes.CreateView(remote => new RemoteControlViewModel(Client.ServiceProvider, remote))
-                            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
+        RemotesView = RemoteManager.Remotes.CreateView(remote => new RemoteControlViewModel(provider, remote))
+                                   .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
 
         RemotesView.CollectionChanged += (sender, args) =>
         {
-            if (args is { Action: NotifyCollectionChangedAction.Remove, OldItems: not null })
+            if (args is not { Action: NotifyCollectionChangedAction.Remove, OldItems: not null })
+                return;
+            
+            foreach (RemoteControlViewModel vm in args.OldItems)
             {
-                foreach (RemoteControlViewModel vm in args.OldItems)
+                if (CurrentSubpage is RemoteViewModel rvm && rvm.Remote == vm.Remote)
                 {
-                    if (CurrentSubpage is RemoteViewModel rvm && rvm.Remote == vm.Remote)
-                    {
-                        OnHomeClicked();
-                    }
-
-                    vm.Dispose();
+                    OnHomeClicked();
                 }
+
+                vm.Dispose();
             }
         };
         
-        _mainPage = new MainPageViewModel(Client.ServiceProvider, Client.RemoteManager);
+        _mainPage = new MainPageViewModel(provider, RemoteManager);
         CurrentSubpage = _mainPage;
     }
     
@@ -72,9 +74,7 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
         
         if (vm.CreatedRemote != null)
         {
-            Client.RemoteManager.Remotes.Add(vm.CreatedRemote);
-            // await Client.RemoteManagerFile.SaveAsync(Client.RemoteManager);
-            
+            RemoteManager.Remotes.Add(vm.CreatedRemote);
             Log.Logger.Information("Added new remote {Remote}", vm.CreatedRemote);
         }
     }
@@ -85,9 +85,7 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
         if (rcvm?.Remote == null)
             throw new NullReferenceException("Remote is null, how?");
         
-        Client.RemoteManager.Remotes.Remove(rcvm.Remote);
-        // await Client.RemoteManagerFile.SaveAsync(Client.RemoteManager);
-        
+        RemoteManager.Remotes.Remove(rcvm.Remote);
         Log.Logger.Information("Removed remote {Remote}", rcvm.Remote);
     }
     

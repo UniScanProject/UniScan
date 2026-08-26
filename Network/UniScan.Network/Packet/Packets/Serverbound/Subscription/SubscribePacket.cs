@@ -1,3 +1,4 @@
+using MessagePack;
 using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
@@ -15,5 +16,9 @@ namespace UniScan.Network.Packet.Packets.Serverbound.Subscription;
 /// <param name="RequestId">The request ID (must be present, how do we enforce?)</param>
 [RegistryPacket("UniScan", "packet", "serverbound", "subscription", "subscribe")]
 [RequiredHandlerPermission("UniScan", "permission", "subscription", "subscribe")]
+[MessagePackObject]
 [method: RequestConstructor]
-public partial record SubscribePacket(Slug<SnakeSlugFormatter> ScannerIdentifier, Guid? RequestId) : IServerboundPacket, IRequiresAcceptedClientPayloadPart<GetDeviceListPacket>, ISelectedScannerPayloadPart, IRequiresAuthenticationPayloadPart<SubscribePacket>, IRequestPayloadPart<AcknowledgePacket>;
+public partial record SubscribePacket(
+    [property: Key(0)] Slug<SnakeSlugFormatter> ScannerIdentifier,
+    [property: Key(1)] Guid? RequestId
+) : IServerboundPacket, IRequiresAcceptedClientPayloadPart<GetDeviceListPacket>, ISelectedScannerPayloadPart, IRequiresAuthenticationPayloadPart<SubscribePacket>, IRequestPayloadPart<AcknowledgePacket>;

@@ -5,12 +5,12 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:dialogs1="clr-namespace:UniScan.Client.App.ViewModels.Dialogs"
              xmlns:views="clr-namespace:UniScan.Client.App.Views"
-             xmlns:util="clr-namespace:UniScan.Client.App.UI.Util"
+             xmlns:conversion="clr-namespace:UniScan.Client.App.UI.Conversion"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Dialogs.AddRemoteDialogView"
              x:DataType="dialogs1:AddRemoteDialogViewModel"
-             Width="{Binding $parent[views:MainView].Bounds.Width, Converter={util:RelativeUnitConverter Min=200, Percentage=0.50}}"
-             Height="{Binding $parent[views:MainView].Bounds.Height, Converter={util:RelativeUnitConverter Min=200, Percentage=0.50}}"
+             Width="{Binding $parent[views:MainView].Bounds.Width, Converter={conversion:RelativeUnitConverter Min=200, Percentage=0.50}}"
+             Height="{Binding $parent[views:MainView].Bounds.Height, Converter={conversion:RelativeUnitConverter Min=200, Percentage=0.50}}"
              Padding="6">
     <Grid RowDefinitions="*, Auto">
         <StackPanel Orientation="Vertical" Spacing="10" Grid.Row="0">

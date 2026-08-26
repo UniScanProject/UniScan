@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:UniScan.Client.App.ViewModels.Controls"
+             xmlns:controls1="clr-namespace:UniScan.Client.App.Views.Controls"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UniScan.Client.App.Views.Controls.RemoteInfoView"
+             x:DataType="controls:RemoteInfoViewModel">
+    <StackPanel Spacing="10">
+        <Border Padding="10">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Border CornerRadius="10" VerticalAlignment="Center" IsVisible="{Binding Info.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <Image asyncImageLoader:ImageLoader.Source="{Binding Info.Branding.LogoUrl}" Width="64" Height="64" />
+                </Border>
+                <StackPanel VerticalAlignment="Center" Spacing="5">
+                    <TextBlock Text="{Binding Info.DisplayName}" FontSize="20" FontWeight="Bold" IsVisible="{Binding Info.DisplayName, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    <TextBlock Text="{Binding Info.Description}" IsVisible="{Binding Info.Description, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding Links}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="10" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                                
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls1:RemoteLinkView />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </StackPanel>
+</UserControl>

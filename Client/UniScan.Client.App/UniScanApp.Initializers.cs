@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
@@ -11,6 +12,9 @@ using UniScan.Client.App.Core.Module.Modules.Internal;
 using UniScan.Client.App.Core.Pipeline.Initialization;
 using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
+using UniScan.Client.Core.Remote;
+using UniScan.Network;
+using UniScan.Network.Registry.Source.Sources;
 using UniScan.Platform.DependencyInjection;
 
 namespace UniScan.Client.App;
@@ -34,7 +38,13 @@ public partial class UniScanApp
                                      .ForContext<UniScanApp>();
 
         _hostEnvironment.AddToDi(context.ServiceCollection);
-        Log.Logger.Debug("Initialized Environment {Env}", _hostEnvironment);
+
+        context.ServiceCollection.AddLogging(builder =>
+        {
+            builder.ClearProviders();
+            builder.AddSerilog();
+        });
+        Log.Debug("Initialized Environment {Env}", _hostEnvironment);
     }
 
     internal async Task InitializeSoftwareInfo(UniScanAppInitializationPipeline.TaskContexts.Early ctx, CancellationToken ct = default)
@@ -73,16 +83,14 @@ public partial class UniScanApp
         foreach (IUniScanClientAppModule module in ModuleStorage.Modules)
         {
             module.ConfigureDi(ctx.ServiceCollection);
+            ctx.ServiceCollection.AddSingleton(module);
         }
     }
 
     internal async Task InitializeClient(UniScanAppInitializationPipeline.TaskContexts.PreClient ctx, CancellationToken ct = default)
     {
-        ctx.Status.Value = "Initializing client and loading remotes";
-
-        ctx.Client = await UniScanClient.CreateInstanceAsync(_hostEnvironment, SoftwareInfo);
-        ctx.ServiceCollection.AddSingleton(ctx.Client);
-        ctx.ServiceCollection.AddSingleton<IRemoteFactory>(_ => ctx.Client.ServiceProvider.GetRequiredService<IRemoteFactory>());
+        ctx.Status.Value = "Initializing client";
+        ctx.ServiceCollection.AddUniScanClient(_hostEnvironment, SoftwareInfo);
     }
 
     internal Task FinishInitialization(UniScanAppInitializationPipeline.TaskContexts.PostServiceProvider ctx, CancellationToken ct = default)

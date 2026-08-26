@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using UniScan.Client.App.ViewModels;
 using UniScan.Client.App.Views;
+using UniScan.Client.Core.Remote;
+using UniScan.Network;
+using UniScan.Network.Registry.Source.Sources;
 
 namespace UniScan.Client.App.Core.Pipeline.Initialization;
 
@@ -27,8 +30,20 @@ public partial class UniScanAppInitializationPipeline
 
     internal static async Task InitializeRemotes(TaskContexts.PostServiceProvider ctx, CancellationToken ct = default)
     {
-        ctx.Status.Value = "Saving remotes";
+        ctx.Status.Value = "Loading remotes";
+        
+        IRemoteStorage remoteStorage = ctx.Services.GetRequiredService<IRemoteStorage>();
+        await remoteStorage.LoadAsync();
+    }
+    
+    internal Task RegisterPackets(UniScanAppInitializationPipeline.TaskContexts.PostServiceProvider ctx,
+                                  CancellationToken ct = default)
+    {
+        ctx.Status.Value = "Registering packets";
+        
+        PacketRegistry registry = ctx.Services.GetRequiredService<PacketRegistry>();
+        registry.RegisterFromSource<AssembliesPacketSource>();
 
-        // await ctx.Client!.RemoteManagerFile.SaveAsync(ctx.Client.RemoteManager);
+        return Task.CompletedTask;
     }
 }

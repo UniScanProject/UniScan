@@ -15,6 +15,7 @@ using UniScan.Device.Device;
 using UniScan.Network;
 using UniScan.Network.Data.Info.Remote;
 using UniScan.Network.Data.Info.Software;
+using UniScan.Network.Packet.Packets.Bidirectional.Status;
 using UniScan.Network.Packet.Packets.Clientbound.Remote;
 using UniScan.Network.Registry.Source.Sources;
 using UniScan.Network.Server;
@@ -58,10 +59,14 @@ public class UniScanServer
                                                                  );
     
     public static readonly RemoteInfo RemoteInfo = new(
-                                                                 "Hello, world!",
-                                                                 "Example description",
+                                                                 "UniScan Test Server",
+                                                                 "Soon I will make all of this configurable",
                                                                  new RemoteSettings(true),
-                                                                 new RemoteBranding(null, []),
+                                                                 new RemoteBranding(new Uri("https://github.com/UniScanProject.png?size=64"), [
+                                                                    new RemoteLink(new Uri("https://github.com/UniScanProject.png?size=32"), "UniScan on GitHub", new Uri("https://github.com/UniScanProject/UniScan")),
+                                                                    new RemoteLink(new Uri("https://uniscan.dexrn.me/assets/logo_512x512.png"), "UniScan Web", new Uri("https://uniscan.dexrn.me")),
+                                                                    new RemoteLink(new Uri("https://dexrn.me/favicon.png"), "Developer's Website", new Uri("https://dexrn.me"))
+                                                                 ]),
                                                                  new RemoteSocial("Hello, world!", [])
                                                                 );
     
@@ -111,6 +116,11 @@ public class UniScanServer
     public async Task ExitAsync()
     {
         Log.Information("Closing socket...");
+        if (Socket is ServerSocket serverSocket)
+        {
+            await serverSocket.ClientManager.BroadcastAsync(new DisconnectPacket("Server shutting down..."));
+        }
+
         await Socket.StopAsync();
         
         Log.Information("Disconnecting scanners...");

@@ -12,20 +12,19 @@
             <TextBlock DockPanel.Dock="Top" Grid.Row="0" HorizontalAlignment="Center" Text="{Binding Info.DisplayName}" FontWeight="Bold" />
             
             <Border Grid.Row="1" BorderThickness="2" BorderBrush="{DynamicResource ButtonBorderBrushPointerOver}" CornerRadius="5">
-                <TextBlock Text="Not subscribed" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold" />
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Not subscribed" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold" />
+                    <Button Command="{Binding SubscribeCommand}" VerticalAlignment="Center" HorizontalAlignment="Center">Subscribe</Button>
+                </StackPanel>
             </Border>
             
             <Grid DockPanel.Dock="Bottom" Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="5">
                 <StackPanel VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" IsVisible="{Binding $parent[Border].((controls1:DeviceInfoViewModel)DataContext)?.HasModelInfo}" Spacing="1">
+                    <StackPanel Orientation="Horizontal" IsVisible="{Binding $parent[Border].((controls1:DeviceInfoViewModel)DataContext)?.HasModelInfo}" Spacing="2">
                         <TextBlock Text="{Binding Info.Specs?.Model}" />
                         <TextBlock Text="{Binding Info.Specs?.Version}" FontSize="12" Foreground="{DynamicResource TextControlForegroundDisabled}" />
                     </StackPanel>
                     <TextBlock Foreground="{DynamicResource TextControlForegroundDisabled}" FontSize="12" Text="{Binding Info.ScannerIdentifier}" />
-                </StackPanel>
-                
-                <StackPanel Grid.Column="2">
-                    <Button>Subscribe</Button>
                 </StackPanel>
             </Grid>
         </Grid>

@@ -8,7 +8,7 @@
              xmlns:controls="clr-namespace:UniScan.Client.App.Views.Controls"
              xmlns:app="clr-namespace:UniScan.Client.App"
              xmlns:ui="clr-namespace:UniScan.Client.App.UI"
-             xmlns:util="clr-namespace:UniScan.Client.App.UI.Util"
+             xmlns:conversion="clr-namespace:UniScan.Client.App.UI.Conversion"
              Name="UniScan">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -17,7 +17,7 @@
     </Application.DataTemplates>
              
              <Application.Resources>
-                 <util:RelativeUnitConverter x:Key="RelativeUnitConverter"/>
+                 <conversion:RelativeUnitConverter x:Key="RelativeUnitConverter"/>
              </Application.Resources>
 
     <Application.Styles>

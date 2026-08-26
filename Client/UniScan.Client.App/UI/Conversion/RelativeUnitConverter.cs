@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 
-namespace UniScan.Client.App.UI.Util;
+namespace UniScan.Client.App.UI.Conversion;
 
 public class RelativeUnitConverter : MarkupExtension, IValueConverter
 {

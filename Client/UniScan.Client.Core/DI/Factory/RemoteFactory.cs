@@ -3,6 +3,7 @@ using Shiki.Common.Identity;
 using UniScan.Client.Core.Config.Remote;
 using UniScan.Client.Core.Remote;
 using UniScan.Network;
+using UniScan.Network.Client;
 using UniScan.Network.Client.Remote.Connection;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Packet.Packets.Serverbound.Client;
@@ -19,6 +20,6 @@ public interface IRemoteFactory
 
 public class RemoteFactory(IServiceProvider provider) : IRemoteFactory
 {
-    public RemoteServer Create(Guid id, IRemoteConnectionMethod connectionMethod) => new(id, connectionMethod, provider.GetServices<IPipelineConfigurator>(), provider.GetRequiredService<PacketRegistry>(), provider);
-    public RemoteServer Create(Guid id, RemoteDto dto, RemoteCacheDto? cache) => new(id, dto.ConnectionMethod, provider.GetServices<IPipelineConfigurator>(), provider.GetRequiredService<PacketRegistry>(), provider, cache?.RemoteInfo);
+    public RemoteServer Create(Guid id, IRemoteConnectionMethod connectionMethod) => new(id, connectionMethod, provider.GetRequiredService<IClientSocketFactory>());
+    public RemoteServer Create(Guid id, RemoteDto dto, RemoteCacheDto? cache) => new(id, dto, cache, provider.GetRequiredService<IClientSocketFactory>());
 }

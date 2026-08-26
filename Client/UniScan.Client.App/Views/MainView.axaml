@@ -23,7 +23,8 @@
     
     <dialogHostAvalonia:DialogHost Identifier="MainDialogHost" DialogMargin="16">
         <DrawerPage Content="{Binding CurrentSubpage}"
-                    DrawerLayoutBehavior="CompactOverlay" x:Name="MainDrawerPage">
+                    DrawerLayoutBehavior="CompactOverlay" x:Name="MainDrawerPage"
+                    CompactDrawerLength="60">
             <DrawerPage.Drawer>
                 <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="12" RowSpacing="10">
                     <StackPanel Spacing="10">

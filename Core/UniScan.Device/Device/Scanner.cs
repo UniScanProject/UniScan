@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using R3;
 using Semver;
 using Serilog;
 using UniScan.Core.State;
@@ -13,7 +14,6 @@ namespace UniScan.Device.Device;
 
 public interface IScannerEvents
 {
-    public event Action<DeviceState>? OnStateUpdated;
 }
 
 public interface IScannerAPI
@@ -50,13 +50,12 @@ public abstract class Scanner : IScanner, IScannerEvents
     public abstract bool Active { get; }
     
     [JsonIgnore]
-    public abstract DeviceState? State { get; protected set; }
+    public abstract IReadOnlyBindableReactiveProperty<DeviceState?> State { get; }
     
     [JsonIgnore]
     public abstract ScannerInfo? ScannerInfo { get; protected set; }
     
     protected readonly ILogger Logger;
-    public abstract event Action<DeviceState>? OnStateUpdated;
     
     public Scanner(IScannerConnection connection)
     {

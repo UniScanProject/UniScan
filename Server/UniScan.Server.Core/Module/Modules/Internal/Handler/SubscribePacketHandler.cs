@@ -26,8 +26,12 @@ public class SubscribePacketHandler(ScannerHostManager scannerHostManager) : Sim
         {
             ctx.WriteAsync(new AcknowledgePacket(new TransportableBooleanResult(null), msg.RequestId));
             
-            ctx.WriteAsync(new ScannerRegistrationPacket(host.DisplayName, msg.RequestId, msg.ScannerIdentifier));
-            ctx.WriteAsync(new StatePacket(host.Scanner.State, msg.RequestId, host.Identifier));
+            // ctx.WriteAsync(new ScannerRegistrationPacket(host.DisplayName, msg.RequestId, msg.ScannerIdentifier));
+            if (host.Scanner.State.Value != null)
+            {
+                ctx.WriteAsync(new StatePacket(host.Scanner.State.Value, msg.RequestId, host.Identifier));
+            }
+
             ctx.Flush();
             
             host.NetworkClients.AddClient(ctx.Channel);

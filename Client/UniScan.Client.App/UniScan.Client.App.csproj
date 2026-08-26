@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AsyncImageLoader.Avalonia" />
         <PackageReference Include="Avalonia"/>
         <PackageReference Include="Avalonia.Labs.Controls" />
         <PackageReference Include="Avalonia.Themes.Fluent"/>

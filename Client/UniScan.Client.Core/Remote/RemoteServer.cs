@@ -63,19 +63,16 @@ public class RemoteServer : IRemoteServerMutationProxy
     private readonly ReactiveProperty<bool> _connected = new(false);
     public ReadOnlyReactiveProperty<bool> Connected => _connected;
     
-    private readonly IServiceProvider _serviceProvider;
-
-    public RemoteServer(Guid id, IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider)
+    public RemoteServer(Guid id, IRemoteConnectionMethod connectionMethod, IClientSocketFactory socketFactory)
     {
         Id = id;
         
         ConnectionMethod = connectionMethod;
         DisplayName = _remoteInfo.Select(info => info?.DisplayName ?? ConnectionMethod.ToDisplayString())
                                  .ToReadOnlyBindableReactiveProperty(ConnectionMethod.ToDisplayString());
-        
-        _serviceProvider = serviceProvider;
-        
-        Socket = new ClientSocket(new UniScanClientChannelInitializer(packetRegistry, configurators, _serviceProvider), ConnectionMethod);
+
+
+        Socket = socketFactory.CreateInstance(connectionMethod);
         Socket.ConnectionState.Connected += (sender, args) =>
         {
             _connected.Value = true;
@@ -89,13 +86,12 @@ public class RemoteServer : IRemoteServerMutationProxy
         };
     }
 
-    public RemoteServer(Guid id, IRemoteConnectionMethod connectionMethod, IEnumerable<IPipelineConfigurator> configurators,
-                        PacketRegistry packetRegistry, IServiceProvider serviceProvider, RemoteInfo? info) : this(id, connectionMethod, configurators, packetRegistry, serviceProvider)
+    public RemoteServer(Guid id, IRemoteConnectionMethod connectionMethod, IClientSocketFactory socketFactory, RemoteInfo? info) : this(id, connectionMethod, socketFactory)
     {
         _remoteInfo.Value = info;
     }
     
-    public RemoteServer(Guid id, RemoteDto dto, IEnumerable<IPipelineConfigurator> configurators, PacketRegistry packetRegistry, IServiceProvider serviceProvider) : this(id, dto.ConnectionMethod, configurators, packetRegistry, serviceProvider) {}
+    public RemoteServer(Guid id, RemoteDto dto, RemoteCacheDto? cache, IClientSocketFactory socketFactory) : this(id, dto.ConnectionMethod, socketFactory, cache?.RemoteInfo) {}
 
     void IRemoteServerMutationProxy.SetSoftwareInfo(ServerSoftwareInfo info)
     {

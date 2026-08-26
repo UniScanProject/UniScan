@@ -51,6 +51,7 @@ public partial class RemoteConnectionPipeline
         {
             _logger.Debug("Received devices list: [{Devices}]", string.Join(", ", devices.Value.Devices));
 
+            ctx.RemoteServer.Devices.Clear();
             foreach (var deviceInfoDto in devices.Value.Devices)
             {
                 ctx.RemoteServer.Devices.Add(deviceInfoDto);    

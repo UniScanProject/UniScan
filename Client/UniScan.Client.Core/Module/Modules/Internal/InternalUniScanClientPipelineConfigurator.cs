@@ -6,25 +6,18 @@ using UniScan.Network.Socket.Configuration;
 
 namespace UniScan.Client.Core.Module.Modules.Internal;
 
-public class InternalUniScanClientPipelineConfigurator : IPipelineConfigurator
+public class InternalUniScanClientPipelineConfigurator(IServiceProvider serviceProvider) : IPipelineConfigurator
 {
     public int Priority => 100;
 
-    private readonly IServiceProvider _serviceProvider;
-    
-    public InternalUniScanClientPipelineConfigurator(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
-    
     public void ConfigureFilters(IChannelPipeline pipeline)
     {
     }
 
     public void ConfigureHandlers(IChannelPipeline pipeline)
     {
-        pipeline.AddLast(nameof(DisconnectPacketHandler), _serviceProvider.GetRequiredService<DisconnectPacketHandler>());
-        pipeline.AddLast(nameof(RemoteInfoPacketHandler), _serviceProvider.GetRequiredService<RemoteInfoPacketHandler>());
+        pipeline.AddLast(nameof(DisconnectPacketHandler), serviceProvider.GetRequiredService<DisconnectPacketHandler>());
+        pipeline.AddLast(nameof(RemoteInfoPacketHandler), serviceProvider.GetRequiredService<RemoteInfoPacketHandler>());
 
     }
 }

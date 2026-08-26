@@ -22,9 +22,7 @@ public partial class UniScanAppInitializationPipeline
             public BindableReactiveProperty<string> Status { get; } = new(status);
 
             public ServiceCollection ServiceCollection { get; } = serviceCollection;
-
-            public UniScanClient? Client { get; set; } = null;
-
+            
             public PreClient(Early ctx) : this(ctx.Status.CurrentValue, ctx.ServiceCollection)
             {
             }
@@ -34,18 +32,14 @@ public partial class UniScanAppInitializationPipeline
 
         public class PostClient(
             string status,
-            ServiceCollection serviceCollection,
-            UniScanClient client)
+            ServiceCollection serviceCollection)
             : ITaskContext<PostClient, PreClient>
         {
             public BindableReactiveProperty<string> Status { get; } = new(status);
 
             public ServiceCollection ServiceCollection { get; } = serviceCollection;
-
-            public UniScanClient Client { get; } = client;
-
-            public PostClient(PreClient ctx) : this(ctx.Status.CurrentValue, ctx.ServiceCollection,
-                                                    ctx.Client ?? throw new NullReferenceException())
+            
+            public PostClient(PreClient ctx) : this(ctx.Status.CurrentValue, ctx.ServiceCollection)
             {
             }
 
@@ -54,20 +48,16 @@ public partial class UniScanAppInitializationPipeline
 
         public class PreServiceProvider(
             string status,
-            ServiceCollection serviceCollection,
-            UniScanClient client)
+            ServiceCollection serviceCollection)
             : ITaskContext<PreServiceProvider, PostClient>
         {
             public BindableReactiveProperty<string> Status { get; } = new(status);
 
             public ServiceCollection ServiceCollection { get; } = serviceCollection;
-
-            public UniScanClient Client { get; } = client;
-
+            
             public IServiceProvider? Services { get; set; } = null;
 
-            public PreServiceProvider(PostClient ctx) : this(ctx.Status.CurrentValue, ctx.ServiceCollection,
-                                                             ctx.Client ?? throw new NullReferenceException())
+            public PreServiceProvider(PostClient ctx) : this(ctx.Status.CurrentValue, ctx.ServiceCollection)
             {
             }
 
@@ -76,21 +66,14 @@ public partial class UniScanAppInitializationPipeline
 
         public class PostServiceProvider(
             string status,
-            ServiceCollection serviceCollection,
-            UniScanClient client,
             IServiceProvider provider)
             : ITaskContext<PostServiceProvider, PreServiceProvider>
         {
             public BindableReactiveProperty<string> Status { get; } = new(status);
-
-            public ServiceCollection ServiceCollection { get; } = serviceCollection;
-
-            public UniScanClient Client { get; } = client;
-
+            
             public IServiceProvider Services { get; } = provider;
 
-            public PostServiceProvider(PreServiceProvider ctx) : this(ctx.Status.CurrentValue, ctx.ServiceCollection,
-                                                                      ctx.Client ?? throw new NullReferenceException(),
+            public PostServiceProvider(PreServiceProvider ctx) : this(ctx.Status.CurrentValue,
                                                                       ctx.Services ??
                                                                       throw new NullReferenceException())
             {

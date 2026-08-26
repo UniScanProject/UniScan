@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using R3;
 using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
@@ -20,6 +21,9 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
     private MainRemotePageViewModel? _mainPage;
     
     public DeviceListViewModel DeviceList { get; }
+    
+    public BehaviorSubject<RemoteInfoViewModel?> InfoViewModelStream { get; } = new BehaviorSubject<RemoteInfoViewModel?>(null); 
+    public RemoteInfoViewModel? InfoViewModel => InfoViewModelStream.Value;
 
     public RemoteViewModel(IServiceProvider provider, RemoteServer remote) : base(new NotConnectedRemotePageViewModel(provider, remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
     {
@@ -41,6 +45,13 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
         };
         
         this.Remote = remote;
+        Remote.RemoteInfo.Subscribe((v) =>
+        {
+            RemoteInfoViewModel? n = v != null ? new RemoteInfoViewModel(v) : null;
+            
+            InfoViewModelStream.OnNext(n);
+            OnPropertyChanged(nameof(InfoViewModel));
+        });
         
         DeviceList = new DeviceListViewModel(remote);
 
@@ -79,7 +90,7 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
     {
         Dispatcher.UIThread.Post(() =>
         {
-            _mainPage ??= new MainRemotePageViewModel(Remote, DeviceList);
+            _mainPage ??= new MainRemotePageViewModel(Remote, DeviceList, InfoViewModelStream.AsObservable());
             this.CurrentSubpage = _mainPage;
         });
     }

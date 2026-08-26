@@ -1,3 +1,4 @@
+using System;
 using ObservableCollections;
 using R3;
 using Serilog;
@@ -7,12 +8,17 @@ using UniScan.Client.Core.Storage;
 
 namespace UniScan.Client.Core.Remote;
 
+public interface IRemoteStorage : IDisposable
+{
+    Task LoadAsync();
+}
+
 public class RemoteStorage(
     IRemoteManager remoteManager,
     IRemoteFactory remoteFactory,
     DirectoryKeyValueStorage<RemoteDto> remoteStorage,
     DirectoryKeyValueStorage<RemoteCacheDto>? cacheStorage
-) : IDisposable
+) : IRemoteStorage
 {
     private readonly CompositeDisposable _disposables = new();
 
@@ -79,6 +85,9 @@ public class RemoteStorage(
     private async Task DeleteRemoteAsync(Guid id)
     {
         await remoteStorage.DeleteAsync(id.ToString());
+        
+        if (cacheStorage != null)
+            await cacheStorage.DeleteAsync(id.ToString());
     }
 
     public void Dispose()

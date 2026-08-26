@@ -5,13 +5,15 @@
              xmlns:controls="clr-namespace:UniScan.Client.App.ViewModels.Controls"
              xmlns:controls1="clr-namespace:UniScan.Client.App.Views.Controls"
              xmlns:controls2="clr-namespace:UniScan.Client.App.ViewModels.Controls"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Controls.RemoteControlView"
              x:DataType="controls2:RemoteControlViewModel">
     <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Command="{Binding OnClicked}">
         <Grid ColumnDefinitions="*, Auto">
-            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
-                <TextBlock Text="{Binding Remote.DisplayName.Value}" />
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl}" Width="16" Height="16" IsVisible="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Remote.DisplayName.Value}" />
             </StackPanel>
             
             <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">

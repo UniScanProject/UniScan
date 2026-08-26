@@ -7,7 +7,7 @@
              xmlns:pages="clr-namespace:UniScan.Client.App.ViewModels.Pages"
              xmlns:controls2="clr-namespace:UniScan.Client.App.ViewModels.Controls"
              xmlns:controls3="clr-namespace:UniScan.Client.App.Views.Controls"
-             xmlns:util="clr-namespace:UniScan.Client.App.UI.Util"
+             xmlns:conversion="clr-namespace:UniScan.Client.App.UI.Conversion"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Controls.DeviceListView"
              x:DataType="controls2:DeviceListViewModel">
@@ -32,11 +32,11 @@
                 </Setter>
                                 
                 <Setter Property="Width">
-                    <Binding Path="#DeviceGrid.Bounds.Width" Converter="{util:RelativeUnitConverter Min=200, Percentage=0.15}" />
+                    <Binding Path="#DeviceGrid.Bounds.Width" Converter="{conversion:RelativeUnitConverter Min=200, Percentage=0.15}" />
                 </Setter>
                                 
                 <Setter Property="Height">
-                    <Binding Path="#DeviceGrid.Bounds.Width" Converter="{util:RelativeUnitConverter Min=200, Percentage=0.15}" />
+                    <Binding Path="#DeviceGrid.Bounds.Width" Converter="{conversion:RelativeUnitConverter Min=200, Percentage=0.15}" />
                 </Setter>
                                 
                 <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" />

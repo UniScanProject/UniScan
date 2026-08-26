@@ -2,5 +2,5 @@ namespace UniScan.Network;
 
 public class Constants
 {
-    public const int ProtocolVersion = 2;
+    public const int ProtocolVersion = 3;
 }
