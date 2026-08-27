@@ -1,12 +1,8 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="using:UniScan.Client"
              x:Class="UniScan.Client.App.UniScanApp"
              RequestedThemeVariant="Default"
              xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
-             xmlns:labs="clr-namespace:Avalonia.Labs.Controls;assembly=Avalonia.Labs.Controls"
-             xmlns:controls="clr-namespace:UniScan.Client.App.Views.Controls"
-             xmlns:app="clr-namespace:UniScan.Client.App"
              xmlns:ui="clr-namespace:UniScan.Client.App.UI"
              xmlns:conversion="clr-namespace:UniScan.Client.App.UI.Conversion"
              Name="UniScan">

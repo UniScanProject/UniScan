@@ -16,7 +16,7 @@ using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
 using UniScan.Client.App.Core.Module;
 using UniScan.Client.App.Core.Pipeline.Initialization;
-using UniScan.Client.App.ViewModels;
+using UniScan.Client.App.Views.Global;
 using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
 using UniScan.Client.Core.Module.Modules.Internal;
@@ -25,10 +25,10 @@ using UniScan.Network.Packet.Packets.Serverbound.Client;
 using UniScan.Platform;
 using UniScan.Platform.DependencyInjection;
 using MainView = UniScan.Client.App.Views.MainView;
-using MainViewModel = UniScan.Client.App.ViewModels.MainViewModel;
+using MainViewModel = UniScan.Client.App.Views.MainViewModel;
 using MainWindow = UniScan.Client.App.Views.MainWindow;
 using RootView = UniScan.Client.App.Views.RootView;
-using RootViewModel = UniScan.Client.App.ViewModels.RootViewModel;
+using RootViewModel = UniScan.Client.App.Views.RootViewModel;
 
 namespace UniScan.Client.App;
 
