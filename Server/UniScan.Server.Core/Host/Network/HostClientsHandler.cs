@@ -44,6 +44,8 @@ public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
     
     public void AddClient(IChannel channel) => _subscribers.Add(channel);
 
+    public bool Contains(IChannel channel) => _subscribers.Contains(channel);
+
     public void Dispose()
     {
         _disposable.Dispose();

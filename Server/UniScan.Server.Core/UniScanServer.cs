@@ -9,6 +9,8 @@ using Serilog;
 using Serilog.Core;
 using Shiki.Common.Extensions;
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Common.Util;
 using Shiki.ModuleManagement;
 using UniScan.Device.Device;
@@ -67,7 +69,19 @@ public class UniScanServer
                                                                     new RemoteLink(new Uri("https://uniscan.dexrn.me/assets/logo_512x512.png"), "UniScan Web", new Uri("https://uniscan.dexrn.me")),
                                                                     new RemoteLink(new Uri("https://dexrn.me/favicon.png"), "Developer's Website", new Uri("https://dexrn.me"))
                                                                  ]),
-                                                                 new RemoteSocial("Hello, world!", [])
+                                                                 new RemoteSocial("Hello, world!", new Dictionary<Slug<SnakeSlugFormatter>, RemoteAnnouncement> {
+                                                                    [new Slug<SnakeSlugFormatter>("work_in_progress")] = new(
+                                                                     "Work In Progress",
+                                                                     "All of this is still a work in progress, in the future, this will all be configurable.",
+                                                                     DateTimeOffset.UtcNow,
+                                                                     [],
+                                                                     [
+                                                                         new RemoteAnnouncementAuthor(
+                                                                          "Dexrn ZacAttack",
+                                                                          new Uri("https://github.com/DexrnZacAttack.png?size=64")
+                                                                          )
+                                                                     ])
+                                                                 })
                                                                 );
     
     public UniScanServer(SessionManager sessionManager, ServerSocketInitializer socketInitializer, PacketRegistry packetRegistry, ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> moduleStorage)
@@ -75,7 +89,7 @@ public class UniScanServer
         SessionManager = sessionManager;
         _moduleStorage = moduleStorage;
         _packetRegistry = packetRegistry;
-        _networkGroupManager = new LibUvGroupManager(); //new MultithreadedGroupManager();
+        _networkGroupManager = new MultithreadedGroupManager();
         
         ScannerManager = new ScannerHostManager();
         

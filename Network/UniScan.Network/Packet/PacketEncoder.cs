@@ -40,11 +40,11 @@ public class PacketEncoder(PacketRegistry packetRegistry, MessagePackSerializerO
             byte[] msg = MessagePackSerializer.Serialize(type, message, options, ct);
 
             #if DEBUG
-            var lines = msg.Chunk(16)
-                           .Select(chunk => string.Join(" ", Convert.ToHexString(chunk).Chunk(2)
-                                                                    .Select(c => new string(c))));
+                var lines = msg.Chunk(16)
+                               .Select(chunk => string.Join(" ", Convert.ToHexString(chunk).Chunk(2)
+                                                                        .Select(c => new string(c))));
 
-            Log.Debug("{lines}", string.Join(Environment.NewLine, lines));
+                Log.Debug("sent: {lines}", string.Join(Environment.NewLine, lines));
             #endif
 
             output.WriteBytes(msg);

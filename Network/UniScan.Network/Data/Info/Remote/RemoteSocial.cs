@@ -11,5 +11,5 @@ namespace UniScan.Network.Data.Info.Remote;
 [MessagePackObject]
 public readonly record struct RemoteSocial(
     [property: Key(0)] string? MessageOfTheDay,
-    [property: Key(1)] Dictionary<Slug<SnakeSlugFormatter>, RemoteAnnouncement> Announcements
+    [property: Key(1)] Dictionary<Slug<SnakeSlugFormatter>, RemoteAnnouncement> Announcements//TODO make this list of IDs, so that we aren't sending such a large packet if there are many announcements
 );
