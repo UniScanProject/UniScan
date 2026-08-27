@@ -35,7 +35,7 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
 
         this._notConnectedPage.OnConnectFailed += (ex) =>
         {
-            this.CurrentSubpage = new DisconnectedRemotePageViewModel("Failed to connect to server! " + ex.Message)
+            this.CurrentSubpage = new DisconnectedRemotePageViewModel("Failed to connect to server! " + ex.Message, Remote)
             {
                 OkClicked = new RelayCommand(() =>
                 {
@@ -69,7 +69,7 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
                 reason = eventArgs.Channel.GetAttribute(ServerAttributes.DisconnectReasonAttribute).Get();
             }
             
-            this.CurrentSubpage = new DisconnectedRemotePageViewModel(reason)
+            this.CurrentSubpage = new DisconnectedRemotePageViewModel(reason, Remote)
             {
                 OkClicked = new RelayCommand(() =>
                 {

@@ -9,7 +9,9 @@
              mc:Ignorable="d"
              x:Class="UniScan.Client.App.Views.Pages.MainPageView"
              x:DataType="pages:MainPageViewModel">
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+    <Border Padding="10">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="10">
+        <TextBlock HorizontalAlignment="Center" Text="Looks like you're not connected to any remotes." FontSize="20" FontWeight="Bold" IsVisible="{ReflectionBinding !ConnectedRemotesView.Count}" />
         <ItemsControl x:Name="RemotesList" ItemsSource="{Binding ConnectedRemotesView}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type viewModels1:RemoteViewModel}">
@@ -27,4 +29,5 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
     </StackPanel>
+    </Border>
 </ContentPage>

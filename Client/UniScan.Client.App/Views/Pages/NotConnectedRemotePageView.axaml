@@ -11,9 +11,9 @@
     <Border VerticalAlignment="Center" HorizontalAlignment="Center" Padding="10" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" CornerRadius="10">
         <StackPanel Spacing="10">
             <Border Padding="10" CornerRadius="5" Background="{DynamicResource SystemControlPageBackgroundBaseLowBrush}">
-                <StackPanel Orientation="Horizontal" Spacing="10">
+                <StackPanel Orientation="Horizontal" Spacing="5">
                     <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl}" Width="32" Height="32" IsVisible="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
-                    <TextBlock Text="{Binding Remote.DisplayName}" FontWeight="Bold" FontSize="16" />
+                    <TextBlock Text="{Binding Remote.DisplayName}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
                 </StackPanel>
             </Border>
             <TextBlock Text="Not connected" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" />
