@@ -39,6 +39,7 @@ jobs:
           -c Release
           -o ${{steps.strings.outputs.build-output-dir}}    
           /nr:false
+          /m:1
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v5
