@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using UniScan.Client.App.ViewModels;
+using UniScan.Client.App.Views.ViewModel;
 
 namespace UniScan.Client.App.UI;
 

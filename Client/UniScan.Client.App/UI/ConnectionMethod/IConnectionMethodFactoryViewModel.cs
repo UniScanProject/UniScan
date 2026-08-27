@@ -1,4 +1,4 @@
-using UniScan.Client.App.ViewModels;
+using UniScan.Client.App.Views.ViewModel;
 using UniScan.Network.Client.Remote.Connection;
 
 namespace UniScan.Client.App.UI.ConnectionMethod;

@@ -1,11 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using UniScan.Client.App.ViewModels;
 using UniScan.Client.App.Views;
+using UniScan.Client.App.Views.Settings;
 using UniScan.Client.Core.Remote;
 using UniScan.Network;
 using UniScan.Network.Registry.Source.Sources;
+using MainViewModel = UniScan.Client.App.Views.MainViewModel;
 
 namespace UniScan.Client.App.Core.Pipeline.Initialization;
 

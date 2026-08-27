@@ -16,6 +16,7 @@
     <ItemGroup>
         <PackageReference Include="AsyncImageLoader.Avalonia" />
         <PackageReference Include="Avalonia"/>
+        <PackageReference Include="Avalonia.Controls.ItemsRepeater" />
         <PackageReference Include="Avalonia.Labs.Controls" />
         <PackageReference Include="Avalonia.Themes.Fluent"/>
         <PackageReference Include="Avalonia.Fonts.Inter"/>
@@ -45,13 +46,127 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\Pages\MainRemotePageView.axaml.cs">
+      <Compile Update="Views\Remote\RemoteInfoControl.axaml.cs">
+        <DependentUpon>RemoteInfoView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\RemoteLinkControl.axaml.cs">
+        <DependentUpon>RemoteLinkControl.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\SidebarRemoteItemControl.axaml.cs">
+        <DependentUpon>SidebarRemoteItemView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\Device\DeviceInfoControl.axaml.cs">
+        <DependentUpon>DeviceInfoView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\Device\DeviceListControl.axaml.cs">
+        <DependentUpon>DeviceListView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\Device\SidebarDeviceItemControl.axaml.cs">
+        <DependentUpon>DeviceSidebarView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\RemotePageView.axaml.cs">
         <DependentUpon>MainRemotePageView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="Views\Pages\DisconnectedRemotePageView.axaml.cs">
+      <Compile Update="Views\Remote\RemoteRootPageView.axaml.cs">
+        <DependentUpon>RemoteView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\Connection\NotConnectedRemotePageView.axaml.cs">
+        <DependentUpon>NotConnectedRemotePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\Connection\ConnectionMethod\TCPConnectionMethodFactoryView.axaml.cs">
+        <DependentUpon>TCPConnectionMethodFactoryView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Home\MainPageView.axaml.cs">
+        <DependentUpon>MainPageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\Connection\DisconnectedRemotePageView.axaml.cs">
         <DependentUpon>DisconnectedRemotePageView.axaml</DependentUpon>
         <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Global\HeadedSeparatorControl.axaml.cs">
+        <DependentUpon>HeadedSeparatorControl.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Settings\ClientSettingsView.axaml.cs">
+        <DependentUpon>ClientSettingsView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Global\LoadingView.axaml.cs">
+        <DependentUpon>LoadingView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Global\EmptyPageView.axaml.cs">
+        <DependentUpon>EmptyPageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Remote\Action\AddRemoteDialog.axaml.cs">
+        <DependentUpon>AddRemoteDialog.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Global\HeadedSeparatorControlViewModel.cs">
+        <DependentUpon>HeadedSeparatorControl.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Global\LoadingViewModel.cs">
+        <DependentUpon>LoadingView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Global\EmptyPageViewModel.cs">
+        <DependentUpon>EmptyPageView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Home\MainPageViewModel.cs">
+        <DependentUpon>MainPageView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\Action\AddRemoteDialogViewModel.cs">
+        <DependentUpon>AddRemoteDialog.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\Connection\ConnectionMethod\TCPConnectionMethodFactoryViewModel.cs">
+        <DependentUpon>TCPConnectionMethodFactoryView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\Connection\DisconnectedRemotePageViewModel.cs">
+        <DependentUpon>DisconnectedRemotePageView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\Connection\NotConnectedRemotePageViewModel.cs">
+        <DependentUpon>NotConnectedRemotePageView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\Device\DeviceInfoControlViewModel.cs">
+        <DependentUpon>DeviceInfoControl.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\Device\DeviceListControlViewModel.cs">
+        <DependentUpon>DeviceListControl.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\RemotePageViewModel.cs">
+        <DependentUpon>RemotePageView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\RemoteInfoControlViewModel.cs">
+        <DependentUpon>RemoteInfoControl.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\RemoteLinkControlViewModel.cs">
+        <DependentUpon>RemoteLinkControl.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\SidebarRemoteItemControlViewModel.cs">
+        <DependentUpon>SidebarRemoteItemControl.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\RemoteRootPageViewModel.cs">
+        <DependentUpon>RemoteRootPageView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\MainViewModel.cs">
+        <DependentUpon>MainView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\RootViewModel.cs">
+        <DependentUpon>RootView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Settings\ClientSettingsViewModel.cs">
+        <DependentUpon>ClientSettingsView.axaml</DependentUpon>
       </Compile>
     </ItemGroup>
 

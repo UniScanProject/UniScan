@@ -1,0 +1,36 @@
+<ContentPage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:home="clr-namespace:UniScan.Client.App.Views.Home"
+             xmlns:remote="clr-namespace:UniScan.Client.App.Views.Remote"
+             xmlns:device="clr-namespace:UniScan.Client.App.Views.Remote.Device"
+             mc:Ignorable="d"
+             x:Class="UniScan.Client.App.Views.Home.MainPageView"
+             x:DataType="home:MainPageViewModel">
+    <Border Padding="10">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="10">
+        <TextBlock HorizontalAlignment="Center" Text="Looks like you're not connected to any remotes." FontSize="20" FontWeight="Bold" IsVisible="{ReflectionBinding !ConnectedRemotesView.Count}" />
+        <ItemsControl x:Name="RemotesList" ItemsSource="{Binding ConnectedRemotesView}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type remote:RemoteRootPageViewModel}">
+                    <Expander IsExpanded="True" HorizontalAlignment="Stretch" Margin="5" CornerRadius="5">
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl}" Width="32" Height="32" IsVisible="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Remote.DisplayName.Value}" />
+                            </StackPanel>
+                        </Expander.Header>
+                        
+                        <device:DeviceListControl DataContext="{Binding DeviceListControl}" HorizontalAlignment="Stretch" />
+                    </Expander>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+            </ScrollViewer>
+    </Border>
+</ContentPage>
