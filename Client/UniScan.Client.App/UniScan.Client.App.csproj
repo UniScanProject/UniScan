@@ -199,9 +199,10 @@
 
     <!-- THIS TOOK SO FUCKING LONG TO GET WORKING MY GOD -->
     <ItemGroup Condition="'$(UniScanPlatform)' == 'browser'">
-        <Compile Remove="Views\ConnectionMethod\TCPConnectionMethodFactoryView.axaml.cs" />
-        <Compile Remove="Views\ConnectionMethod\TCPConnectionMethodFactoryView.axaml" />
+        <Compile Remove="Views\Remote\Connection\ConnectionMethod\TCPConnectionMethodFactoryView.axaml.cs" />
+        <Compile Remove="Views\Remote\Connection\ConnectionMethod\TCPConnectionMethodFactoryView.axaml" />
+        <Compile Remove="Views\Remote\Connection\ConnectionMethod\TCPConnectionMethodFactoryViewModel.cs" />
         
-        <AvaloniaXaml Remove="Views\ConnectionMethod\TCPConnectionMethodFactoryView.axaml" />
+        <AvaloniaXaml Remove="Views\Remote\Connection\ConnectionMethod\TCPConnectionMethodFactoryView.axaml" />
     </ItemGroup>
 </Project>
