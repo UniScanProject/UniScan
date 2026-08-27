@@ -32,11 +32,15 @@ public partial class RemoteConnectionPipeline
         }
         
         var serverSoftware = await ctx.RemoteServer.Socket.SendRequestAsync(ClientSoftwareInfoPacket.CreateRequest(clientSoftware), ct);
-
         if (serverSoftware.HasValue)
         {
             ctx.RemoteServerMutationProxy.SetSoftwareInfo(serverSoftware.Value.Info);
             _logger.Information("Received server software info: {Info}", serverSoftware.Value.Info);
+        }
+        else
+        {
+            _logger.Error(serverSoftware.Error, "Server rejected handshake");
+            throw new Exception("Server rejected handshake");
         }
     }
 

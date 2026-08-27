@@ -7,11 +7,13 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Pages.DisconnectedRemotePageView"
              x:DataType="pages1:DisconnectedRemotePageViewModel">
-    <Border VerticalAlignment="Center" HorizontalAlignment="Center">
-        <StackPanel>
-            <TextBlock Text="Disconnected!" />
+    <Border VerticalAlignment="Center" HorizontalAlignment="Center" Padding="10" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" CornerRadius="10">
+        <StackPanel Spacing="10">
+            <TextBlock Text="You've been disconnected!" FontWeight="Bold" FontSize="20" />
             <TextBlock Text="{Binding Reason}" />
-            <Button Content="Okay" Command="{Binding OkClicked}" />
+            <StackPanel Orientation="Horizontal" Spacing="10" FlowDirection="RightToLeft" Margin="0 10 0 0">
+                <Button Content="Okay" Command="{Binding OkClicked}" />
+            </StackPanel>
         </StackPanel>
     </Border>
 </UserControl>
