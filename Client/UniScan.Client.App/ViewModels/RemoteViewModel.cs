@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using R3;
@@ -22,7 +23,7 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
     
     public DeviceListViewModel DeviceList { get; }
     
-    public BehaviorSubject<RemoteInfoViewModel?> InfoViewModelStream { get; } = new BehaviorSubject<RemoteInfoViewModel?>(null); 
+    public BehaviorSubject<RemoteInfoViewModel?> InfoViewModelStream { get; } = new(null); 
     public RemoteInfoViewModel? InfoViewModel => InfoViewModelStream.Value;
 
     public RemoteViewModel(IServiceProvider provider, RemoteServer remote) : base(new NotConnectedRemotePageViewModel(provider, remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
@@ -77,6 +78,7 @@ public class RemoteViewModel : SubPagedViewModelBase, IDisposable
                 })
             };
 
+            //todo can we PLEASE manage state better!!!!!!
             if (_mainPage is IDisposable d)
             {
                 d.Dispose();
