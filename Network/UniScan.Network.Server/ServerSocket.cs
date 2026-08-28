@@ -12,6 +12,7 @@ using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Packet.Packets.Serverbound.Client;
 using UniScan.Network.Packet.PayloadPart;
 using UniScan.Network.Request;
+using UniScan.Network.Server.Handler;
 using UniScan.Network.Socket;
 using UniScan.Network.Util;
 
@@ -39,6 +40,8 @@ public class ServerSocket : ISocket
     private MultithreadEventLoopGroup? _workerGroup;
     
     private readonly RequestManager _requestManager = new();
+
+    public ClientsManager ClientManager { get; } = new();
 
     // TODO IHostMethod
     public ServerSocket(UniScanServerChannelInitializer channelInitializer, int port)
@@ -70,6 +73,7 @@ public class ServerSocket : ISocket
                     pipeline.AddLast(ChannelInitializer);
 
                     pipeline.AddFirst(new ConnectionStateTracker());
+                    pipeline.AddFirst(ClientManager);
                     pipeline.AddLast(new ResponseHandler(_requestManager));
                 }));
             
@@ -82,7 +86,7 @@ public class ServerSocket : ISocket
             await StopAsync();
         }
     }
-
+    
     public async Task StopAsync()
     {
         if (_requestManager != null) await _requestManager.RejectAllAsync(new OperationCanceledException("Socket is shutting down")).ContinueWith(_ => _requestManager.DisposeAsync());
@@ -99,9 +103,9 @@ public class ServerSocket : ISocket
         return true;
     }
     
-    public async Task<Result<TResponse, Exception>> SendRequestAsync<TResponse>(IChannel? client, IRequestPayloadPart<TResponse> packet)
+    public async Task<Result<TResponse, Exception>> SendRequestAsync<TResponse>(IChannel? client, IRequestPayloadPart<TResponse> packet, CancellationToken ct = default)
         where TResponse : IPacket, IResponsePayloadPart
     {
-        return await _requestManager.MakeRequestAsync(client, packet);
+        return await _requestManager.MakeRequestAsync(client, packet, ct);
     }
 }

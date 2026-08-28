@@ -1,30 +1,22 @@
 <Border xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="using:UniScan.Client.App.ViewModels"
-        xmlns:controls="clr-namespace:UniScan.Client.App.Views.Controls"
         xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
         x:Class="UniScan.Client.App.Views.MainView"
-        xmlns:labs="clr-namespace:Avalonia.Labs.Controls;assembly=Avalonia.Labs.Controls"
-        xmlns:viewModels="clr-namespace:UniScan.Client.App.ViewModels"
-        xmlns:controls1="clr-namespace:UniScan.Client.App.Views.Controls"
-        xmlns:controls2="clr-namespace:UniScan.Client.App.ViewModels.Controls"
-        xmlns:types="clr-namespace:UniScan.Client.Core.Config.Types;assembly=UniScan.Client.Core"
-        xmlns:vm1="clr-namespace:UniScan.Client.App.ViewModels"
-        xmlns:controls3="clr-namespace:UniScan.Client.App.Views.Controls"
-        xmlns:controls21="clr-namespace:UniScan.Client.App.ViewModels.Controls"
-        x:DataType="vm1:MainViewModel">
+        xmlns:views="clr-namespace:UniScan.Client.App.Views"
+        xmlns:global="clr-namespace:UniScan.Client.App.Views.Global"
+        xmlns:remote="clr-namespace:UniScan.Client.App.Views.Remote"
+        x:DataType="views:MainViewModel">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm1:MainViewModel />
+        <views:MainViewModel />
     </Design.DataContext>
     
     <dialogHostAvalonia:DialogHost Identifier="MainDialogHost" DialogMargin="16">
         <DrawerPage Content="{Binding CurrentSubpage}"
-                    DrawerLayoutBehavior="CompactOverlay" x:Name="MainDrawerPage">
+                    DrawerLayoutBehavior="CompactOverlay" x:Name="MainDrawerPage"
+                    CompactDrawerLength="60">
             <DrawerPage.Drawer>
                 <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="12" RowSpacing="10">
                     <StackPanel Spacing="10">
@@ -32,27 +24,27 @@
                     </StackPanel>
                     
                     <StackPanel Grid.Row="1" Spacing="10">
-                        <controls3:HeadedSeparatorControl Text="Local" />
+                        <global:HeadedSeparatorControl Text="Local" />
                         <!-- TODO local scanners!!! -->
                     </StackPanel>
 
                     <Grid RowDefinitions="Auto, *, Auto" Grid.Row="2" RowSpacing="10">
-                        <controls3:HeadedSeparatorControl Text="Remote" Grid.Row="0" />
+                        <global:HeadedSeparatorControl Text="Remote" Grid.Row="0" />
                         <!-- create remote list -->
                         <ScrollViewer Grid.Row="1">
                             <ItemsControl x:Name="RemotesList" ItemsSource="{Binding RemotesView}">
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate x:DataType="{x:Type controls21:RemoteControlViewModel}">
-                                        <controls3:RemoteControlView />
+                                    <DataTemplate x:DataType="{x:Type remote:SidebarRemoteItemControlViewModel}">
+                                        <remote:SidebarRemoteItemControl />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                                 
                                 <ItemsControl.Styles>
-                                    <Style Selector="controls3|RemoteControlView">
+                                    <Style Selector="remote|SidebarRemoteItemControl">
                                         <Setter Property="FlyoutBase.AttachedFlyout">
                                             <MenuFlyout>
-                                                <MenuItem x:DataType="controls21:RemoteControlViewModel" Header="Connect" Command="{ReflectionBinding #RemotesList.((vm1:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
-                                                <MenuItem x:DataType="controls21:RemoteControlViewModel" Header="Remove" Command="{ReflectionBinding #RemotesList.((vm1:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
+                                                <MenuItem x:DataType="remote:SidebarRemoteItemControlViewModel" Header="Connect" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
+                                                <MenuItem x:DataType="remote:SidebarRemoteItemControlViewModel" Header="Remove" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
                                             </MenuFlyout>
                                         </Setter>
                                         

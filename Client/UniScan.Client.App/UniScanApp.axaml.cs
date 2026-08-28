@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -14,9 +15,10 @@ using Shiki.Common.Extensions;
 using Shiki.Common.Identity;
 using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
-using UniScan.Client.App.Core.Initialization;
 using UniScan.Client.App.Core.Module;
-using UniScan.Client.App.ViewModels;
+using UniScan.Client.App.Core.Pipeline.Initialization;
+using UniScan.Client.App.Core.Platform;
+using UniScan.Client.App.Views.Global;
 using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
 using UniScan.Client.Core.Module.Modules.Internal;
@@ -25,10 +27,10 @@ using UniScan.Network.Packet.Packets.Serverbound.Client;
 using UniScan.Platform;
 using UniScan.Platform.DependencyInjection;
 using MainView = UniScan.Client.App.Views.MainView;
-using MainViewModel = UniScan.Client.App.ViewModels.MainViewModel;
+using MainViewModel = UniScan.Client.App.Views.MainViewModel;
 using MainWindow = UniScan.Client.App.Views.MainWindow;
 using RootView = UniScan.Client.App.Views.RootView;
-using RootViewModel = UniScan.Client.App.ViewModels.RootViewModel;
+using RootViewModel = UniScan.Client.App.Views.RootViewModel;
 
 namespace UniScan.Client.App;
 
@@ -43,8 +45,10 @@ public partial class UniScanApp : Application
 
     private HostEnvironment _hostEnvironment = null!;
 
+    private static readonly Assembly PlatformAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.IsDefined(typeof(UniScanPlatformAttribute))) ?? typeof(UniScanApp).Assembly;
+
     public static readonly Identifier Identifier = UniScanClient.ClientIdentifier.Derived("app");
-    public static readonly SemVersion PlatformVersion = SemVersion.Parse(Assembly.GetEntryAssembly()!.InformationalVersionString);
+    public static readonly SemVersion PlatformVersion = SemVersion.Parse(PlatformAssembly.InformationalVersionString);
 
     public static readonly ClientSoftwareInfo SoftwareInfo = new(
                                                                  Identifier,
@@ -75,7 +79,7 @@ public partial class UniScanApp : Application
     {
         Log.Information("Loading root view");
 
-        RootViewModel = new RootViewModel(new LoadingViewModel(InitializationPipeline.Pipeline));
+        RootViewModel = new RootViewModel(new LoadingViewModel("Loading...", InitializationPipeline.Pipeline));
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:

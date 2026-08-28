@@ -20,7 +20,7 @@
         <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
         <Version>0.0.1</Version>
         <Authors>DexrnZacAttack</Authors>
-        <Company>UniScan</Company>
+        <Company>UniScanProject</Company>
     </PropertyGroup>
 
     <ItemGroup>

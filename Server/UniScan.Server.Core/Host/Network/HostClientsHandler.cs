@@ -1,6 +1,7 @@
 using DotNetty.Common.Concurrency;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Groups;
+using R3;
 using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
@@ -19,16 +20,21 @@ public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
 
     private readonly SubscribableGroup _subscribers = new();
 
+    private IDisposable _disposable;
+
     public HostClientsHandler(Slug<SnakeSlugFormatter> scannerId, Scanner scanner)
     {
         _scannerId = scannerId;
         _scanner = scanner;
         
-        _scanner.OnStateUpdated += HandleState;
+        _disposable = _scanner.State.AsObservable().Subscribe(HandleState);
     }
 
-    private void HandleState(DeviceState state)
+    private void HandleState(DeviceState? state)
     {
+        if (state == null)
+            return;
+        
         // TODO it will be better to get difference of entire state and ship that out but atm this is best I can do
         //every 10 state updates lets send full state too to avoid desync
         StatePacket packet = new(state, null, _scannerId);
@@ -38,15 +44,17 @@ public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
     
     public void AddClient(IChannel channel) => _subscribers.Add(channel);
 
+    public bool Contains(IChannel channel) => _subscribers.Contains(channel);
+
     public void Dispose()
     {
-        _scanner.OnStateUpdated -= HandleState;
+        _disposable.Dispose();
         _ = _subscribers.CloseAllAsync();
     }
 
     public async ValueTask DisposeAsync()
     {
-        _scanner.OnStateUpdated -= HandleState;
+        _disposable.Dispose();
         await _subscribers.CloseAllAsync();
     }
 }

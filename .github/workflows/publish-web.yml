@@ -37,7 +37,9 @@ jobs:
         run: >
           dotnet publish ${{github.workspace}}/Client/UniScan.Client.App.Platform.Browser
           -c Release
-          -o ${{steps.strings.outputs.build-output-dir}}        
+          -o ${{steps.strings.outputs.build-output-dir}}    
+          /nr:false
+          /m:1
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v5
@@ -50,6 +52,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build-client-web
+    if: github.ref == 'refs/heads/main'
     permissions:
       id-token: write
       pages: write

@@ -1,0 +1,102 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:remote="clr-namespace:UniScan.Client.App.Views.Remote"
+             xmlns:device="clr-namespace:UniScan.Client.App.Views.Remote.Device"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UniScan.Client.App.Views.Remote.RemotePageView"
+             x:DataType="remote:RemotePageViewModel">
+        <SplitView IsPaneOpen="True"
+                   DisplayMode="Inline"
+                   OpenPaneLength="100"
+                   PanePlacement="Right">
+            <SplitView.Pane>
+                <StackPanel>
+                <TextBlock Text="Remotes" FontStyle="Oblique" />
+                <!-- <ItemsControl x:Name="RemotesList" ItemsSource="{Binding DevicesView}"> -->
+                <!--     <ItemsControl.ItemTemplate> -->
+                <!--         <controls:DeviceInfoViewModelTemplate ParentRemote="{Binding #RemotesList.((pages:MainRemotePageViewModel)DataContext)?.Remote}" /> -->
+                <!--     </ItemsControl.ItemTemplate> -->
+                <!--          -->
+                <!--     <ItemsControl.Styles> -->
+                <!--         <Style Selector="controls1|DeviceSidebarView"> -->
+                <!--             <Setter Property="FlyoutBase.AttachedFlyout"> -->
+                <!--                 <MenuFlyout> -->
+                <!--                 </MenuFlyout> -->
+                <!--             </Setter> -->
+                <!--                  -->
+                <!--             <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" /> -->
+                <!--         </Style> -->
+                <!--     </ItemsControl.Styles> -->
+                <!-- </ItemsControl> -->
+                </StackPanel>
+            </SplitView.Pane>
+            
+            <SplitView.Content>
+                <TabbedPage Grid.Row="1" TabPlacement="Top">
+                    <ContentPage Header="Home">
+                        <Grid RowDefinitions="Auto, *, Auto">
+                            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Margin="5" CornerRadius="5" IsVisible="{Binding RemoteInfoViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <remote:RemoteInfoControl DataContext="{Binding RemoteInfoViewModel}" />
+                            </Border>
+                            
+                            <Border Grid.Row="1" CornerRadius="5">
+                                <device:DeviceListControl DataContext="{Binding DeviceListControl}" />
+                            </Border>
+                            
+                            <Border Grid.Row="2" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Margin="5" Padding="10" CornerRadius="5" IsVisible="{Binding RemoteInfoViewModel?.Info.Social.MessageOfTheDay, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <TextBlock Text="{Binding RemoteInfoViewModel?.Info.Social.MessageOfTheDay}" />
+                            </Border>
+                        </Grid>
+                    </ContentPage>
+                    <ContentPage Header="Announcements" IsVisible="{Binding RemoteInfoViewModel?.Info.Social.Announcements, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}">
+                            <ItemsControl ItemsSource="{Binding RemoteInfoViewModel?.Info.Social.Announcements}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical" Spacing="10"  />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="10" Padding="10" CornerRadius="5" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
+                                            <StackPanel Spacing="10">
+                                                <Border Background="{DynamicResource SystemControlPageBackgroundBaseLowBrush}" Padding="5" CornerRadius="5">
+                                                    <DockPanel>
+                                                        <TextBlock DockPanel.Dock="Right" Text="{Binding Value.Published, StringFormat=\{0:MM/dd/yyyy hh:mm tt\}}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding Value.Title}" FontWeight="Bold" FontSize="20" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                                    </DockPanel>
+                                                </Border>
+                                                <ItemsControl ItemsSource="{Binding Value.Authors}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel Orientation="Horizontal" Spacing="10" />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Padding="10" CornerRadius="5" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
+                                                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                                                    <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Avatar}" Width="24" Height="24" IsVisible="{Binding Avatar, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
+                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" FontSize="16" />
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                
+                                                <TextBlock Text="{Binding Value.Body}" TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                    </ContentPage>
+                </TabbedPage>
+
+            </SplitView.Content>
+        </SplitView>
+</UserControl>

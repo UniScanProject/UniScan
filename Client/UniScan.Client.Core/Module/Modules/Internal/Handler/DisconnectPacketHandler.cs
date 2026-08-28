@@ -1,13 +1,13 @@
 using DotNetty.Transport.Channels;
 using Serilog;
-using UniScan.Client.Core.Config.Types;
+using UniScan.Client.Core.Remote;
 using UniScan.Network.Packet.Packets.Bidirectional.Status;
 
 namespace UniScan.Client.Core.Module.Modules.Internal.Handler;
 
 public class DisconnectPacketHandler : SimpleChannelInboundHandler<DisconnectPacket>
 {
-    private readonly ILogger _logger = Log.ForContext<DisconnectPacket>();
+    private readonly ILogger _logger = Log.ForContext<DisconnectPacketHandler>();
     
     protected override void ChannelRead0(IChannelHandlerContext ctx, DisconnectPacket msg)
     {

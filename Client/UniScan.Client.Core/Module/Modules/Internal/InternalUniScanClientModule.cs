@@ -17,6 +17,7 @@ public class InternalUniScanClientModule : IUniScanClientModule
     public void ConfigureDi(IServiceCollection services)
     {
         services.AddTransient<DisconnectPacketHandler>();
+        services.AddTransient<RemoteInfoPacketHandler>();
         
         services.AddSingleton<IPipelineConfigurator, InternalUniScanClientPipelineConfigurator>();
     }

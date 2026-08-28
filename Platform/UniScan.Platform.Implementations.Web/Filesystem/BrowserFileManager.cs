@@ -64,7 +64,7 @@ public class BrowserFileManager(WebWorkerService workerService, SpawnJSRuntime r
         {
             throw new InvalidOperationException($"File {to} already exists");
         }
-        FileSystemFileHandle? dst = await Get(to, false, true);
+        FileSystemFileHandle? dst = await Get(to, true, true);
         if (dst == null)
         {
             throw new DirectoryNotFoundException(Path.GetDirectoryName(to));

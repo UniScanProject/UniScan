@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:device="clr-namespace:UniScan.Client.App.Views.Remote.Device"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UniScan.Client.App.Views.Remote.Device.DeviceListControl"
+             x:DataType="device:DeviceListControlViewModel">
+    <UserControl.Styles>
+        <Style Selector="device|DeviceInfoControl">
+            <Setter Property="FlyoutBase.AttachedFlyout">
+                <MenuFlyout>
+                </MenuFlyout>
+            </Setter>
+
+            <!-- <Setter Property="Width"> -->
+            <!--     <Binding Path="#DeviceGrid.Bounds.Width" Converter="{conversion:RelativeUnitConverter Min=200, Percentage=0.15}" /> -->
+            <!-- </Setter> -->
+            <!-- -->
+            <!-- <Setter Property="Height"> -->
+            <!--     <Binding Path="#DeviceGrid.Bounds.Width" Converter="{conversion:RelativeUnitConverter Min=200, Percentage=0.15}" /> -->
+            <!-- </Setter> -->
+            
+            <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" />
+        </Style> 
+    </UserControl.Styles>
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+        <ItemsRepeater x:Name="DeviceGrid" ItemsSource="{Binding DevicesView}" Margin="5">
+            <ItemsRepeater.Layout>
+                <UniformGridLayout ItemsJustification="Start" MinColumnSpacing="5" MinRowSpacing="5" MinItemWidth="200" 
+                                   ItemsStretch="Fill" />
+            </ItemsRepeater.Layout>
+
+            <ItemsRepeater.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type device:DeviceInfoControlViewModel}">
+                    <device:DeviceInfoControl />
+                </DataTemplate>
+            </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
+    </ScrollViewer>
+
+</UserControl>

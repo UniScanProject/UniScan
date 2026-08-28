@@ -9,11 +9,15 @@ using Serilog;
 using Serilog.Core;
 using Shiki.Common.Extensions;
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Common.Util;
 using Shiki.ModuleManagement;
 using UniScan.Device.Device;
 using UniScan.Network;
+using UniScan.Network.Data.Info.Remote;
 using UniScan.Network.Data.Info.Software;
+using UniScan.Network.Packet.Packets.Bidirectional.Status;
 using UniScan.Network.Packet.Packets.Clientbound.Remote;
 using UniScan.Network.Registry.Source.Sources;
 using UniScan.Network.Server;
@@ -56,12 +60,36 @@ public class UniScanServer
                                                                  "https://github.com/UniScanProject/UniScan"
                                                                  );
     
+    public static readonly RemoteInfo RemoteInfo = new(
+                                                                 "UniScan Test Server",
+                                                                 "Soon I will make all of this configurable",
+                                                                 new RemoteSettings(true),
+                                                                 new RemoteBranding(new Uri("https://github.com/UniScanProject.png?size=64"), [
+                                                                    new RemoteLink(new Uri("https://github.com/UniScanProject.png?size=32"), "UniScan on GitHub", new Uri("https://github.com/UniScanProject/UniScan")),
+                                                                    new RemoteLink(new Uri("https://uniscan.dexrn.me/assets/logo_512x512.png"), "UniScan Web", new Uri("https://uniscan.dexrn.me")),
+                                                                    new RemoteLink(new Uri("https://dexrn.me/favicon.png"), "Developer's Website", new Uri("https://dexrn.me"))
+                                                                 ]),
+                                                                 new RemoteSocial("Hello, world!", new Dictionary<Slug<SnakeSlugFormatter>, RemoteAnnouncement> {
+                                                                    [new Slug<SnakeSlugFormatter>("work_in_progress")] = new(
+                                                                     "Work In Progress",
+                                                                     "All of this is still a work in progress, in the future, this will all be configurable.",
+                                                                     DateTimeOffset.UtcNow,
+                                                                     [],
+                                                                     [
+                                                                         new RemoteAnnouncementAuthor(
+                                                                          "Dexrn ZacAttack",
+                                                                          new Uri("https://github.com/DexrnZacAttack.png?size=64")
+                                                                          )
+                                                                     ])
+                                                                 })
+                                                                );
+    
     public UniScanServer(SessionManager sessionManager, ServerSocketInitializer socketInitializer, PacketRegistry packetRegistry, ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> moduleStorage)
     {
         SessionManager = sessionManager;
         _moduleStorage = moduleStorage;
         _packetRegistry = packetRegistry;
-        _networkGroupManager = new LibUvGroupManager(); //new MultithreadedGroupManager();
+        _networkGroupManager = new MultithreadedGroupManager();
         
         ScannerManager = new ScannerHostManager();
         
@@ -101,7 +129,15 @@ public class UniScanServer
 
     public async Task ExitAsync()
     {
+        Log.Information("Closing socket...");
+        if (Socket is ServerSocket serverSocket)
+        {
+            await serverSocket.ClientManager.BroadcastAsync(new DisconnectPacket("Server shutting down..."));
+        }
+
         await Socket.StopAsync();
+        
+        Log.Information("Disconnecting scanners...");
         await ScannerManager.DisconnectAllAsync();
     }
 }

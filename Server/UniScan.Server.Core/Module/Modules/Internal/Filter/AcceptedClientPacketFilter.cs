@@ -1,3 +1,4 @@
+using DotNetty.Common.Utilities;
 using DotNetty.Transport.Channels;
 using Serilog;
 using Serilog.Core;
@@ -20,6 +21,7 @@ public class AcceptedClientPacketFilter : ChannelHandlerAdapter
             if (!context.Channel.HasAttribute(ClientAttributes.SoftwareInfoAttribute))
             {
                 _logger.Error("Client '{RemoteAddress}' sent packet of type '{Type}' without completing handshake.", context.Channel.RemoteAddress, message.GetType().FullName);
+                ReferenceCountUtil.Release(message);
                 
                 context.WriteAndFlushAsync(new DisconnectPacket("Client has not completed handshake.")).ContinueWith(_ => context.CloseAsync());
                 return;

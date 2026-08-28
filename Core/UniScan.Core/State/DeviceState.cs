@@ -18,11 +18,6 @@ namespace UniScan.Core.State;
 public class DeviceState
 {
     /// <summary>
-    /// A write lock to make sure we're not trying to concurrently modify the state
-    /// </summary>
-    public readonly Lock Lock = new();
-    
-    /// <summary>
     /// The current volume of the Scanner
     /// </summary>
     public int Volume { get; set; } = 0;
@@ -77,9 +72,6 @@ public class DeviceState
     /// The current Channel
     /// </summary>
     public IScanChannel? CurrentChannel { get; set; }
-
-    //dict of special attributes, allows for enough flexibility when a scanner may have extra state to store
-    public Dictionary<Identifier, IStateAttribute> Attributes { get; set; } = [];//TODO send to deepest point of hell and instead subclass DeviceState
 
     /// <inheritdoc/>
     public override string ToString() => JsonSerializer.Serialize(this);

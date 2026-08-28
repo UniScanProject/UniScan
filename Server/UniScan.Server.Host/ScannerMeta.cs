@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Schema;
+using System.Threading.Tasks;
 using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
@@ -38,7 +41,8 @@ public class ScannerMeta(string root, JsonSerializerOptions jsonOptions)
     public async Task SaveAsync(ScannerHostManager hostManager)
     {
         string p = Path.Combine(root, "scanners.json");
-        
-        await JsonSerializer.SerializeAsync(File.OpenWrite(p), hostManager.Scanners.ToDictionary(h => h.Key, h => new ScannerHostDto(h.Value)), jsonOptions);
+
+        await using FileStream fs = new(p, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+        await JsonSerializer.SerializeAsync(fs, hostManager.Scanners.ToDictionary(h => h.Key, h => new ScannerHostDto(h.Value)), jsonOptions);
     }
 }

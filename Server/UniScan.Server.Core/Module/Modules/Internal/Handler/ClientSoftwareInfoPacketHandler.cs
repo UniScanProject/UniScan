@@ -32,12 +32,13 @@ public class ClientSoftwareInfoPacketHandler : SimpleChannelInboundHandler<Clien
         {
             _logger.Information("Disconnecting client {ChannelIp} due to protocol version mismatch. (expected: {ServerProtocolVer}, got: {ProtocolVer})", ctx.Channel.RemoteAddress, Constants.ProtocolVersion, msg.Info.ProtocolVersion);
 
-            ctx.WriteAndFlushAsync(new DisconnectPacket($"Client protocol version does not match expected '{Constants.ProtocolVersion}'")).ContinueWith(_ => ctx.CloseAsync());
+            ctx.WriteAndFlushAsync(new DisconnectPacket($"Client protocol version '{msg.Info.ProtocolVersion}' does not match expected '{Constants.ProtocolVersion}'")).ContinueWith(_ => ctx.CloseAsync());
             return;
         }
         
         ctx.Channel.GetAttribute(ClientAttributes.SoftwareInfoAttribute).Set(msg.Info);
 
         ctx.WriteAndFlushAsync(new ServerSoftwareInfoPacket(UniScanServer.SoftwareInfo, msg.RequestId));
+        ctx.WriteAndFlushAsync(new RemoteInfoPacket(UniScanServer.RemoteInfo));
     }
 }

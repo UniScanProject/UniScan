@@ -23,6 +23,8 @@ public class TCPRemoteConnectionMethod(IPEndPoint endPoint) : IRemoteConnectionM
                  .Option(ChannelOption.ConnectTimeout, TimeSpan.FromSeconds(5));
     }
 
-    public Task<IChannel> ConnectAsync(Bootstrap bootstrap) => bootstrap.ConnectAsync(EndPoint);
+    public async Task<IChannel> ConnectAsync(Bootstrap bootstrap) => await bootstrap.ConnectAsync(EndPoint);
+
+    public string ToDisplayString() => EndPoint.ToString();
 }
 #endif

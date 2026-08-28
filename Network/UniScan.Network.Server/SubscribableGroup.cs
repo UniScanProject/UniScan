@@ -18,6 +18,8 @@ public class SubscribableGroup
     }
 
     public void Remove(IChannel channel) => _channels.TryRemove(channel.Id, out _);
+    
+    public bool Contains(IChannel channel) => _channels.ContainsKey(channel.Id);
 
     public Task BroadcastAsync<TPacket>(TPacket packet) where TPacket : IPacket =>
          _channels.IsEmpty ? Task.CompletedTask : Task.WhenAll(_channels.Values.Select(c => c.WriteAndFlushAsync(packet)));
