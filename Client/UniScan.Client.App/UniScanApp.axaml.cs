@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
 using UniScan.Client.App.Core.Module;
 using UniScan.Client.App.Core.Pipeline.Initialization;
+using UniScan.Client.App.Core.Platform;
 using UniScan.Client.App.Views.Global;
 using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
@@ -43,8 +45,10 @@ public partial class UniScanApp : Application
 
     private HostEnvironment _hostEnvironment = null!;
 
+    private static readonly Assembly PlatformAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.IsDefined(typeof(UniScanPlatformAttribute))) ?? typeof(UniScanApp).Assembly;
+
     public static readonly Identifier Identifier = UniScanClient.ClientIdentifier.Derived("app");
-    public static readonly SemVersion PlatformVersion = SemVersion.Parse(Assembly.GetEntryAssembly()!.InformationalVersionString);
+    public static readonly SemVersion PlatformVersion = SemVersion.Parse(PlatformAssembly.InformationalVersionString);
 
     public static readonly ClientSoftwareInfo SoftwareInfo = new(
                                                                  Identifier,

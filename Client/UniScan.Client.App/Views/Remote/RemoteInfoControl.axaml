@@ -14,8 +14,8 @@
                     <Image asyncImageLoader:ImageLoader.Source="{Binding Info.Branding.LogoUrl}" Width="64" Height="64" />
                 </Border>
                 <StackPanel VerticalAlignment="Center" Spacing="5">
-                    <TextBlock Text="{Binding Info.DisplayName}" FontSize="20" FontWeight="Bold" IsVisible="{Binding Info.DisplayName, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                    <TextBlock Text="{Binding Info.Description}" IsVisible="{Binding Info.Description, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    <TextBlock Text="{Binding Info.DisplayName}" TextWrapping="Wrap" FontSize="20" FontWeight="Bold" IsVisible="{Binding Info.DisplayName, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    <TextBlock Text="{Binding Info.Description}" TextWrapping="Wrap" IsVisible="{Binding Info.Description, Converter={x:Static ObjectConverters.IsNotNull}}" />
                 </StackPanel>
             </StackPanel>
         </Border>

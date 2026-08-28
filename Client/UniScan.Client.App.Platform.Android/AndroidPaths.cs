@@ -11,5 +11,5 @@ public class AndroidPaths : IPlatformStandardPaths
 
     public string ConfigPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-    public string CachePath => Path.Combine(DataPath, "cache");
+    public string CachePath => Path.Combine(DataPath, ".cache");
 }
