@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace UniScan.Client.App.Views.Home;
 
-public partial class MainPageView : ContentPage
+public partial class HomePageView : ContentPage
 {
-    public MainPageView()
+    public HomePageView()
     {
         InitializeComponent();
     }

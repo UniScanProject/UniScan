@@ -16,7 +16,7 @@ public class RemoteConnectionStateFilter : ISynchronizedViewFilter<RemoteServer,
     }
 }
 
-public partial class MainPageViewModel : ViewModelBase, IDisposable
+public partial class HomePageViewModel : ViewModelBase, IDisposable
 {
     public INotifyCollectionChangedSynchronizedViewList<RemoteRootPageViewModel> ConnectedRemotesView { get; }
     private readonly ISynchronizedView<RemoteServer, RemoteRootPageViewModel> _remotesView;
@@ -25,7 +25,7 @@ public partial class MainPageViewModel : ViewModelBase, IDisposable
 
     private readonly IRemoteManager _remoteManager;
     
-    public MainPageViewModel(IServiceProvider provider, IRemoteManager remoteManager)
+    public HomePageViewModel(IServiceProvider provider, IRemoteManager remoteManager)
     {
         _remoteManager = remoteManager;
         

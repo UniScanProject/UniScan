@@ -7,8 +7,8 @@
              xmlns:remote="clr-namespace:UniScan.Client.App.Views.Remote"
              xmlns:device="clr-namespace:UniScan.Client.App.Views.Remote.Device"
              mc:Ignorable="d"
-             x:Class="UniScan.Client.App.Views.Home.MainPageView"
-             x:DataType="home:MainPageViewModel">
+             x:Class="UniScan.Client.App.Views.Home.HomePageView"
+             x:DataType="home:HomePageViewModel">
     <Border Padding="10">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
 

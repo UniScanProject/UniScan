@@ -7,7 +7,7 @@
              x:Class="UniScan.Client.App.Views.Remote.Device.DeviceInfoControl"
              x:DataType="device:DeviceInfoControlViewModel">
     <Border Name="DeviceCard" MinHeight="200"
-            Height="{Binding $self.Bounds.Width}" Background="{DynamicResource ButtonBackground}" Padding="5" CornerRadius="5" BorderThickness="2" BorderBrush="{DynamicResource ButtonBorderBrush}">
+            Height="{Binding $self.Bounds.Width}" Background="{DynamicResource ButtonBackground}" CornerRadius="5" BorderThickness="2" BorderBrush="{DynamicResource ButtonBorderBrush}">
         <Grid RowDefinitions="Auto, *, Auto" RowSpacing="5">
             <TextBlock DockPanel.Dock="Top" Grid.Row="0" HorizontalAlignment="Center" Text="{Binding Info.DisplayName}" FontWeight="Bold" />
             

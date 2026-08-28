@@ -38,12 +38,13 @@
                 <TabbedPage Grid.Row="1" TabPlacement="Top">
                     <ContentPage Header="Home">
                         <Grid RowDefinitions="Auto, *, Auto">
-                            <!-- <Expander IsExpanded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"> -->
-                            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Margin="5" CornerRadius="10" IsVisible="{Binding RemoteInfoViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Margin="5" CornerRadius="5" IsVisible="{Binding RemoteInfoViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <remote:RemoteInfoControl DataContext="{Binding RemoteInfoViewModel}" />
                             </Border>
-                            <!-- </Expander> -->
-                                <device:DeviceListControl Grid.Row="1" DataContext="{Binding DeviceListControl}" />
+                            
+                            <Border Grid.Row="1" CornerRadius="5">
+                                <device:DeviceListControl DataContext="{Binding DeviceListControl}" />
+                            </Border>
                             
                             <Border Grid.Row="2" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" Margin="5" Padding="10" CornerRadius="5" IsVisible="{Binding RemoteInfoViewModel?.Info.Social.MessageOfTheDay, Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <TextBlock Text="{Binding RemoteInfoViewModel?.Info.Social.MessageOfTheDay}" />

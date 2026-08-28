@@ -29,7 +29,7 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
     
     public INotifyCollectionChangedSynchronizedViewList<SidebarRemoteItemControlViewModel> RemotesView { get; }
 
-    private readonly MainPageViewModel _mainPage;
+    private readonly HomePageViewModel _mainPage;
     
     public MainViewModel(IServiceProvider provider, IRemoteManager remoteManager, ClientSettingsViewModel clientSettingsViewModel, IRemoteFactory remoteFactory) : base(new EmptyPageViewModel())
     {
@@ -56,7 +56,7 @@ public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewMode
             }
         };
         
-        _mainPage = new MainPageViewModel(provider, RemoteManager);
+        _mainPage = new HomePageViewModel(provider, RemoteManager);
         CurrentSubpage = _mainPage;
     }
     
