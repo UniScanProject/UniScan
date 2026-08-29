@@ -30,8 +30,8 @@
     <PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Avalonia.Browser" Version="2.0.0" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
-    <PackageVersion Include="SpawnDev.SpawnJS" Version="2.1.8" />
-    <PackageVersion Include="SpawnDev.SpawnJS.WebWorkers" Version="2.1.8" />
+    <PackageVersion Include="SpawnDev.SpawnJS" Version="2.1.9" />
+    <PackageVersion Include="SpawnDev.SpawnJS.WebWorkers" Version="2.1.10" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.2.0.3" />
     <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Common" Version="2.11.0.1" />
     <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Common.Jvm" Version="2.11.0.1" />
