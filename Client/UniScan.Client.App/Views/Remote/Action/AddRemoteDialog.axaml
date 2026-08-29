@@ -16,8 +16,8 @@
             <TextBlock Text="Connection Method"></TextBlock>
             <Expander HorizontalAlignment="Stretch" IsExpanded="True">
                 <Expander.Header>
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                        <ComboBox ItemsSource="{Binding ViewModels}" SelectedItem="{Binding SelectedMethodFactory}">
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Stretch">
+                        <ComboBox ItemsSource="{Binding ViewModels}" SelectedItem="{Binding SelectedMethodFactory}" HorizontalAlignment="Stretch" PlaceholderText="Choose a connection method">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Attribute.DisplayName}"></TextBlock>

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using CommunityToolkit.Mvvm.ComponentModel;
 using UniScan.Client.App.UI.ConnectionMethod;
+using UniScan.Client.App.UI.Validation;
 using UniScan.Client.App.Views.ViewModel;
 using UniScan.Network.Client.Remote.Connection.Methods;
 
@@ -19,26 +20,20 @@ public partial class TCPConnectionMethodFactoryViewModel : ViewModelBase, IConne
     
     [ObservableProperty]
     [NotifyDataErrorInfo]
-    [Required(ErrorMessage = "Endpoint is required")]
+    [Required(ErrorMessage = "IP Address is required")]
     [NotifyPropertyChangedFor(nameof(IsValid))]
-    [IPEndpointValidator(ErrorMessage = "Must be a valid IPEndpoint containing an IP and port, such as 127.0.0.1:9000")]
-    public partial string EndPoint { get; set; }
+    [ParsableValidator<IPAddress>(ErrorMessage = "Must be a valid IP Address, such as 127.0.0.1")]
+    public partial string Address { get; set; }
     
-    public bool IsValid => !GetErrors(nameof(EndPoint)).Any();
+    [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Port is required")]
+    [NotifyPropertyChangedFor(nameof(IsValid))]
+    [ParsableValidator<ushort>(ErrorMessage = "Must be a valid port number, such as 9000")]
+    public partial string Port { get; set; }
     
-    public TCPRemoteConnectionMethod Create() => new(IPEndPoint.Parse(EndPoint));
-}
-
-public class IPEndpointValidatorAttribute : ValidationAttribute
-{
-    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
-    {
-        if (value is string v && IPEndPoint.TryParse(v, out _))
-        {
-            return ValidationResult.Success;
-        }
-        
-        return new ValidationResult(ErrorMessage);
-    }
+    public bool IsValid => !GetErrors(nameof(Address)).Any();
+    
+    public TCPRemoteConnectionMethod Create() => new(new IPEndPoint(IPAddress.Parse(Address), int.Parse(Port)));
 }
 #endif
