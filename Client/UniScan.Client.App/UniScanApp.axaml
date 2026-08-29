@@ -19,5 +19,8 @@
     <Application.Styles>
         <FluentTheme />
         <dialogHostAvalonia:DialogHostStyles />
+        <Style Selector="DataValidationErrors">
+            <Setter Property="Theme" Value="{StaticResource TooltipDataValidationErrors}" />
+        </Style>
     </Application.Styles>
 </Application>
