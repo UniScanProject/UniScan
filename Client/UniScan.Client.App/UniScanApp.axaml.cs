@@ -58,6 +58,8 @@ public partial class UniScanApp : Application
                                                                  "UniScan Client",
                                                                  "https://github.com/UniScanProject/UniScan"
                                                                 );
+    
+    public static string VersionString => $"UniScan Client v{UniScanApp.SoftwareInfo.Version} (Platform v{UniScanApp.PlatformVersion})";
 
     public ModuleStorage<IUniScanClientAppModule, UniScanClientAppModuleInitializationArgs>? ModuleStorage
     {

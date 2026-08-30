@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:global="clr-namespace:UniScan.Client.App.Views.Global"
+             xmlns:app="clr-namespace:UniScan.Client.App"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Global.LoadingView"
              x:DataType="global:LoadingViewModel">
@@ -16,7 +17,7 @@
         </StackPanel>
         
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Spacing="10">
-            <TextBlock Text="{Binding Source={x:Static global:LoadingViewModel.VersionString}}" />
+            <TextBlock Text="{Binding Source={x:Static app:UniScanApp.VersionString}}" />
         </StackPanel>
     </Grid>
 </UserControl>
