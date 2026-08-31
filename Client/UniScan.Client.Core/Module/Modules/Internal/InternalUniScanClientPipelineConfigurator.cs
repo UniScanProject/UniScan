@@ -18,6 +18,6 @@ public class InternalUniScanClientPipelineConfigurator(IServiceProvider serviceP
     {
         pipeline.AddLast(nameof(DisconnectPacketHandler), serviceProvider.GetRequiredService<DisconnectPacketHandler>());
         pipeline.AddLast(nameof(RemoteInfoPacketHandler), serviceProvider.GetRequiredService<RemoteInfoPacketHandler>());
-
+        pipeline.AddLast(nameof(DeviceStatePacketHandler), serviceProvider.GetRequiredService<DeviceStatePacketHandler>());
     }
 }

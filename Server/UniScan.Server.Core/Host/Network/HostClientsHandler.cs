@@ -7,6 +7,7 @@ using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Common.Util;
 using UniScan.Core.State;
+using UniScan.Core.State.Node;
 using UniScan.Device.Device;
 using UniScan.Network.Packet.Packets.Clientbound.Device;
 using UniScan.Network.Server;
@@ -17,6 +18,7 @@ public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
 {
     private readonly Slug<SnakeSlugFormatter> _scannerId;
     private readonly Scanner _scanner;
+    private DeviceState? _currentState;
 
     private readonly SubscribableGroup _subscribers = new();
 
@@ -32,12 +34,13 @@ public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
 
     private void HandleState(DeviceState? state)
     {
+        _currentState = state;
         if (state == null)
             return;
         
         // TODO it will be better to get difference of entire state and ship that out but atm this is best I can do
         //every 10 state updates lets send full state too to avoid desync
-        StatePacket packet = new(state, null, _scannerId);
+        DeviceStatePacket packet = new(DeviceStateSerializer.Serialize(state), null, _scannerId);
         
         _ = _subscribers.BroadcastAsync(packet);
     }

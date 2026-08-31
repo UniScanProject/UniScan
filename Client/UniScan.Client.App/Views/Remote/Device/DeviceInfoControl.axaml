@@ -9,7 +9,7 @@
     <Border Name="DeviceCard" MinHeight="200"
             Height="{Binding $self.Bounds.Width}" Background="{DynamicResource ButtonBackground}" CornerRadius="5" BorderThickness="2" BorderBrush="{DynamicResource ButtonBorderBrush}">
         <Grid RowDefinitions="Auto, *, Auto" RowSpacing="5">
-            <TextBlock DockPanel.Dock="Top" Grid.Row="0" HorizontalAlignment="Center" Text="{Binding Info.DisplayName}" FontWeight="Bold" />
+            <TextBlock DockPanel.Dock="Top" Grid.Row="0" HorizontalAlignment="Center" Text="{Binding Device.DisplayName}" FontWeight="Bold" />
             
             <Border Grid.Row="1" BorderThickness="2" BorderBrush="{DynamicResource ButtonBorderBrushPointerOver}" CornerRadius="5">
                 <StackPanel Spacing="10" VerticalAlignment="Center">
@@ -21,10 +21,10 @@
             <Grid DockPanel.Dock="Bottom" Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="5">
                 <StackPanel VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" IsVisible="{Binding $parent[Border].((device:DeviceInfoControlViewModel)DataContext)?.HasModelInfo}" Spacing="2">
-                        <TextBlock Text="{Binding Info.Specs?.Model}" />
-                        <TextBlock Text="{Binding Info.Specs?.Version}" FontSize="12" Foreground="{DynamicResource TextControlForegroundDisabled}" />
+                        <TextBlock Text="{Binding Device.Specs?.Model}" />
+                        <TextBlock Text="{Binding Device.Specs?.Version}" FontSize="12" Foreground="{DynamicResource TextControlForegroundDisabled}" />
                     </StackPanel>
-                    <TextBlock Foreground="{DynamicResource TextControlForegroundDisabled}" FontSize="12" Text="{Binding Info.ScannerIdentifier}" />
+                    <TextBlock Foreground="{DynamicResource TextControlForegroundDisabled}" FontSize="12" Text="{Binding Device.Identifier}" />
                 </StackPanel>
             </Grid>
         </Grid>

@@ -5,6 +5,7 @@ using Serilog;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Client.Core.Config.Remote;
+using UniScan.Client.Core.Remote.Device;
 using UniScan.Network;
 using UniScan.Network.Client;
 using UniScan.Network.Client.Remote.Connection;
@@ -51,7 +52,7 @@ public class RemoteServer : IRemoteServerMutationProxy
     /// <summary>
     /// cached list of devices
     /// </summary>
-    public ObservableDictionary<Slug<SnakeSlugFormatter>, DeviceDto> Devices { get; } = [];
+    public ObservableDictionary<Slug<SnakeSlugFormatter>, RemoteDevice> Devices { get; } = [];
     
     public ServerSoftwareInfo? SoftwareInfo { get; private set; }
     

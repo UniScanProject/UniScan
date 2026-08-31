@@ -1,9 +1,12 @@
 using System.ComponentModel.Design;
 using DotNetty.Transport.Channels;
 using Serilog;
+using Shiki.Common.Identity;
 using Shiki.Common.Result;
 using Shiki.Common.Result.Serialization.Types;
 using Shiki.Common.Util;
+using UniScan.Core.State;
+using UniScan.Core.State.Node;
 using UniScan.Network.Packet.Packets.Bidirectional.Status;
 using UniScan.Network.Packet.Packets.Clientbound.Device;
 using UniScan.Network.Packet.Packets.Serverbound.Subscription;
@@ -46,7 +49,7 @@ public class SubscribePacketHandler(ScannerHostManager scannerHostManager)
             ctx.WriteAsync(new AcknowledgePacket(new TransportableBooleanResult(null), msg.RequestId));
             if (host.Scanner.State.Value != null)
             {
-                ctx.WriteAsync(new StatePacket(host.Scanner.State.Value, msg.RequestId, host.Identifier));
+                ctx.WriteAsync(new DeviceStatePacket(DeviceStateSerializer.Serialize(host.Scanner.State.Value), msg.RequestId, host.Identifier));
             }
 
             ctx.Flush();

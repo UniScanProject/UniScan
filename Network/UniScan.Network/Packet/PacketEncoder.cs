@@ -44,7 +44,7 @@ public class PacketEncoder(PacketRegistry packetRegistry, MessagePackSerializerO
                                .Select(chunk => string.Join(" ", Convert.ToHexString(chunk).Chunk(2)
                                                                         .Select(c => new string(c))));
 
-                Log.Debug("sent: {lines}", string.Join(Environment.NewLine, lines));
+                Log.Debug("Sent {Type}: {lines}", type.FullName, string.Join(Environment.NewLine, lines));
             #endif
 
             output.WriteBytes(msg);
