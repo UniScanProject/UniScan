@@ -30,5 +30,5 @@ it up to the internet for others to listen to, and control it yourself by loggin
 | [UniScan.Client.App.Platform.Android](src/Client/UniScan.Client.App.Platform.Android) | 0.0.4 | UniScan client for Android |
 | [UniScan.Client.App.Platform.Browser](src/Client/UniScan.Client.App.Platform.Browser) | 0.1.3 | UniScan client for web browsers (https://uniscan.dexrn.me) |
 | [UniScan.Client.App.Platform.Desktop](src/Client/UniScan.Client.App.Platform.Desktop) | 0.0.3 | UniScan client for desktop |
-| [UniScan.Client.App.Platform.iOS](src/Client/UniScan.Client.App.Platform.iOS) |  | UniScan client for iOS |
+| [UniScan.Client.App.Platform.iOS](src/Client/UniScan.Client.App.Platform.iOS) | 0.0.1 | UniScan client for iOS |
 | [UniScan.Modules.DebugModule](src/Modules/UniScan.Modules.DebugModule) | 0.0.1 |  |

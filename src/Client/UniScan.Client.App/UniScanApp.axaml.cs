@@ -55,7 +55,7 @@ public partial class UniScanApp : Application
     public static readonly Identifier Identifier = UniScanClient.ClientIdentifier.Derived("app");
     public static readonly SemVersion PlatformVersion = SemVersion.Parse(PlatformAssembly.InformationalVersionString);
 
-    public static readonly ClientSoftwareInfo SoftwareInfo = new(new SoftwareAssemblyInfo(Identifier, SemVersion.Parse(typeof(UniScanApp).Assembly .InformationalVersionString)),
+    public static readonly ClientSoftwareInfo SoftwareInfo = new(new SoftwareAssemblyInfo(Identifier, SemVersion.Parse(typeof(UniScanApp).Assembly.InformationalVersionString)),
                                                                  new SoftwareAssemblyInfo(PlatformAttribute?.Identifier ?? Identifier.CreateInstance("UniScan:client/app/platform/unknown"), PlatformVersion),
                                                                  Network.Constants.ProtocolVersion,
                                                                  "UniScan Client",
