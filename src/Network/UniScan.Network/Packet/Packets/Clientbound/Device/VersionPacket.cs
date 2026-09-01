@@ -8,6 +8,6 @@ namespace UniScan.Network.Packet.Packets.Clientbound.Device;
 [RegistryPacket("UniScan", "packet", "clientbound", "device", "version")]
 public record VersionPacket(
     string Version,
-    Slug<SnakeSlugFormatter> ScannerIdentifier,
+    Slug<SnakeSlugFormatter> DeviceIdentifier,
     Guid? RequestId
-) : IClientboundPacket, IResponsePayloadPart, ISelectedScannerPayloadPart;
+) : IClientboundPacket, IResponsePayloadPart, ISelectedDevicePayloadPart;

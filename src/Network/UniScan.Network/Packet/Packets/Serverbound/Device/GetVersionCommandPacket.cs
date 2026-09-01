@@ -11,4 +11,4 @@ namespace UniScan.Network.Packet.Packets.Serverbound.Device;
 [RegistryPacket("UniScan", "packet", "serverbound", "device", "get_version")]
 [RequiredHandlerPermission("UniScan", "permission", "device", "get_version")]
 [method: RequestConstructor]
-public partial record GetVersionCommandPacket(Slug<SnakeSlugFormatter> ScannerIdentifier, Guid? RequestId) : IServerboundPacket, ISelectedScannerPayloadPart, IRequiresAuthenticationPayloadPart<GetVersionCommandPacket>, IRequestPayloadPart<VersionPacket>;
+public partial record GetVersionCommandPacket(Slug<SnakeSlugFormatter> DeviceIdentifier, Guid? RequestId) : IServerboundPacket, ISelectedDevicePayloadPart, IRequiresAuthenticationPayloadPart<GetVersionCommandPacket>, IRequestPayloadPart<VersionPacket>;

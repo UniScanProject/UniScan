@@ -9,4 +9,4 @@ namespace UniScan.Network.Packet.Packets.Serverbound.Device;
 
 [RegistryPacket("UniScan", "packet", "serverbound", "device", "get_model")]
 [method: RequestConstructor]
-public partial record GetModelCommandPacket(Slug<SnakeSlugFormatter> ScannerIdentifier, Guid? RequestId) : IServerboundPacket, ISelectedScannerPayloadPart, IRequiresAuthenticationPayloadPart<GetModelCommandPacket>, IRequestPayloadPart<ModelPacket>;
+public partial record GetModelCommandPacket(Slug<SnakeSlugFormatter> DeviceIdentifier, Guid? RequestId) : IServerboundPacket, ISelectedDevicePayloadPart, IRequiresAuthenticationPayloadPart<GetModelCommandPacket>, IRequestPayloadPart<ModelPacket>;

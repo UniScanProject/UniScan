@@ -29,7 +29,7 @@ public class SubscribePacketHandler(ScannerHostManager scannerHostManager)
         if (msg.RequestId == null)
             return;
 
-        if (_scannerHostManager.Scanners.TryGetValue(msg.ScannerIdentifier, out ScannerHost? host))
+        if (_scannerHostManager.Scanners.TryGetValue(msg.DeviceIdentifier, out ScannerHost? host))
         {
             if (host.NetworkClients.Contains(ctx.Channel))
             {
@@ -58,7 +58,7 @@ public class SubscribePacketHandler(ScannerHostManager scannerHostManager)
         }
         else
         {
-            _logger.Warning("Client attempted to subscribe to nonexistent device '{Value}'. Discarding.", msg.ScannerIdentifier);
+            _logger.Warning("Client attempted to subscribe to nonexistent device '{Value}'. Discarding.", msg.DeviceIdentifier);
             
             ctx.WriteAndFlushAsync(new
                                        AcknowledgePacket(new

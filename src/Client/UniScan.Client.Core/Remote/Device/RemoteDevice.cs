@@ -17,5 +17,5 @@ public class RemoteDevice(Slug<SnakeSlugFormatter> id, string? name, bool connec
 
     public ObservableDictionary<Identifier, IDeviceStateNode> States { get; set; } = [];
     
-    public static RemoteDevice FromDto(DeviceDto dto) => new(dto.ScannerIdentifier, dto.DisplayName, dto.Connected, dto.Specs);
+    public static RemoteDevice FromDto(DeviceDto dto) => new(dto.DeviceIdentifier, dto.DisplayName, dto.Connected, dto.Specs);
 }

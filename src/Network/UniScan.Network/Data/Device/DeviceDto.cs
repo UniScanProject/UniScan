@@ -16,7 +16,7 @@ public record DeviceSpecifications(
 
 [MessagePackObject]
 public record DeviceDto(
-    [property: Key(0)] Slug<SnakeSlugFormatter> ScannerIdentifier,
+    [property: Key(0)] Slug<SnakeSlugFormatter> DeviceIdentifier,
     [property: Key(1)] string? DisplayName,
     [property: Key(2), MemberNotNullWhen(true, nameof(DeviceDto.Specs))] bool Connected,
     [property: Key(3)] DeviceSpecifications? Specs

@@ -12,5 +12,5 @@ namespace UniScan.Network.Packet.Packets.Clientbound.Device;
 public record DeviceStatePacket(
     [property: Key(0)] Dictionary<Identifier, IDeviceStateNode> States,
     [property: Key(1)] Guid? RequestId,
-    [property: Key(2)] Slug<SnakeSlugFormatter> ScannerIdentifier
-) : IClientboundPacket, IResponsePayloadPart, ISelectedScannerPayloadPart;
+    [property: Key(2)] Slug<SnakeSlugFormatter> DeviceIdentifier
+) : IClientboundPacket, IResponsePayloadPart, ISelectedDevicePayloadPart;

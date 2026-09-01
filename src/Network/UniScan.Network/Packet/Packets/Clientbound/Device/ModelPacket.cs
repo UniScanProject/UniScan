@@ -10,6 +10,6 @@ namespace UniScan.Network.Packet.Packets.Clientbound.Device;
 [MessagePackObject]
 public readonly record struct ModelPacket(
     [property: Key(0)] string Model,
-    [property: Key(1)] Slug<SnakeSlugFormatter> ScannerIdentifier,
+    [property: Key(1)] Slug<SnakeSlugFormatter> DeviceIdentifier,
     [property: Key(2)] Guid? RequestId
-) : IClientboundPacket, IResponsePayloadPart, ISelectedScannerPayloadPart;
+) : IClientboundPacket, IResponsePayloadPart, ISelectedDevicePayloadPart;

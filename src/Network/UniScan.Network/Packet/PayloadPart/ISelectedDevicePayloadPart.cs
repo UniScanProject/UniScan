@@ -10,10 +10,7 @@ namespace UniScan.Network.Packet.PayloadPart;
 ///
 /// When authenticating and checking permissions, check using the ID given here.
 /// </summary>
-public interface ISelectedScannerPayloadPart
+public interface ISelectedDevicePayloadPart
 {
-    // TODO turn into Identifier and require an Identifier on each Host, move Name from Scanner to Host if not already done
-    // They should consist of a display name and internal ID
-    
-    public abstract Slug<SnakeSlugFormatter> ScannerIdentifier { get; }
+    public abstract Slug<SnakeSlugFormatter> DeviceIdentifier { get; }
 };

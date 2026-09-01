@@ -15,7 +15,7 @@ public class DeviceStatePacketHandler : SimpleChannelInboundHandler<DeviceStateP
     protected override void ChannelRead0(IChannelHandlerContext ctx, DeviceStatePacket msg)
     {
         RemoteServer serv = ctx.Channel.GetAttribute(ServerAttributes.ServerAttribute).Get();
-        if (!serv.Devices.TryGetValue(msg.ScannerIdentifier, out RemoteDevice? device))
+        if (!serv.Devices.TryGetValue(msg.DeviceIdentifier, out RemoteDevice? device))
             return; //todo disconnect
 
         device.States = new ObservableDictionary<Identifier, IDeviceStateNode>(msg.States);
