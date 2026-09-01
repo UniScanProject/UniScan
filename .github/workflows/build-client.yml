@@ -110,62 +110,62 @@ jobs:
             ${{steps.strings.outputs.build-output-dir}}/*.apk
   
   build-client-ios:
-  runs-on: macos-latest
-
-  strategy:
-    fail-fast: false
-    matrix:
-      id: ["ios-arm64", "iossimulator-arm64", "iossimulator-x64"]
-      type: ["Release", "Debug"]
-
-  steps:
-    - uses: actions/checkout@v7
-      with:
-        submodules: 'recursive'
-
-    - uses: actions/setup-dotnet@v6
-      with:
-        dotnet-version: '10.0.x'
-
-    - name: Install iOS workload
-      run: dotnet workload install ios --temp-dir "${{ runner.temp }}"
-
-    - name: Set reusable strings
-      # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
-      id: strings
-      shell: bash
-      run: |
-        echo "build-output-dir=${{ github.workspace }}/publish/${{matrix.id}}" >> "$GITHUB_OUTPUT"
-
-    - name: Build (Normal)
-      if: matrix.id == 'ios-arm64'
-      # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
-      
-      #too broke for the stupid apple tax
-      #im not paying your fee. Honest.
-      run: >
-        dotnet publish ${{github.workspace}}/src/Client/UniScan.Client.App.Platform.iOS
-        -c ${{matrix.type}}
-        -r ${{matrix.id}}
-        -o ${{steps.strings.outputs.build-output-dir}}
-        -p:CodesignKey="-"
-        -p:CodesignProvision=""
+    runs-on: macos-latest
+  
+    strategy:
+      fail-fast: false
+      matrix:
+        id: ["ios-arm64", "iossimulator-arm64", "iossimulator-x64"]
+        type: ["Release", "Debug"]
+  
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: 'recursive'
+  
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+  
+      - name: Install iOS workload
+        run: dotnet workload install ios --temp-dir "${{ runner.temp }}"
+  
+      - name: Set reusable strings
+        # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
+        id: strings
+        shell: bash
+        run: |
+          echo "build-output-dir=${{ github.workspace }}/publish/${{matrix.id}}" >> "$GITHUB_OUTPUT"
+  
+      - name: Build (Normal)
+        if: matrix.id == 'ios-arm64'
+        # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
         
-    - name: Build (Simulator)
-      if: matrix.id != 'ios-arm64'
-      # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
-      run: >
-        dotnet build ${{github.workspace}}/src/Client/UniScan.Client.App.Platform.iOS
-        -c ${{matrix.type}}
-        -r ${{matrix.id}}
-        -o ${{steps.strings.outputs.build-output-dir}}
-        
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v7
-      with:
-        name: UniScan.Client_${{matrix.type}}_${{matrix.id}}_unsigned
-        path: |
-          ${{steps.strings.outputs.build-output-dir}}
+        #too broke for the stupid apple tax
+        #im not paying your fee. Honest.
+        run: >
+          dotnet publish ${{github.workspace}}/src/Client/UniScan.Client.App.Platform.iOS
+          -c ${{matrix.type}}
+          -r ${{matrix.id}}
+          -o ${{steps.strings.outputs.build-output-dir}}
+          -p:CodesignKey="-"
+          -p:CodesignProvision=""
+          
+      - name: Build (Simulator)
+        if: matrix.id != 'ios-arm64'
+        # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
+        run: >
+          dotnet build ${{github.workspace}}/src/Client/UniScan.Client.App.Platform.iOS
+          -c ${{matrix.type}}
+          -r ${{matrix.id}}
+          -o ${{steps.strings.outputs.build-output-dir}}
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: UniScan.Client_${{matrix.type}}_${{matrix.id}}_unsigned
+          path: |
+            ${{steps.strings.outputs.build-output-dir}}
   
   release-client:
     needs: [build-client-desktop, build-client-android, build-client-ios]
