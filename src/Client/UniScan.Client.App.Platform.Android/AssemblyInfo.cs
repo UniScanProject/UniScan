@@ -1,3 +1,3 @@
 using UniScan.Client.App.Core.Platform;
 
-[assembly: UniScanPlatform]
+[assembly: UniScanPlatform("UniScan:client/app/platform/android")]

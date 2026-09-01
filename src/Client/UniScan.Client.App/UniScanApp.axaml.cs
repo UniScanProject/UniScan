@@ -45,21 +45,24 @@ public partial class UniScanApp : Application
 
     private HostEnvironment _hostEnvironment = null!;
 
-    private static readonly Assembly PlatformAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.IsDefined(typeof(UniScanPlatformAttribute))) ?? typeof(UniScanApp).Assembly;
+    private static readonly Assembly? PlatformContainingAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                                                                  .FirstOrDefault(a =>
+                                                                       a.IsDefined(typeof(
+                                                                           UniScanPlatformAttribute)));
+    private static readonly UniScanPlatformAttribute? PlatformAttribute = PlatformContainingAssembly?.GetCustomAttribute<UniScanPlatformAttribute>();
+    private static readonly Assembly PlatformAssembly = PlatformContainingAssembly ?? typeof(UniScanApp).Assembly;
 
     public static readonly Identifier Identifier = UniScanClient.ClientIdentifier.Derived("app");
     public static readonly SemVersion PlatformVersion = SemVersion.Parse(PlatformAssembly.InformationalVersionString);
 
-    public static readonly ClientSoftwareInfo SoftwareInfo = new(
-                                                                 Identifier,
-                                                                 SemVersion.Parse(typeof(UniScanApp).Assembly
-                                                                    .InformationalVersionString),
+    public static readonly ClientSoftwareInfo SoftwareInfo = new(new SoftwareAssemblyInfo(Identifier, SemVersion.Parse(typeof(UniScanApp).Assembly .InformationalVersionString)),
+                                                                 new SoftwareAssemblyInfo(PlatformAttribute?.Identifier ?? Identifier.CreateInstance("UniScan:client/app/platform/unknown"), PlatformVersion),
                                                                  Network.Constants.ProtocolVersion,
                                                                  "UniScan Client",
                                                                  "https://github.com/UniScanProject/UniScan"
                                                                 );
     
-    public static string VersionString => $"UniScan Client v{UniScanApp.SoftwareInfo.Version} (Platform v{UniScanApp.PlatformVersion})";
+    public static string VersionString => $"UniScan Client v{SoftwareInfo.AppInfo.Version} (Platform v{PlatformVersion})";
 
     public ModuleStorage<IUniScanClientAppModule, UniScanClientAppModuleInitializationArgs>? ModuleStorage
     {

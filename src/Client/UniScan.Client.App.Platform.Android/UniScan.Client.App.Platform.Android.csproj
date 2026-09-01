@@ -9,8 +9,8 @@
         <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
         <Company>UniScanProject</Company>
         <Product>UniScan Android</Product>
-        <AssemblyVersion>0.0.3</AssemblyVersion>
-        <FileVersion>0.0.3</FileVersion>
+        <AssemblyVersion>0.0.4</AssemblyVersion>
+        <FileVersion>0.0.4</FileVersion>
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>$(AssemblyVersion)</ApplicationDisplayVersion>
         <Description>UniScan client for Android</Description>

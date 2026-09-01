@@ -6,13 +6,9 @@ namespace UniScan.Network.Data.Info.Software;
 public interface ISoftwareInfo
 {
     /// <summary>
-    /// Server software identifier, should be unique per project
+    /// Info on the application
     /// </summary>
-    Identifier Identifier { get; }
-    /// <summary>
-    /// Server software version
-    /// </summary>
-    SemVersion Version { get; }
+    SoftwareAssemblyInfo AppInfo { get; }
     /// <summary>
     /// Server protocol version
     /// </summary>

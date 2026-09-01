@@ -10,26 +10,22 @@ namespace UniScan.Network.Data.Info.Software;
 /// <summary>
 /// Info about the server software
 /// </summary>
-/// <param name="Identifier">Server software identifier, used to differentiate server software projects</param>
-/// <param name="Version">Server software version</param>
+/// <param name="AppInfo">Server software info, used to differentiate server software projects</param>
 /// <param name="ProtocolVersion">Server protocol version, may vary as clients are not supposed to take action based on this field.</param>
 /// <param name="DisplayName">Display name of the server software</param>
 /// <param name="Url">Download/Info URL of the server software</param>
 [MessagePackObject]
 public record ServerSoftwareInfo(
-    [property: Key(0), MessagePackFormatter(typeof(IdentifierMessagePackFormatter))]
-    Identifier Identifier,
-    [property: Key(1), MessagePackFormatter(typeof(SemVersionFormatter))]
-    SemVersion Version,
-    [property: Key(2)] int ProtocolVersion,
-    [property: Key(3)] string DisplayName,
-    [property: Key(4)] string? Url
+    [property: Key(0)] SoftwareAssemblyInfo AppInfo,
+    [property: Key(1)] int ProtocolVersion,
+    [property: Key(2)] string DisplayName,
+    [property: Key(3)] string? Url
 ) : ISoftwareInfo
 {
     public override string ToString()
     {
         StringBuilder sb = new();
-        sb.Append($"{DisplayName} v{Version} ({Identifier}, PVN: {ProtocolVersion})");
+        sb.Append($"{DisplayName} v{AppInfo.Version} ({AppInfo.Identifier}, PVN: {ProtocolVersion})");
 
         if (Url != null)
         {
