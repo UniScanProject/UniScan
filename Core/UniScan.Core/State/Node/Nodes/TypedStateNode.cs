@@ -6,6 +6,8 @@ public abstract class TypedStateNode<T>(T value) : IDeviceStateNode
 {
     [Key(0)]
     public T Value { get; } = value;
+
+    public override string ToString() => Value?.ToString() ?? "null";
 }
 
 [MessagePackObject]

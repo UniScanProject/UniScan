@@ -168,6 +168,9 @@
       <Compile Update="Views\Settings\ClientSettingsViewModel.cs">
         <DependentUpon>ClientSettingsView.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Views\Remote\Device\DevicePageViewModel.cs">
+        <DependentUpon>DevicePageView.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
