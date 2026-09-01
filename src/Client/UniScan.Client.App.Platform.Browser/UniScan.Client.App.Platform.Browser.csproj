@@ -14,7 +14,7 @@
         <Version>0.0.2</Version>
         <Title>UniScan Web</Title>
         <Authors>UniScanProject</Authors>
-        <Description>Web frontend for UniScan</Description>
+        <Description>UniScan client for web browsers (https://uniscan.dexrn.me)</Description>
         <Copyright>UniScanProject</Copyright>
         <PackageProjectUrl>https://uniscan.dexrn.me</PackageProjectUrl>
         <RepositoryUrl>https://github.com/UniScanProject/UniScan</RepositoryUrl>

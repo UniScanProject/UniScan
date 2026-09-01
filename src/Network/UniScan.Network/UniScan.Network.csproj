@@ -8,6 +8,7 @@
         <Company>UniScanProject</Company>
         <AssemblyVersion>0.3.0</AssemblyVersion>
         <FileVersion>0.3.0</FileVersion>
+        <Description>Contains the protocol and shared networking code</Description>
     </PropertyGroup>
 
     <ItemGroup>

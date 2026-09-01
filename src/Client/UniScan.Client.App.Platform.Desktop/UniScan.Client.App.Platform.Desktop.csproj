@@ -9,7 +9,7 @@
         <Product>UniScan Desktop</Product>
         <AssemblyVersion>0.0.3</AssemblyVersion>
         <FileVersion>0.0.3</FileVersion>
-        <Description>UniScan client desktop application</Description>
+        <Description>UniScan client for desktop</Description>
     </PropertyGroup>
 
     <PropertyGroup>

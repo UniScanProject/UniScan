@@ -8,7 +8,7 @@
         <Company>UniScanProject</Company>
         <AssemblyVersion>0.3.0</AssemblyVersion>
         <FileVersion>0.3.0</FileVersion>
-        <Description>Holds reusable client code, no dep on Avalonia</Description>
+        <Description>Holds shared client code, no dep on Avalonia</Description>
     </PropertyGroup>
 
     <ItemGroup>

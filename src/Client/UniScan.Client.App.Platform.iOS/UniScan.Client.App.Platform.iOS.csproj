@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\UniScan.Client.App\UniScan.Client.App.csproj" />
         <ProjectReference Include="..\UniScan.Client\UniScan.Client.csproj"/>
     </ItemGroup>
 </Project>
