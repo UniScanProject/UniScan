@@ -48,7 +48,7 @@ jobs:
       - name: Build
         # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
         run: >
-          dotnet publish ${{github.workspace}}/Client/UniScan.Client.App.Platform.Desktop
+          dotnet publish ${{github.workspace}}/src/Client/UniScan.Client.App.Platform.Desktop
           -c ${{matrix.type}}
           -r ${{matrix.id}}
           -o ${{steps.strings.outputs.build-output-dir}}
@@ -97,7 +97,7 @@ jobs:
       - name: Build
         # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
         run: >
-          dotnet publish ${{github.workspace}}/Client/UniScan.Client.App.Platform.Android
+          dotnet publish ${{github.workspace}}/src/Client/UniScan.Client.App.Platform.Android
           -c ${{matrix.type}}
           -r ${{matrix.id}}
           -o ${{steps.strings.outputs.build-output-dir}}
@@ -142,7 +142,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION=$(dotnet msbuild ${{github.workspace}}/Client/UniScan.Client.App/UniScan.Client.App.csproj -nologo -getProperty:AssemblyVersion | xargs)
+          VERSION=$(dotnet msbuild ${{github.workspace}}/src/Client/UniScan.Client.App/UniScan.Client.App.csproj -nologo -getProperty:AssemblyVersion | xargs)
           TAG=$(echo UniScan.Client.App/$VERSION)
           
           gh release create "$TAG" \

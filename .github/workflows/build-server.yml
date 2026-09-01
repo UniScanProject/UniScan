@@ -48,7 +48,7 @@ jobs:
       - name: Build
         # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
         run: >
-          dotnet publish ${{github.workspace}}/Server/UniScan.Server.Host
+          dotnet publish ${{github.workspace}}/src/Server/UniScan.Server.Host
           -c ${{matrix.type}}
           -r ${{matrix.id}}
           -o ${{steps.strings.outputs.build-output-dir}}
@@ -93,7 +93,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION=$(dotnet msbuild ${{github.workspace}}/Server/UniScan.Server.Host/UniScan.Server.Host.csproj -nologo -getProperty:AssemblyVersion | xargs)
+          VERSION=$(dotnet msbuild ${{github.workspace}}/src/Server/UniScan.Server.Host/UniScan.Server.Host.csproj -nologo -getProperty:AssemblyVersion | xargs)
           TAG=$(echo UniScan.Server.Host/$VERSION)
           
           gh release create "$TAG" \

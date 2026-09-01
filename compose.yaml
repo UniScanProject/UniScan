@@ -1,7 +1,0 @@
-﻿services:
-  uniscan.server:
-    image: uniscan.server
-    build:
-      context: .
-      dockerfile: UniScan.Server/Dockerfile
-

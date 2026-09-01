@@ -35,7 +35,7 @@ jobs:
       - name: Build
         # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
         run: >
-          dotnet publish ${{github.workspace}}/Client/UniScan.Client.App.Platform.Browser
+          dotnet publish ${{github.workspace}}/src/Client/UniScan.Client.App.Platform.Browser
           -c Release
           -o ${{steps.strings.outputs.build-output-dir}}    
           /nr:false
