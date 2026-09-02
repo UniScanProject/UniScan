@@ -2,8 +2,8 @@ using DotNetty.Common.Utilities;
 using DotNetty.Transport.Channels;
 using Serilog;
 using Serilog.Core;
-using UniScan.Network.Packet.Packets.Bidirectional.Status;
-using UniScan.Network.Packet.PayloadPart;
+using UniScan.Network.Protocol.Packets.Bidirectional.Status;
+using UniScan.Network.Protocol.PayloadPart;
 using UniScan.Network.Server;
 
 namespace UniScan.Server.Core.Module.Modules.Internal.Filter;

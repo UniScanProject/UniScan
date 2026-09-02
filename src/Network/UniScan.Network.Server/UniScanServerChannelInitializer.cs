@@ -3,7 +3,8 @@ using DotNetty.Handlers.Logging;
 using DotNetty.Transport.Channels;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using UniScan.Network.Packet;
+using UniScan.Network.Protocol;
+using UniScan.Network.Registry;
 using UniScan.Network.Socket;
 using UniScan.Network.Socket.Configuration;
 

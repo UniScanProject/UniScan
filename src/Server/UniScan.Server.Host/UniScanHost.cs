@@ -6,6 +6,7 @@ using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
 using UniScan.Core.Serialization;
 using UniScan.Network;
+using UniScan.Network.Registry;
 using UniScan.Network.Registry.Source.Sources;
 using UniScan.Network.Server;
 using UniScan.Server.Authentication.Session;

@@ -4,7 +4,6 @@ using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Extensions.MessagePack.Formatter.Identity;
-using UniScan.Network.Packet.Packets.Clientbound.Remote;
 
 namespace UniScan.Network.Data.Info.Remote;
 

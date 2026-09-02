@@ -9,7 +9,7 @@ using Shiki.Common.Util;
 using UniScan.Core.State;
 using UniScan.Core.State.Node;
 using UniScan.Device.Device;
-using UniScan.Network.Packet.Packets.Clientbound.Device;
+using UniScan.Network.Protocol.Packets.Clientbound.Device;
 using UniScan.Network.Server;
 
 namespace UniScan.Server.Core.Host.Network;

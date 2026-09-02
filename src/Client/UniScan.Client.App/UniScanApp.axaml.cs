@@ -23,7 +23,6 @@ using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
 using UniScan.Client.Core.Module.Modules.Internal;
 using UniScan.Network.Data.Info.Software;
-using UniScan.Network.Packet.Packets.Serverbound.Client;
 using UniScan.Platform;
 using UniScan.Platform.DependencyInjection;
 using MainView = UniScan.Client.App.Views.MainView;

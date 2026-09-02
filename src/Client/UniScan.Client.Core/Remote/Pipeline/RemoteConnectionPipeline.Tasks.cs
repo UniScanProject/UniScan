@@ -2,8 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using UniScan.Client.Core.Remote.Device;
 using UniScan.Network.Data.Info.Software;
-using UniScan.Network.Packet.Packets.Serverbound;
-using UniScan.Network.Packet.Packets.Serverbound.Client;
+using UniScan.Network.Protocol.Packets.Serverbound;
+using UniScan.Network.Protocol.Packets.Serverbound.Client;
 
 namespace UniScan.Client.Core.Remote.Pipeline;
 
@@ -59,7 +59,7 @@ public partial class RemoteConnectionPipeline
             ctx.RemoteServer.Devices.Clear();
             foreach (var deviceInfoDto in devices.Value.Devices)
             {
-                ctx.RemoteServer.Devices.Add(deviceInfoDto.Key, RemoteDevice.FromDto(deviceInfoDto.Value));    
+                ctx.RemoteServer.Devices.Add(deviceInfoDto.Key, RemoteDevice.FromDto(deviceInfoDto.Value, ctx.RemoteServer));    
             }
         }
         else

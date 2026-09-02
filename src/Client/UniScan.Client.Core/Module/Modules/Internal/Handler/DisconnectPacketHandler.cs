@@ -1,7 +1,7 @@
 using DotNetty.Transport.Channels;
 using Serilog;
 using UniScan.Client.Core.Remote;
-using UniScan.Network.Packet.Packets.Bidirectional.Status;
+using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 
 namespace UniScan.Client.Core.Module.Modules.Internal.Handler;
 

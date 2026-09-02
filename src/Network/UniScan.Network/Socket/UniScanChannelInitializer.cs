@@ -1,4 +1,5 @@
 using DotNetty.Transport.Channels;
+using UniScan.Network.Registry;
 using UniScan.Network.Socket.Configuration;
 
 namespace UniScan.Network.Socket;

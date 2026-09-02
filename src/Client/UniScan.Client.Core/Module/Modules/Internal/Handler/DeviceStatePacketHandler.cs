@@ -6,7 +6,7 @@ using UniScan.Client.Core.Remote;
 using UniScan.Client.Core.Remote.Device;
 using UniScan.Core.State;
 using UniScan.Core.State.Node;
-using UniScan.Network.Packet.Packets.Clientbound.Device;
+using UniScan.Network.Protocol.Packets.Clientbound.Device;
 
 namespace UniScan.Client.Core.Module.Modules.Internal.Handler;
 

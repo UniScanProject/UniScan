@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using DotNetty.Transport.Channels;
 using Shiki.Common.Result;
-using UniScan.Network.Packet.PayloadPart;
+using UniScan.Network.Protocol.PayloadPart;
 using UniScan.Network.Socket;
 
 namespace UniScan.Network.Request;

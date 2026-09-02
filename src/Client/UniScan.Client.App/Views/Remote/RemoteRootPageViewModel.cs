@@ -1,19 +1,24 @@
 using System;
+using System.Linq;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
+using ObservableCollections;
 using R3;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
+using UniScan.Client.App.UI.ServersideRendering;
 using UniScan.Client.App.Views.Global;
 using UniScan.Client.App.Views.Remote.Connection;
 using UniScan.Client.App.Views.Remote.Device;
 using UniScan.Client.App.Views.ViewModel;
 using UniScan.Client.Core.Remote;
+using UniScan.Client.Core.Remote.Device;
 using UniScan.Network.Util;
 
 namespace UniScan.Client.App.Views.Remote;
 
-public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable
+public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemoteRootPageDeviceNavigatorProxy
 {
     public RemoteServer Remote { get; set; }
 
@@ -24,6 +29,8 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable
     
     public BehaviorSubject<RemoteInfoControlViewModel?> InfoViewModelStream { get; } = new(null); 
     public RemoteInfoControlViewModel? InfoViewModel => InfoViewModelStream.Value;
+
+    public INotifyCollectionChangedSynchronizedViewList<DeviceRootPageViewModel> DevicePages { get; }
 
     public RemoteRootPageViewModel(IServiceProvider provider, RemoteServer remote) : base(new NotConnectedRemotePageViewModel(provider, remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
     {
@@ -52,8 +59,9 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable
             InfoViewModelStream.OnNext(n);
             OnPropertyChanged(nameof(InfoViewModel));
         });
-        
-        DeviceListControl = new DeviceListControlViewModel(remote);
+
+        DevicePages = Remote.Devices.CreateView(kvp => new DeviceRootPageViewModel(provider, kvp.Value)).ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
+        DeviceListControl = new DeviceListControlViewModel(remote, this);
 
         this.Remote.Socket.ConnectionState.Disconnected += OnDisconnected;
         this.Remote.Socket.ConnectionState.Connected += OnConnected;
@@ -106,4 +114,18 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable
         
         DeviceListControl.Dispose();
     }
+
+    void IRemoteRootPageDeviceNavigatorProxy.Navigate(RemoteDevice device)
+    {
+        DeviceRootPageViewModel? p = DevicePages.FirstOrDefault(page => page.Device.Identifier == device.Identifier);
+        if (p != null)
+        {
+            Dispatcher.UIThread.Post(() => { CurrentSubpage = p; });
+        }
+    }
+}
+
+public interface IRemoteRootPageDeviceNavigatorProxy
+{
+    void Navigate(RemoteDevice device);
 }

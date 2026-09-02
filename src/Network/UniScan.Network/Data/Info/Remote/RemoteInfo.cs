@@ -1,5 +1,4 @@
 using MessagePack;
-using UniScan.Network.Packet.Packets.Clientbound.Remote;
 
 namespace UniScan.Network.Data.Info.Remote;
 

@@ -1,5 +1,5 @@
 using DotNetty.Transport.Channels;
-using UniScan.Network.Packet.PayloadPart;
+using UniScan.Network.Protocol.PayloadPart;
 
 namespace UniScan.Network.Request;
 

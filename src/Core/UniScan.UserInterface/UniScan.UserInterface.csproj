@@ -4,6 +4,19 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Description>Serverside UI definitions</Description>
+        <Company>UniScanProject</Company>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
+        <FileVersion>0.0.1</FileVersion>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\external\Shiki\Extensions\Shiki.Extensions.MessagePack\Shiki.Extensions.MessagePack.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MessagePack" Version="3.1.8" />
+    </ItemGroup>
 
 </Project>

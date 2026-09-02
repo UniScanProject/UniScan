@@ -4,7 +4,7 @@ using Shiki.Common.Collections;
 using Shiki.Common.Identity;
 using UniScan.Network.Registry.Source;
 
-namespace UniScan.Network;
+namespace UniScan.Network.Registry;
 
 public class PacketRegistry
 {

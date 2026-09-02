@@ -3,7 +3,7 @@ using DotNetty.Transport.Channels;
 using Serilog;
 using Shiki.Common.Event;
 using Shiki.Common.Result;
-using UniScan.Network.Packet.PayloadPart;
+using UniScan.Network.Protocol.PayloadPart;
 using UniScan.Network.Socket.Configuration;
 using UniScan.Network.Util;
 

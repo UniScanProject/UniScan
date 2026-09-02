@@ -3,8 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:device="clr-namespace:UniScan.Client.App.Views.Remote.Device"
+             xmlns:ssr="clr-namespace:UniScan.Client.App.Views.SSR"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.Device.DevicePageView"
              x:DataType="device:DevicePageViewModel">
-    Welcome to Avalonia!
+    <ssr:UISlotControl DataContext="{Binding SSRViewModel}" />
 </UserControl>

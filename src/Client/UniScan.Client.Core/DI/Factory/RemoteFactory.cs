@@ -6,7 +6,6 @@ using UniScan.Network;
 using UniScan.Network.Client;
 using UniScan.Network.Client.Remote.Connection;
 using UniScan.Network.Data.Info.Software;
-using UniScan.Network.Packet.Packets.Serverbound.Client;
 using UniScan.Network.Socket.Configuration;
 
 namespace UniScan.Client.Core.DI.Factory;

@@ -2,8 +2,9 @@ using DotNetty.Transport.Channels;
 using Shiki.Common.Identity;
 using Shiki.Common.Result;
 using UniScan.Network.Data;
-using UniScan.Network.Packet.Packets.Clientbound;
-using UniScan.Network.Packet.Packets.Serverbound;
+using UniScan.Network.Data.Device;
+using UniScan.Network.Protocol.Packets.Clientbound;
+using UniScan.Network.Protocol.Packets.Serverbound;
 using UniScan.Server.Core.Host;
 
 namespace UniScan.Server.Core.Module.Modules.Internal.Handler;

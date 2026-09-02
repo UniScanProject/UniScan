@@ -1,0 +1,25 @@
+using System;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
+using UniScan.Client.App.Views.Global;
+using UniScan.Client.App.Views.Remote.Connection;
+using UniScan.Client.App.Views.ViewModel;
+using UniScan.Client.Core.Remote.Device;
+
+namespace UniScan.Client.App.Views.Remote.Device;
+
+public class DeviceRootPageViewModel : SubPagedViewModelBase, IDisposable
+{
+    public RemoteDevice Device { get; }
+    
+    public DeviceRootPageViewModel(IServiceProvider provider, RemoteDevice device) : base(new EmptyPageViewModel(), UniScanApp.Identifier.Derived("view_model", "device", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
+    {
+        Device = device;
+    }
+
+    public void Dispose()
+    {
+    }
+}

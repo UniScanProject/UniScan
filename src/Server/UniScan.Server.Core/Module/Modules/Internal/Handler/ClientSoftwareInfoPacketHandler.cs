@@ -2,9 +2,9 @@ using DotNetty.Transport.Channels;
 using Serilog;
 using Shiki.Common.Result;
 using UniScan.Network;
-using UniScan.Network.Packet.Packets.Bidirectional.Status;
-using UniScan.Network.Packet.Packets.Clientbound.Remote;
-using UniScan.Network.Packet.Packets.Serverbound.Client;
+using UniScan.Network.Protocol.Packets.Bidirectional.Status;
+using UniScan.Network.Protocol.Packets.Clientbound.Remote;
+using UniScan.Network.Protocol.Packets.Serverbound.Client;
 using UniScan.Network.Server;
 
 namespace UniScan.Server.Core.Module.Modules.Internal.Handler;

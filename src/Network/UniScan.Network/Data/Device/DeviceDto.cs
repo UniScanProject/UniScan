@@ -1,12 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
 using MessagePack;
 using Semver;
-using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
-using UniScan.Network.Formatter.SemVer;
+using UniScan.Network.Formatter.Semver;
 
-namespace UniScan.Network.Data;
+namespace UniScan.Network.Data.Device;
 
 [MessagePackObject]
 public record DeviceSpecifications(

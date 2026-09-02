@@ -13,6 +13,7 @@ using UniScan.Core.Serialization;
 using UniScan.Network;
 using UniScan.Network.Client;
 using UniScan.Network.Data.Info.Software;
+using UniScan.Network.Registry;
 using UniScan.Platform;
 
 namespace UniScan.Client.Core;

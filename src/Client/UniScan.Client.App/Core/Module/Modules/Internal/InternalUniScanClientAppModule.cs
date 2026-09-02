@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shiki.Common.Identity;
+using UniScan.Client.App.Core.Module.Modules.Internal.ViewModelFactory;
+using UniScan.Client.App.UI.ServersideRendering;
 
 namespace UniScan.Client.App.Core.Module.Modules.Internal;
 
@@ -14,6 +16,6 @@ public class InternalUniScanClientAppModule : IUniScanClientAppModule
 
     public void ConfigureDi(IServiceCollection services)
     {
-                
+        services.AddSingleton<IUINodeViewModelConverter, TextBlockUIControlViewModelConverter>();
     }
 }

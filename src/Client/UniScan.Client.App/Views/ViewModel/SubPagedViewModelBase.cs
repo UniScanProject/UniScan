@@ -1,3 +1,4 @@
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Shiki.Common.Identity;
@@ -11,7 +12,7 @@ public interface ISingletonSubPagedViewModel : ISubPagedViewModel
     new static abstract Identifier Identifier { get; }
 }
 
-public interface ISubPagedViewModel
+public interface ISubPagedViewModel : ISubPagedViewNavigator
 {
     ObservableObject CurrentSubpage { get; }
     Identifier Identifier { get; }
@@ -19,6 +20,8 @@ public interface ISubPagedViewModel
 
 public abstract partial class SubPagedViewModelBase : ViewModelBase, ISubPagedViewModel
 {
+    private ISubPagedViewNavigator _subPagedViewNavigatorImplementation;
+
     [ObservableProperty]
     public partial ObservableObject CurrentSubpage { get; set; }
 
@@ -36,6 +39,20 @@ public abstract partial class SubPagedViewModelBase : ViewModelBase, ISubPagedVi
     {
         CurrentSubpage = message.Subpage;
     }
+
+
+    void ISubPagedViewNavigator.Navigate(ObservableObject page)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            CurrentSubpage = page;
+        });
+    }
+}
+
+public interface ISubPagedViewNavigator
+{
+    void Navigate(ObservableObject page);
 }
 
 public abstract partial class SingletonSubPagedViewModelBase<TSingletonSelf>(ObservableObject subpage)

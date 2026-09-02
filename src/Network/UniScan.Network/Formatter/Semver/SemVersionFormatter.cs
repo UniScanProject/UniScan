@@ -2,7 +2,7 @@ using MessagePack;
 using MessagePack.Formatters;
 using Semver;
 
-namespace UniScan.Network.Formatter.SemVer;
+namespace UniScan.Network.Formatter.Semver;
 
 public class SemVersionFormatter : IMessagePackFormatter<SemVersion?>
 {

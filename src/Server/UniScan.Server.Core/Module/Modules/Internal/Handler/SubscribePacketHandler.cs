@@ -7,9 +7,9 @@ using Shiki.Common.Result.Serialization.Types;
 using Shiki.Common.Util;
 using UniScan.Core.State;
 using UniScan.Core.State.Node;
-using UniScan.Network.Packet.Packets.Bidirectional.Status;
-using UniScan.Network.Packet.Packets.Clientbound.Device;
-using UniScan.Network.Packet.Packets.Serverbound.Subscription;
+using UniScan.Network.Protocol.Packets.Bidirectional.Status;
+using UniScan.Network.Protocol.Packets.Clientbound.Device;
+using UniScan.Network.Protocol.Packets.Serverbound.Subscription;
 using UniScan.Server.Core.Host;
 
 namespace UniScan.Server.Core.Module.Modules.Internal.Handler;

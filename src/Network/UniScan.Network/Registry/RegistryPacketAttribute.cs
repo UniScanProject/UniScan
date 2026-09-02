@@ -1,7 +1,6 @@
 using Shiki.Common.Identity;
-using Shiki.Common.Util;
 
-namespace UniScan.Network;
+namespace UniScan.Network.Registry;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = true)]
 public class RegistryPacketAttribute(Identifier id) : Attribute

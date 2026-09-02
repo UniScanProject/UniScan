@@ -40,6 +40,7 @@
       <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
+      <ProjectReference Include="..\..\Core\UniScan.UserInterface\UniScan.UserInterface.csproj" />
       <ProjectReference Include="..\..\Platform\UniScan.Platform.DependencyInjection\UniScan.Platform.DependencyInjection.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network.Client\UniScan.Network.Client.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network\UniScan.Network.csproj" />

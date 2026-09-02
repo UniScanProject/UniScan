@@ -24,7 +24,9 @@ public partial class UniScanAppInitializationPipeline
                            return Task.CompletedTask;
                        })
                       .ThenRun(app.InitializeSoftwareInfo)
+                      .ThenRun(SetupSSRSlotRegistry)
                       .ThenRun(app.InitializeModules)
+                      .ThenRun(SetupSSRUI)
                   .ThenTransitionTo<TaskContexts.PreClient>()
                     .ThenRun(app.InitializeClient)
                   .ThenTransitionTo<TaskContexts.PostClient>()

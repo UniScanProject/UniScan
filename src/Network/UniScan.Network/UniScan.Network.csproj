@@ -13,6 +13,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\external\Shiki\Extensions\Shiki.Extensions.MessagePack\Shiki.Extensions.MessagePack.csproj" />
+        <ProjectReference Include="..\..\Core\UniScan.UserInterface\UniScan.UserInterface.csproj" />
         <ProjectReference Include="..\UniScan.Network.CodeGenerator\UniScan.Network.CodeGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
     

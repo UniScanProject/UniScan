@@ -3,7 +3,7 @@ using MessagePack;
 using Semver;
 using Shiki.Common.Identity;
 using Shiki.Extensions.MessagePack.Formatter.Identity;
-using UniScan.Network.Formatter.SemVer;
+using UniScan.Network.Formatter.Semver;
 
 namespace UniScan.Network.Data.Info.Software;
 
