@@ -21,12 +21,11 @@ namespace UniScan.Client.App.Views.Remote;
 
 public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemoteRootPageDeviceNavigatorProxy
 {
-    public RemoteServer Remote { get; set; }
+    public RemoteServer Remote { get; }
 
     private readonly NotConnectedRemotePageViewModel _notConnectedPage;
     private RemotePageViewModel? _mainPage;
-    
-    public DeviceListControlViewModel DeviceListControl { get; }
+    public DeviceListControlViewModel? DeviceListControl { get; private set; }
     
     public BehaviorSubject<RemoteInfoControlViewModel?> InfoViewModelStream { get; } = new(null); 
     public RemoteInfoControlViewModel? InfoViewModel => InfoViewModelStream.Value;
@@ -62,7 +61,6 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
         });
 
         DevicePages = Remote.Devices.CreateView(kvp => new DeviceRootPageViewModel(provider, kvp.Value)).ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
-        DeviceListControl = new DeviceListControlViewModel(remote, this);
 
         this.Remote.Socket.ConnectionState.Disconnected += OnDisconnected;
         this.Remote.Socket.ConnectionState.Connected += OnConnected;
@@ -85,22 +83,22 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
                     this.CurrentSubpage = _notConnectedPage;
                 })
             };
-
-            //todo can we PLEASE manage state better!!!!!!
-            if (_mainPage is IDisposable d)
-            {
-                d.Dispose();
-            }
+            
+            DeviceListControl?.Dispose();
+            DeviceListControl = null;
+            
+            _mainPage?.Dispose();
             _mainPage = null;
         });
-        
     }
     
     private void OnConnected(object? sender, ConnectionStateTracker.ConnectionStateChangedEventArgs eventArgs)
     {
         Dispatcher.UIThread.Post(() =>
         {
-            _mainPage ??= new RemotePageViewModel(Remote, DeviceListControl, InfoViewModelStream.AsObservable());
+            DeviceListControl = new DeviceListControlViewModel(Remote, this);
+            
+            _mainPage = new RemotePageViewModel(Remote, DeviceListControl, InfoViewModelStream.AsObservable());
             this.CurrentSubpage = _mainPage;
         });
     }
@@ -113,7 +111,8 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
             state.Connected -= OnConnected;
         }
         
-        DeviceListControl.Dispose();
+        _mainPage?.Dispose();
+        DeviceListControl?.Dispose();
         DevicePages.Dispose();
     }
 

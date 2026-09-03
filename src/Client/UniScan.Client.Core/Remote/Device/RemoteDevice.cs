@@ -11,7 +11,7 @@ using UniScan.Network.Protocol.Packets.Serverbound.Subscription;
 
 namespace UniScan.Client.Core.Remote.Device;
 
-public class RemoteDevice(Slug<SnakeSlugFormatter> id, string? name, bool connected, DeviceSpecifications? specs, RemoteServer parent)
+public class RemoteDevice(Slug<SnakeSlugFormatter> id, string? name, bool connected, DeviceSpecifications? specs, RemoteServer parent) : IDisposable
 {
     public Slug<SnakeSlugFormatter> Identifier { get; } = id;
 
@@ -32,5 +32,10 @@ public class RemoteDevice(Slug<SnakeSlugFormatter> id, string? name, bool connec
         _subscribed.Value = (await parent.Socket.SendRequestAsync<AcknowledgePacket>(SubscribePacket.CreateRequest(Identifier))).Value.Result.Success;
 
         return _subscribed.CurrentValue;
+    }
+
+    public void Dispose()
+    {
+        _subscribed.Dispose();
     }
 }

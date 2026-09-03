@@ -1,7 +1,4 @@
-using System.Numerics;
 using MessagePack;
-using Shiki.Common.Identity.Slug;
-using Shiki.Common.Identity.Slug.Formatting.Formatters;
 
 namespace UniScan.UserInterface.Definitions;
 
@@ -21,9 +18,9 @@ public partial class ContainerUIControl(params List<IUINode> children) : UIConta
     {
     }
     
-    [Key(4)]
+    [Key(3)]
     public FlowDirection FlowDirection { get; set; } = FlowDirection.TopToBottom;
     
-    [Key(5)]
+    [Key(4)]
     public int ItemSpacing { get; set; } = 0;
 }

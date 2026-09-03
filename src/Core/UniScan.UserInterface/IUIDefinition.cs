@@ -2,6 +2,7 @@ using System.Numerics;
 using MessagePack;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
+using UniScan.UserInterface.Definitions;
 using UniScan.UserInterface.Formatting;
 
 namespace UniScan.UserInterface;
@@ -14,8 +15,7 @@ public interface IUINode : IUIDefinition
 {
     public Slug<DashSlugFormatter> Id { get; }
 
-    public Vector4 Padding { get; }
-    public Vector4 Margin { get; }
+    public UINodeStyle Style { get; }
 }
 
 public interface IUIControl : IUINode;

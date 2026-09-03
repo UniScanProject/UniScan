@@ -4,9 +4,11 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Shiki.Common.Factory;
+using UniScan.Client.App.Core.Extensions;
 using UniScan.Client.App.UI;
 using UniScan.Client.App.UI.ServersideRendering;
 using UniScan.UserInterface;
@@ -28,31 +30,29 @@ public class ContainerUIControlViewModelConverter(IServiceProvider serviceProvid
                                      .Select(i => i as Control ?? ViewLocator.Instance.Build(i))
                                      .OfType<Control>();
 
-        Border b = new()
+        StackPanel stackPanel = new()
         {
-            Margin = new Thickness(node.Margin.X, node.Margin.Y, node.Margin.Z, node.Margin.W),
-            Padding = new Thickness(node.Padding.X, node.Padding.Y, node.Padding.Z, node.Padding.W),
-            
-            Child = new StackPanel {
-                Orientation = node.FlowDirection switch
-                {
-                    FlowDirection.TopToBottom => Orientation.Vertical,
-                    FlowDirection.BottomToTop => Orientation.Vertical,
-                    FlowDirection.LeftToRight => Orientation.Horizontal,
-                    FlowDirection.RightToLeft => Orientation.Horizontal,
-                    _                         => Orientation.Horizontal
-                },
-                FlowDirection = node.FlowDirection switch
-                {
-                    FlowDirection.LeftToRight => Avalonia.Media.FlowDirection.LeftToRight,
-                    FlowDirection.RightToLeft => Avalonia.Media.FlowDirection.RightToLeft,
-                    _                         => Avalonia.Media.FlowDirection.LeftToRight
-                },
-                Spacing = node.ItemSpacing,
-            }
+            Orientation = node.FlowDirection switch
+            {
+                UserInterface.Definitions.FlowDirection.TopToBottom => Orientation.Vertical,
+                UserInterface.Definitions.FlowDirection.BottomToTop => Orientation.Vertical,
+                UserInterface.Definitions.FlowDirection.LeftToRight => Orientation.Horizontal,
+                UserInterface.Definitions.FlowDirection.RightToLeft => Orientation.Horizontal,
+                _                                                   => Orientation.Horizontal
+            },
+            FlowDirection = node.FlowDirection switch
+            {
+                UserInterface.Definitions.FlowDirection.LeftToRight => Avalonia.Media.FlowDirection.LeftToRight,
+                UserInterface.Definitions.FlowDirection.RightToLeft => Avalonia.Media.FlowDirection.RightToLeft,
+                _                                                   => Avalonia.Media.FlowDirection.LeftToRight
+            },
+            Spacing = node.ItemSpacing,
         };
+
+        Border b = node.Style.BuildStyledBorder();
+        b.Child = stackPanel;
         
-        ((StackPanel)b.Child).Children.AddRange(c);
+        stackPanel.Children.AddRange(c);
 
         return b;
     }

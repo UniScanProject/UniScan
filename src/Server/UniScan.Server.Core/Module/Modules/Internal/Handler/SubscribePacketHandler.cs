@@ -1,4 +1,5 @@
 using System.ComponentModel.Design;
+using System.Numerics;
 using DotNetty.Transport.Channels;
 using Serilog;
 using Shiki.Common.Extensions;
@@ -67,7 +68,15 @@ public class SubscribePacketHandler(ScannerHostManager scannerHostManager)
                                                                           new TextBlockUIControl("Hello, world 4!")
                                                                          )
             {
-                Id = "parent".ToSlug<DashSlugFormatter>()
+                Id = "parent".ToSlug<DashSlugFormatter>(),
+                Style =
+                {
+                    Padding = new Vector4(10),
+                    Position =
+                    {
+                        HorizontalPosition = HorizontalPosition.Center
+                    }
+                }
             }));
 
             ctx.Flush();

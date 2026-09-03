@@ -5,6 +5,8 @@ using DotNetty.Transport.Channels;
 using MessagePack;
 using Serilog;
 using Shiki.Common.Identity;
+using UniScan.Core;
+using UniScan.Core.Extensions;
 using UniScan.Network.Registry;
 
 namespace UniScan.Network.Protocol;
@@ -40,11 +42,7 @@ public class PacketEncoder(PacketRegistry packetRegistry, MessagePackSerializerO
             byte[] msg = MessagePackSerializer.Serialize(type, message, options, ct);
 
             #if DEBUG
-                var lines = msg.Chunk(16)
-                               .Select(chunk => string.Join(" ", Convert.ToHexString(chunk).Chunk(2)
-                                                                        .Select(c => new string(c))));
-
-                Log.Debug("Sent {Type}: {lines}", type.FullName, string.Join(Environment.NewLine, lines));
+                Log.Debug("Sent {Type}: {lines}", type.FullName, msg.AsSpan().ToHexViewString());
             #endif
 
             output.WriteBytes(msg);

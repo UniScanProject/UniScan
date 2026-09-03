@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using UniScan.Client.App.Core.Extensions;
 using UniScan.Client.App.UI.ServersideRendering;
 using UniScan.UserInterface;
 using UniScan.UserInterface.Definitions;
@@ -12,10 +13,13 @@ public class TextBlockUIControlViewModelConverter : IUiNodeViewModelConverter<Te
     
     public object CreateView(TextBlockUIControl node)
     {
-        return new TextBlock()
+        Border b = node.Style.BuildStyledBorder();
+        b.Child = new TextBlock
         {
             Text = node.Text,
             FontSize = node.FontSize
         };
+        
+        return b;
     }
 }

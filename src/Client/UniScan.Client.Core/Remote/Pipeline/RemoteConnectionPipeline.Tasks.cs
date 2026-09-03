@@ -48,7 +48,6 @@ public partial class RemoteConnectionPipeline
     public async Task GetDeviceList(TaskContexts.RemoteContext ctx, CancellationToken ct = default)
     {
         ctx.Status.Value = "Receiving devices";
-
         
         var devices = await ctx.RemoteServer.Socket.SendRequestAsync(GetDeviceListPacket.CreateRequest(), ct);
 

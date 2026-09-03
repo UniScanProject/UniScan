@@ -50,7 +50,7 @@ public class RemoteServer : IRemoteServerMutationProxy
     public IRemoteConnectionMethod ConnectionMethod { get; }
     
     /// <summary>
-    /// cached list of devices
+    /// list of devices
     /// </summary>
     public ObservableDictionary<Slug<SnakeSlugFormatter>, RemoteDevice> Devices { get; } = [];
     
@@ -83,6 +83,9 @@ public class RemoteServer : IRemoteServerMutationProxy
         Socket.ConnectionState.Disconnected += (sender, args) =>
         {
             _connected.Value = false;
+            
+            Devices.Clear();
+            
             Log.Information("Disconnected from {RemoteAddress}", args.Channel.RemoteAddress);
         };
     }

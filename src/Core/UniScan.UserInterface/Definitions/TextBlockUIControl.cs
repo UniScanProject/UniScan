@@ -20,10 +20,10 @@ public class TextBlockUIControl : UIControl, ITextBlockUIControl
         Text = text;
     }
 
-    [Key(3)]
+    [Key(2)]
     public string Text { get; set; }
     
-    [Key(4)]
+    [Key(3)]
     public int FontSize { get; set; } = 12;
 }
 
@@ -40,9 +40,9 @@ public partial class BoundTextBlockUIControl : UIControl, ITextBlockUIControl
     {
     }
 
-    [Key(3)]
+    [Key(2)]
     public Identifier PropertyId { get; private set; }
 
-    [Key(4)]
+    [Key(3)]
     public int FontSize { get; set; } = 12;
 }

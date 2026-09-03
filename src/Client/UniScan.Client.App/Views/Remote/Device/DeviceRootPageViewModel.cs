@@ -18,7 +18,7 @@ public class DeviceRootPageViewModel : SubPagedViewModelBase, IDisposable
     
     private DevicePageViewModel _mainPage;
     
-    public DeviceRootPageViewModel(IServiceProvider provider, RemoteDevice device) : base(new EmptyPageViewModel(), UniScanApp.Identifier.Derived("view_model", "device", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
+    public DeviceRootPageViewModel(IServiceProvider provider, RemoteDevice device) : base(new EmptyPageViewModel(), UniScanApp.Identifier.Derived("view_model", "device", device.Identifier))
     {
         Device = device;
 

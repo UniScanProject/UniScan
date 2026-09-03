@@ -2,6 +2,7 @@ using MessagePack;
 using Shiki.Common.Extensions;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
+using UniScan.Core.Extensions;
 using UniScan.UserInterface;
 using UniScan.UserInterface.Definitions;
 
