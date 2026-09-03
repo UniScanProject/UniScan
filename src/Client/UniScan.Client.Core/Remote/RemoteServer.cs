@@ -64,8 +64,6 @@ public class RemoteServer : IRemoteServerMutationProxy
 
     private readonly BindableReactiveProperty<bool> _connected = new(false);
     public IReadOnlyBindableReactiveProperty<bool> Connected => _connected;
-
-    public event EventHandler? UserDisconnect;
     
     public RemoteServer(Guid id, IRemoteConnectionMethod connectionMethod, IClientSocketFactory socketFactory)
     {
@@ -99,14 +97,6 @@ public class RemoteServer : IRemoteServerMutationProxy
     }
     
     public RemoteServer(Guid id, RemoteDto dto, RemoteCacheDto? cache, IClientSocketFactory socketFactory) : this(id, dto.ConnectionMethod, socketFactory, cache?.RemoteInfo) {}
-
-    public async Task Disconnect()
-    {
-        UserDisconnect?.Invoke(this, EventArgs.Empty);
-        
-        await Socket.SendPacketAsync(new DisconnectPacket("User initiated disconnect"));
-        await Socket.StopAsync();
-    }
     
     void IRemoteServerMutationProxy.SetSoftwareInfo(ServerSoftwareInfo info)
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ using UniScan.Client.App.Views.Remote.Device;
 using UniScan.Client.App.Views.ViewModel;
 using UniScan.Client.Core.Remote;
 using UniScan.Client.Core.Remote.Device;
+using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 using UniScan.Network.Util;
 
 namespace UniScan.Client.App.Views.Remote;
@@ -33,7 +35,7 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
 
     public INotifyCollectionChangedSynchronizedViewList<DeviceRootPageViewModel> DevicePages { get; }
 
-    private bool _userDisconnected = false;//this is dirty, todo fix since this only happens if pipeline flow is too shit
+    private bool _userDisconnected = false;
 
     public RemoteRootPageViewModel(IServiceProvider provider, RemoteServer remote) : base(new NotConnectedRemotePageViewModel(provider, remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
     {
@@ -67,7 +69,6 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
 
         this.Remote.Socket.ConnectionState.Disconnected += OnDisconnected;
         this.Remote.Socket.ConnectionState.Connected += OnConnected;
-        this.Remote.UserDisconnect += OnUserDisconnected;
     }
 
     private void OnDisconnected(object? sender, ConnectionStateTracker.ConnectionStateChangedEventArgs eventArgs)
@@ -94,14 +95,23 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
         });
     }
 
-    private void OnUserDisconnected(object? sender, EventArgs e)
+    public async Task Disconnect()
     {
+        if (!Remote.Connected.Value)
+        {
+            return;
+        }
+        
         Dispatcher.UIThread.Post(() =>
         {
-            _userDisconnected = true;            
             this.CurrentSubpage = _notConnectedPage;
+            _userDisconnected = true;
         });
-    }
+        
+        await Remote.Socket.SendPacketAsync(new DisconnectPacket("User initiated disconnect"));
+        await Task.Delay(500);//wait for server to disconnect
+        await Remote.Socket.StopAsync();
+    } 
 
     private void TearDown()
     {

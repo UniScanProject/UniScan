@@ -34,7 +34,7 @@ public partial class SidebarRemoteItemControlViewModel : ViewModelBase, IDisposa
     [RelayCommand]
     public async Task Disconnect()
     {
-        await Remote.Disconnect();
+        await _rootPageViewModel.Disconnect();
     }
     
     public void Dispose()
