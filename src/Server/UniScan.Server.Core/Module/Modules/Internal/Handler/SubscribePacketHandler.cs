@@ -1,7 +1,9 @@
 using System.ComponentModel.Design;
 using DotNetty.Transport.Channels;
 using Serilog;
+using Shiki.Common.Extensions;
 using Shiki.Common.Identity;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Common.Result;
 using Shiki.Common.Result.Serialization.Types;
 using Shiki.Common.Util;
@@ -9,8 +11,10 @@ using UniScan.Core.State;
 using UniScan.Core.State.Node;
 using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 using UniScan.Network.Protocol.Packets.Clientbound.Device;
+using UniScan.Network.Protocol.Packets.Clientbound.SSR;
 using UniScan.Network.Protocol.Packets.Serverbound.Subscription;
 using UniScan.Server.Core.Host;
+using UniScan.UserInterface.Definitions;
 
 namespace UniScan.Server.Core.Module.Modules.Internal.Handler;
 
@@ -51,6 +55,20 @@ public class SubscribePacketHandler(ScannerHostManager scannerHostManager)
             {
                 ctx.WriteAsync(new DeviceStatePacket(DeviceStateSerializer.Serialize(host.Scanner.State.Value), msg.RequestId, host.Identifier));
             }
+
+            var id = new Identifier("UniScan", "ssr", "slot", "device", msg.DeviceIdentifier);
+            ctx.WriteAsync(new SetUISlotPacket(id, new ContainerUIControl(
+                                                                          new TextBlockUIControl("Hello, world 1!")
+                                                                          {
+                                                                              FontSize = 16
+                                                                          },
+                                                                          new TextBlockUIControl("Hello, world 2!"),
+                                                                          new TextBlockUIControl("Hello, world 3!"),
+                                                                          new TextBlockUIControl("Hello, world 4!")
+                                                                         )
+            {
+                Id = "parent".ToSlug<DashSlugFormatter>()
+            }));
 
             ctx.Flush();
 

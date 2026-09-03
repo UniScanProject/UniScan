@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Shiki.Common.Identity;
 using UniScan.Client.App.Views.SSR;
 
@@ -6,7 +7,9 @@ namespace UniScan.Client.App.UI.ServersideRendering;
 
 public interface IUISlotRegistry
 {
-    public IUISlotControlViewModel? Get(Identifier id);
+    public IUISlotControlViewModel Get(Identifier id);
+    
+    public bool TryGet(Identifier id, [NotNullWhen(true)] out IUISlotControlViewModel? vm);
     
     public void Add(IUISlotControlViewModel control);
     public void Add(Identifier id, IUISlotControlViewModel control);
@@ -18,8 +21,10 @@ public interface IUISlotRegistry
 public class UISlotRegistry : IUISlotRegistry
 {
     private readonly Dictionary<Identifier, IUISlotControlViewModel> _controls = [];
-    
-    public IUISlotControlViewModel? Get(Identifier id) => _controls.TryGetValue(id, out IUISlotControlViewModel? control) ? control : null;
+
+    public IUISlotControlViewModel Get(Identifier id) => _controls[id];
+
+    public bool TryGet(Identifier id, [NotNullWhen(true)] out IUISlotControlViewModel? vm) => _controls.TryGetValue(id, out vm);
 
     public void Add(IUISlotControlViewModel control) => Add(control.Identifier, control);
 

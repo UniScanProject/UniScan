@@ -10,13 +10,22 @@ public class DevicePageViewModel : ViewModelBase
 {
     public RemoteDevice Device { get; }
     
-    public UISlotControlViewModel SSRViewModel { get; }
+    public IUISlotControlViewModel SSRViewModel { get; }
 
     public DevicePageViewModel(RemoteDevice device, IUISlotRegistry registry)
     {
         Device = device;
 
-        SSRViewModel = new UISlotControlViewModel(new Identifier("UniScan", "ssr", "slot", "device", Device.Identifier));
-        registry.Add(SSRViewModel);
+        Identifier id = new("UniScan", "ssr", "slot", "device", Device.Identifier);
+        if (registry.TryGet(id, out IUISlotControlViewModel? vm))//stupid hack because for some reason it keeps creating new SSRViewModel or something weird
+        {
+            SSRViewModel = vm;
+        }
+        else
+        {
+            SSRViewModel = new UISlotControlViewModel(id);
+            registry.Add(SSRViewModel);
+        }
+        
     }
 }

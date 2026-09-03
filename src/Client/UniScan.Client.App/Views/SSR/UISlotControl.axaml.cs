@@ -5,7 +5,7 @@ using Shiki.Common.Identity;
 
 namespace UniScan.Client.App.Views.SSR;
 
-public partial class UISlotControl : ContentControl
+public partial class UISlotControl : UserControl
 {
     public UISlotControl()
     {

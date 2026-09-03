@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
@@ -113,6 +114,7 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
         }
         
         DeviceListControl.Dispose();
+        DevicePages.Dispose();
     }
 
     void IRemoteRootPageDeviceNavigatorProxy.Navigate(RemoteDevice device)

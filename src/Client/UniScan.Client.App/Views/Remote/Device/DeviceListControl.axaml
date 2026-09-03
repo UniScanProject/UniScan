@@ -12,14 +12,6 @@
                 <MenuFlyout>
                 </MenuFlyout>
             </Setter>
-
-            <!-- <Setter Property="Width"> -->
-            <!--     <Binding Path="#DeviceGrid.Bounds.Width" Converter="{conversion:RelativeUnitConverter Min=200, Percentage=0.15}" /> -->
-            <!-- </Setter> -->
-            <!-- -->
-            <!-- <Setter Property="Height"> -->
-            <!--     <Binding Path="#DeviceGrid.Bounds.Width" Converter="{conversion:RelativeUnitConverter Min=200, Percentage=0.15}" /> -->
-            <!-- </Setter> -->
             
             <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" />
         </Style> 
