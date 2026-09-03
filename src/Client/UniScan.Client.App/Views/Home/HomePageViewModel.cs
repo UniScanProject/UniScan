@@ -12,7 +12,7 @@ public class RemoteConnectionStateFilter : ISynchronizedViewFilter<RemoteServer,
 {
     public bool IsMatch(RemoteServer value, RemoteRootPageViewModel rootPageView)
     {
-        return value.Connected.CurrentValue;
+        return value.Connected.Value;
     }
 }
 
@@ -45,7 +45,7 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
     {
         if (_subscriptions.ContainsKey(remote)) return;
 
-        _subscriptions[remote] = remote.Connected.Skip(1).Subscribe((_) =>
+        _subscriptions[remote] = remote.Connected.AsObservable().Skip(1).Subscribe((_) =>
         {
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {

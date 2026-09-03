@@ -76,7 +76,7 @@ public class PacketDecoder(PacketRegistry packetRegistry) : MessageToMessageDeco
             }
 
 #if DEBUG
-            _logger.Debug("Received data: {data}", payload.Span.ToHexViewString());
+            _logger.Debug("Received packet with identifier '{Identifier}': {Data}", id.Value, payload.Span.ToHexViewString());
 #endif
             
             //deserialize

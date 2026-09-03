@@ -24,6 +24,7 @@ public class InternalUniScanServerModule : IUniScanServerModule
         services.AddTransient<SubscribePacketHandler>();
         services.AddTransient<GetDeviceListPacketHandler>();
         services.AddTransient<ClientSoftwareInfoPacketHandler>();
+        services.AddTransient<DisconnectPacketHandler>();
 
         services.AddSingleton(new AcceptedClientPacketFilter());
         

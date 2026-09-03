@@ -27,7 +27,7 @@ public partial class NotConnectedRemotePageViewModel(IServiceProvider provider, 
         RemoteConnectionPipeline pipeline = new();
         
         _cts = new CancellationTokenSource();
-        _disposable = Remote.Connected.Skip(1).Subscribe(OnConnectionStatusChanged);
+        _disposable = Remote.Connected.AsObservable().Skip(1).Subscribe(OnConnectionStatusChanged);
         OnConnecting?.Invoke(pipeline);
 
         try

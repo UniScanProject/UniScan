@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using ObservableCollections;
 using R3;
+using Serilog;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Client.App.UI.ServersideRendering;
@@ -31,6 +32,8 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
     public RemoteInfoControlViewModel? InfoViewModel => InfoViewModelStream.Value;
 
     public INotifyCollectionChangedSynchronizedViewList<DeviceRootPageViewModel> DevicePages { get; }
+
+    private bool _userDisconnected = false;//this is dirty, todo fix since this only happens if pipeline flow is too shit
 
     public RemoteRootPageViewModel(IServiceProvider provider, RemoteServer remote) : base(new NotConnectedRemotePageViewModel(provider, remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
     {
@@ -64,32 +67,49 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
 
         this.Remote.Socket.ConnectionState.Disconnected += OnDisconnected;
         this.Remote.Socket.ConnectionState.Connected += OnConnected;
+        this.Remote.UserDisconnect += OnUserDisconnected;
     }
 
     private void OnDisconnected(object? sender, ConnectionStateTracker.ConnectionStateChangedEventArgs eventArgs)
     {
         Dispatcher.UIThread.Post(() =>
         {
-            string reason = "Unknown reason, maybe there is more info in the logs.";
-            if (eventArgs.Channel.HasAttribute(ServerAttributes.DisconnectReasonAttribute))
+            if (!_userDisconnected)
             {
-                reason = eventArgs.Channel.GetAttribute(ServerAttributes.DisconnectReasonAttribute).Get();
-            }
-            
-            this.CurrentSubpage = new DisconnectedRemotePageViewModel(reason, Remote)
-            {
-                OkClicked = new RelayCommand(() =>
+                string reason = "Unknown reason, maybe there is more info in the logs.";
+                if (eventArgs.Channel.HasAttribute(ServerAttributes.DisconnectReasonAttribute))
                 {
-                    this.CurrentSubpage = _notConnectedPage;
-                })
-            };
-            
-            DeviceListControl?.Dispose();
-            DeviceListControl = null;
-            
-            _mainPage?.Dispose();
-            _mainPage = null;
+                    reason = eventArgs.Channel.GetAttribute(ServerAttributes.DisconnectReasonAttribute).Get();
+                }
+
+                this.CurrentSubpage = new DisconnectedRemotePageViewModel(reason, Remote)
+                {
+                    OkClicked = new RelayCommand(() => { this.CurrentSubpage = _notConnectedPage; })
+                };
+            }
+
+            _userDisconnected = false;
+
+            TearDown();
         });
+    }
+
+    private void OnUserDisconnected(object? sender, EventArgs e)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            _userDisconnected = true;            
+            this.CurrentSubpage = _notConnectedPage;
+        });
+    }
+
+    private void TearDown()
+    {
+        DeviceListControl?.Dispose();
+        DeviceListControl = null;
+            
+        _mainPage?.Dispose();
+        _mainPage = null;
     }
     
     private void OnConnected(object? sender, ConnectionStateTracker.ConnectionStateChangedEventArgs eventArgs)
@@ -111,8 +131,7 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
             state.Connected -= OnConnected;
         }
         
-        _mainPage?.Dispose();
-        DeviceListControl?.Dispose();
+        TearDown();
         DevicePages.Dispose();
     }
 
