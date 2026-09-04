@@ -6,11 +6,12 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using ObservableCollections;
 using R3;
-using Serilog;
 using UniScan.Client.App.UI.ServersideRendering;
 using UniScan.Client.App.Views.Remote.Device;
 using UniScan.Client.App.Views.ViewModel;
 using UniScan.Client.Core.Remote;
+using UniScan.Client.Core.Remote.Connection;
+using UniScan.Client.Core.Remote.Connection.Status;
 using UniScan.Client.Core.Remote.Pipeline;
 using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 
@@ -55,7 +56,7 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
         
         Remote.ConnectionStatus.AsObservable().Skip(1).Subscribe((b) =>
         {
-            if (b.State >= ConnectionState.Disconnected)
+            if (b.State.IsDisconnected())
             {
                 TearDown();
             }
@@ -94,7 +95,7 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     public async Task DisconnectAsync()
     {
-        if (Remote.ConnectionStatus.Value.State >= ConnectionState.Disconnected)
+        if (Remote.ConnectionStatus.Value.State.IsDisconnected())
         {
             return;
         }

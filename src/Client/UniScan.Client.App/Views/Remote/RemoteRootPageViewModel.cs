@@ -16,6 +16,8 @@ using UniScan.Client.App.Views.Remote.Connection;
 using UniScan.Client.App.Views.Remote.Device;
 using UniScan.Client.App.Views.ViewModel;
 using UniScan.Client.Core.Remote;
+using UniScan.Client.Core.Remote.Connection;
+using UniScan.Client.Core.Remote.Connection.Status;
 using UniScan.Client.Core.Remote.Device;
 using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 using UniScan.Network.Util;
@@ -33,49 +35,11 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
     
     public RemoteRootPageViewModel(RemoteViewModel remoteViewModel) : base(new NotConnectedRemotePageViewModel(remoteViewModel), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(remoteViewModel.Remote.Id.ToString())))
     {
-        this._notConnectedPage = (NotConnectedRemotePageViewModel)CurrentSubpage;
+        _notConnectedPage = (NotConnectedRemotePageViewModel)CurrentSubpage;
         
-        this.RemoteViewModel = remoteViewModel;
+        RemoteViewModel = remoteViewModel;
 
-        this.RemoteViewModel.Remote.ConnectionStatus.AsObservable().Skip(1).Subscribe(OnConnectionStateChanged).AddTo(_disposables);
-    }
-
-    private void OnDisconnected(IConnectionStatusContext ctx)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            if (ctx.State == ConnectionState.UserDisconnected)
-            {
-                this.CurrentSubpage = _notConnectedPage;
-                
-                TearDown();
-                return;
-            }
-
-            string reason = ctx switch
-            {
-                KickedDisconnectedConnectionStatusContext c     => c.Reason,
-                UnexpectedDisconnectedConnectionStatusContext c => c.Exception?.Message,
-                _                                                      => null
-            } ?? "Unknown disconnect reason";
-
-            this.CurrentSubpage = new DisconnectedRemotePageViewModel(reason, RemoteViewModel)
-            {
-                OkClicked = new RelayCommand(() => { this.CurrentSubpage = _notConnectedPage; })
-            };
-            
-
-            TearDown();
-        });
-    }
-    
-    private void OnConnected(IConnectionStatusContext ctx)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            _mainPage = new RemotePageViewModel(RemoteViewModel);
-            this.CurrentSubpage = _mainPage;
-        });
+        RemoteViewModel.Remote.ConnectionStatus.AsObservable().Skip(1).Subscribe(OnConnectionStateChanged).AddTo(_disposables);
     }
 
     private void TearDown()
@@ -99,6 +63,44 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
         }
     }
 
+    private void OnDisconnected(IConnectionStatusContext ctx)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (ctx.State == ConnectionState.UserDisconnected)
+            {
+                CurrentSubpage = _notConnectedPage;
+                
+                TearDown();
+                return;
+            }
+
+            string reason = ctx switch
+            {
+                KickedDisconnectedConnectionStatusContext c     => c.Reason,
+                UnexpectedDisconnectedConnectionStatusContext c => c.Exception?.Message,
+                _                                               => null
+            } ?? "Unknown disconnect reason";
+
+            CurrentSubpage = new DisconnectedRemotePageViewModel(reason, RemoteViewModel)
+            {
+                OkClicked = new RelayCommand(() => { CurrentSubpage = _notConnectedPage; })
+            };
+            
+
+            TearDown();
+        });
+    }
+    
+    private void OnConnected(IConnectionStatusContext ctx)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            _mainPage = new RemotePageViewModel(RemoteViewModel);
+            CurrentSubpage = _mainPage;
+        });
+    }
+    
     private void OnConnectionStateChanged(IConnectionStatusContext ctx)
     {
         switch (ctx.State)
@@ -109,7 +111,7 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
             case ConnectionState.Connected:
                 OnConnected(ctx);
                 break;
-            case ConnectionState.Disconnected:
+            case ConnectionState.NotConnected:
             case ConnectionState.UserDisconnected:
             case ConnectionState.UnexpectedDisconnected:
             case ConnectionState.KickedDisconnected:

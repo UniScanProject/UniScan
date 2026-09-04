@@ -5,6 +5,8 @@ using Serilog;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Client.Core.Config.Remote;
+using UniScan.Client.Core.Remote.Connection;
+using UniScan.Client.Core.Remote.Connection.Status;
 using UniScan.Client.Core.Remote.Device;
 using UniScan.Network;
 using UniScan.Network.Client;
@@ -61,7 +63,7 @@ public class RemoteServer : IRemoteServerMutationProxy
     
     public ClientSocket Socket { get; }
 
-    private readonly BindableReactiveProperty<IConnectionStatusContext> _connectionStatus = new(new DefaultConnectionStatusContext(ConnectionState.Disconnected));
+    private readonly BindableReactiveProperty<IConnectionStatusContext> _connectionStatus = new(new DefaultConnectionStatusContext(ConnectionState.NotConnected));
     public IReadOnlyBindableReactiveProperty<IConnectionStatusContext> ConnectionStatus => _connectionStatus;
     
     public RemoteServer(Guid id, IRemoteConnectionMethod connectionMethod, IClientSocketFactory socketFactory)
@@ -83,9 +85,9 @@ public class RemoteServer : IRemoteServerMutationProxy
             }
             Devices.Clear();
 
-            if (ConnectionStatus.Value.State < ConnectionState.Disconnected)
+            if (ConnectionStatus.Value.State < ConnectionState.NotConnected)
             {
-                _connectionStatus.Value = new DefaultConnectionStatusContext(ConnectionState.Disconnected);
+                _connectionStatus.Value = new DefaultConnectionStatusContext(ConnectionState.NotConnected);
             }
             
             Log.Information("Disconnected from {RemoteAddress}", args.Channel.RemoteAddress);

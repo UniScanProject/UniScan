@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using UniScan.Client.Core.Remote.Connection;
+using UniScan.Client.Core.Remote.Connection.Status;
 using UniScan.Client.Core.Remote.Device;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Protocol.Packets.Serverbound;

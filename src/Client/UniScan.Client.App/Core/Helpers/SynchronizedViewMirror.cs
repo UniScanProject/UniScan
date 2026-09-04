@@ -78,7 +78,7 @@ public class SynchronizedViewMirror<T, TNew> : IDisposable
 
     public void Dispose()
     {
-        this.Detach();
+        Detach();
         _output.Clear();
     }
 }

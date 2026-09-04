@@ -7,6 +7,7 @@ using R3;
 using UniScan.Client.App.Views.Remote;
 using UniScan.Client.App.Views.ViewModel;
 using UniScan.Client.Core.Remote;
+using UniScan.Client.Core.Remote.Connection;
 
 namespace UniScan.Client.App.Views.Home;
 

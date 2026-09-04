@@ -54,7 +54,7 @@ public partial class UniScanAppInitializationPipeline
         Log.Information("Loaded {Count} remote(s)", remoteManager.Remotes.Count);
     }
     
-    internal Task RegisterPackets(UniScanAppInitializationPipeline.TaskContexts.PostServiceProvider ctx,
+    internal Task RegisterPackets(TaskContexts.PostServiceProvider ctx,
                                   CancellationToken ct = default)
     {
         ctx.Status.Value = "Registering packets";
