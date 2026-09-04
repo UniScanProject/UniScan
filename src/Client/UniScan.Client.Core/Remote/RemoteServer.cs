@@ -27,9 +27,6 @@ public class ServerAttributes
     
     public static readonly AttributeKey<RemoteServer> ServerAttribute =
         AttributeKey<RemoteServer>.ValueOf("server");
-    
-    public static readonly AttributeKey<string> DisconnectReasonAttribute =
-        AttributeKey<string>.ValueOf("disconnectReason");
 }
 
 public interface IRemoteServerMutationProxy
@@ -37,6 +34,8 @@ public interface IRemoteServerMutationProxy
     void SetSoftwareInfo(ServerSoftwareInfo softwareInfo);
 
     void SetRemoteInfo(RemoteInfo info);
+    
+    void SetConnectionStatus(IConnectionStatusContext context);
 }
 
 public class RemoteServer : IRemoteServerMutationProxy
@@ -62,8 +61,8 @@ public class RemoteServer : IRemoteServerMutationProxy
     
     public ClientSocket Socket { get; }
 
-    private readonly BindableReactiveProperty<bool> _connected = new(false);
-    public IReadOnlyBindableReactiveProperty<bool> Connected => _connected;
+    private readonly BindableReactiveProperty<IConnectionStatusContext> _connectionStatus = new(new DefaultConnectionStatusContext(ConnectionState.Disconnected));
+    public IReadOnlyBindableReactiveProperty<IConnectionStatusContext> ConnectionStatus => _connectionStatus;
     
     public RemoteServer(Guid id, IRemoteConnectionMethod connectionMethod, IClientSocketFactory socketFactory)
     {
@@ -75,17 +74,19 @@ public class RemoteServer : IRemoteServerMutationProxy
 
 
         Socket = socketFactory.CreateInstance(connectionMethod);
-        Socket.ConnectionState.Connected += (sender, args) =>
-        {
-            _connected.Value = true;
-            Log.Information("Connected to {RemoteAddress} over {ConnectionMethod}", args.Channel.RemoteAddress, ConnectionMethod);
-        };
         
         Socket.ConnectionState.Disconnected += (sender, args) =>
         {
-            _connected.Value = false;
-            
+            foreach (var device in Devices)
+            {
+                device.Value.Dispose();
+            }
             Devices.Clear();
+
+            if (ConnectionStatus.Value.State < ConnectionState.Disconnected)
+            {
+                _connectionStatus.Value = new DefaultConnectionStatusContext(ConnectionState.Disconnected);
+            }
             
             Log.Information("Disconnected from {RemoteAddress}", args.Channel.RemoteAddress);
         };
@@ -108,5 +109,10 @@ public class RemoteServer : IRemoteServerMutationProxy
     {
         Socket.Channel!.GetAttribute(ServerAttributes.RemoteInfoAttribute).Set(info);
         _remoteInfo.Value = info;
+    }
+
+    void IRemoteServerMutationProxy.SetConnectionStatus(IConnectionStatusContext context)
+    {
+        _connectionStatus.Value = context;
     }
 }

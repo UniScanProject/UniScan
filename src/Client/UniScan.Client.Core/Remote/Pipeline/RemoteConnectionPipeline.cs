@@ -4,7 +4,7 @@ using Shiki.TaskPipeline;
 
 namespace UniScan.Client.Core.Remote.Pipeline;
 
-public partial class RemoteConnectionPipeline
+public partial class RemoteConnectionPipeline : IDisposable
 {
     public TaskPipeline Pipeline { get; }
     private readonly ILogger _logger = Log.ForContext<RemoteConnectionPipeline>();
@@ -18,14 +18,13 @@ public partial class RemoteConnectionPipeline
                   .ThenRun(Handshake)
                   .ThenTransitionTo<TaskContexts.RemoteContext>()
                   .ThenRun(GetDeviceList)
-                  .ThenRun((_, _) =>
-                   {
-                       _subscription?.Dispose();
-
-                       return Task.CompletedTask;
-                   })
                   .Build();
         
         _subscription = Pipeline.Status.Subscribe(s => { _logger.Information("{Status}", s); });
+    }
+
+    public void Dispose()
+    {
+        _subscription.Dispose();
     }
 }

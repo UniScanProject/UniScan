@@ -4,21 +4,30 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              xmlns:remote="clr-namespace:UniScan.Client.App.Views.Remote"
+             xmlns:remote1="clr-namespace:UniScan.Client.Core.Remote;assembly=UniScan.Client.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.SidebarRemoteItemControl"
-             x:DataType="remote:SidebarRemoteItemControlViewModel">
-    <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Command="{Binding OnClicked}">
-        <Grid ColumnDefinitions="*, Auto">
-            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="5">
+             x:DataType="remote:RemoteViewModel">
+    <Grid ColumnDefinitions="*, Auto" HorizontalAlignment="Stretch">
+        <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Command="{Binding SwitchToPageCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="5">
                 <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl}" Width="16" Height="16" IsVisible="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
                 <TextBlock VerticalAlignment="Center" Text="{Binding Remote.DisplayName.Value}" />
             </StackPanel>
+        </Button>
+        
+        <!-- padding is kind of a hack -->
+        <Border Grid.Column="1" Padding="5 0 0 0">
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="Remote.ConnectionStatus.Value.State" Converter="{x:Static ObjectConverters.Equal}" ConverterParameter="{x:Static remote1:ConnectionState.Connected}" />
+                    <Binding Path="IsPaneOpen" Mode="TwoWay" RelativeSource="{RelativeSource AncestorType={x:Type SplitView}}" />
+                </MultiBinding>
+            </Border.IsVisible>
             
-            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
-                <Button IsVisible="{Binding Remote.Connected.Value}" Command="{Binding DisconnectCommand}">
-                    <TextBlock>Disconnect</TextBlock>
-                </Button>
-            </StackPanel>
-        </Grid>
-    </Button>
+            <Button Command="{Binding DisconnectCommand}">
+                <TextBlock>-</TextBlock>
+            </Button>
+        </Border>
+    </Grid>
 </UserControl>

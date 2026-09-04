@@ -6,15 +6,15 @@
              xmlns:ui="clr-namespace:UniScan.Client.App.UI"
              xmlns:conversion="clr-namespace:UniScan.Client.App.UI.Conversion"
              Name="UniScan">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
-        <ui:ViewLocator/>
+        <ui:ViewLocator />
     </Application.DataTemplates>
-             
-             <Application.Resources>
-                 <conversion:RelativeUnitConverter x:Key="RelativeUnitConverter"/>
-             </Application.Resources>
+
+    <Application.Resources>
+        <conversion:RelativeUnitConverter x:Key="RelativeUnitConverter" />
+    </Application.Resources>
 
     <Application.Styles>
         <FluentTheme />

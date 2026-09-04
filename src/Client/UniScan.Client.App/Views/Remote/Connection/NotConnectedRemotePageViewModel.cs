@@ -9,47 +9,15 @@ using UniScan.Client.Core.Remote.Pipeline;
 
 namespace UniScan.Client.App.Views.Remote.Connection;
 
-public partial class NotConnectedRemotePageViewModel(IServiceProvider provider, RemoteServer remote) : ViewModelBase
+public partial class NotConnectedRemotePageViewModel(RemoteViewModel remoteViewModel) : ViewModelBase
 {
-    public RemoteServer Remote { get; set; } = remote;
+    public RemoteViewModel RemoteViewModel { get; set; } = remoteViewModel;
 
-    public bool HasConnectionMethod { get; set; } = remote.ConnectionMethod != null;
-
-    public event Action<RemoteConnectionPipeline>? OnConnecting;
-    public event Action<Exception>? OnConnectFailed;
-
-    private CancellationTokenSource? _cts;
-    private IDisposable? _disposable;
+    public bool HasConnectionMethod { get; set; } = remoteViewModel.Remote.ConnectionMethod != null;
     
-    [RelayCommand]
-    public async Task OnConnectClicked()
+    [RelayCommand(IncludeCancelCommand = true)]
+    public async Task Connect(CancellationToken ct = default)
     {
-        RemoteConnectionPipeline pipeline = new();
-        
-        _cts = new CancellationTokenSource();
-        _disposable = Remote.Connected.AsObservable().Skip(1).Subscribe(OnConnectionStatusChanged);
-        OnConnecting?.Invoke(pipeline);
-
-        try
-        {
-            await pipeline.Pipeline.RunAsync(new RemoteConnectionPipeline.TaskContexts.ConnectionContext(provider,
-                                                      remote), _cts.Token);
-        }
-        catch (Exception e)
-        {
-            OnConnectFailed?.Invoke(e);
-        }
-    }
-
-    private void OnConnectionStatusChanged(bool connected)
-    {
-        if (!connected)
-        {
-            _cts?.Cancel();
-            _cts = null;
-            
-            _disposable?.Dispose();
-            _disposable = null;
-        }
+        await RemoteViewModel.ConnectAsync(ct);
     }
 }

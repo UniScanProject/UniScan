@@ -155,9 +155,6 @@
       <Compile Update="Views\Remote\RemoteLinkControlViewModel.cs">
         <DependentUpon>RemoteLinkControl.axaml</DependentUpon>
       </Compile>
-      <Compile Update="Views\Remote\SidebarRemoteItemControlViewModel.cs">
-        <DependentUpon>SidebarRemoteItemControl.axaml</DependentUpon>
-      </Compile>
       <Compile Update="Views\Remote\RemoteRootPageViewModel.cs">
         <DependentUpon>RemoteRootPageView.axaml</DependentUpon>
       </Compile>
@@ -172,6 +169,12 @@
       </Compile>
       <Compile Update="Views\Remote\Device\DevicePageViewModel.cs">
         <DependentUpon>DevicePageView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\Device\DeviceRootPageViewModel.cs">
+        <DependentUpon>DeviceRootPageView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\SSR\UISlotControlViewModel.cs">
+        <DependentUpon>UISlotControl.axaml</DependentUpon>
       </Compile>
     </ItemGroup>
 

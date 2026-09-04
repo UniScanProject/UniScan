@@ -9,10 +9,10 @@
              x:DataType="connection:DisconnectedRemotePageViewModel">
     <Border VerticalAlignment="Center" HorizontalAlignment="Center" Padding="10" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" CornerRadius="10">
         <StackPanel Spacing="10">
-            <Border Padding="10" CornerRadius="5" Background="{DynamicResource SystemControlPageBackgroundBaseLowBrush}" IsVisible="{Binding Remote, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}">
+            <Border Padding="10" CornerRadius="5" Background="{DynamicResource SystemControlPageBackgroundBaseLowBrush}" IsVisible="{Binding RemoteViewModel, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}">
                 <StackPanel Orientation="Horizontal" Spacing="5">
-                    <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Remote?.RemoteInfo.CurrentValue?.Branding.LogoUrl}" Width="32" Height="32" IsVisible="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
-                    <TextBlock Text="{Binding Remote?.DisplayName}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
+                    <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding RemoteViewModel?.Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl}" Width="32" Height="32" IsVisible="{Binding RemoteViewModel.Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
+                    <TextBlock Text="{Binding RemoteViewModel?.Remote.DisplayName}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
                 </StackPanel>
             </Border>
             <TextBlock Text="You've been disconnected!" FontWeight="Bold" FontSize="20" />

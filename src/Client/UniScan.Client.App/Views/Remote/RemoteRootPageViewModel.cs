@@ -24,133 +24,100 @@ namespace UniScan.Client.App.Views.Remote;
 
 public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemoteRootPageDeviceNavigatorProxy
 {
-    public RemoteServer Remote { get; }
+    public RemoteViewModel RemoteViewModel { get; }
 
     private readonly NotConnectedRemotePageViewModel _notConnectedPage;
     private RemotePageViewModel? _mainPage;
-    public DeviceListControlViewModel? DeviceListControl { get; private set; }
     
-    public BehaviorSubject<RemoteInfoControlViewModel?> InfoViewModelStream { get; } = new(null); 
-    public RemoteInfoControlViewModel? InfoViewModel => InfoViewModelStream.Value;
-
-    public INotifyCollectionChangedSynchronizedViewList<DeviceRootPageViewModel> DevicePages { get; }
-
-    private bool _userDisconnected = false;
-
-    public RemoteRootPageViewModel(IServiceProvider provider, RemoteServer remote) : base(new NotConnectedRemotePageViewModel(provider, remote), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(Guid.NewGuid().ToString())))
+    private readonly CompositeDisposable _disposables = new();
+    
+    public RemoteRootPageViewModel(RemoteViewModel remoteViewModel) : base(new NotConnectedRemotePageViewModel(remoteViewModel), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(remoteViewModel.Remote.Id.ToString())))
     {
         this._notConnectedPage = (NotConnectedRemotePageViewModel)CurrentSubpage;
-        this._notConnectedPage.OnConnecting += (pipeline) =>
-        {
-            this.CurrentSubpage = new LoadingViewModel("Connecting...", pipeline.Pipeline);
-        };
-
-        this._notConnectedPage.OnConnectFailed += (ex) =>
-        {
-            this.CurrentSubpage = new DisconnectedRemotePageViewModel("Failed to connect to server! " + ex.Message, Remote)
-            {
-                OkClicked = new RelayCommand(() =>
-                {
-                    this.CurrentSubpage = _notConnectedPage;
-                })
-            };
-        };
         
-        this.Remote = remote;
-        Remote.RemoteInfo.Subscribe((v) =>
-        {
-            RemoteInfoControlViewModel? n = v != null ? new RemoteInfoControlViewModel(v) : null;
-            
-            InfoViewModelStream.OnNext(n);
-            OnPropertyChanged(nameof(InfoViewModel));
-        });
+        this.RemoteViewModel = remoteViewModel;
 
-        DevicePages = Remote.Devices.CreateView(kvp => new DeviceRootPageViewModel(provider, kvp.Value)).ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
-
-        this.Remote.Socket.ConnectionState.Disconnected += OnDisconnected;
-        this.Remote.Socket.ConnectionState.Connected += OnConnected;
+        this.RemoteViewModel.Remote.ConnectionStatus.AsObservable().Skip(1).Subscribe(OnConnectionStateChanged).AddTo(_disposables);
     }
 
-    private void OnDisconnected(object? sender, ConnectionStateTracker.ConnectionStateChangedEventArgs eventArgs)
+    private void OnDisconnected(IConnectionStatusContext ctx)
     {
         Dispatcher.UIThread.Post(() =>
         {
-            if (!_userDisconnected)
+            if (ctx.State == ConnectionState.UserDisconnected)
             {
-                string reason = "Unknown reason, maybe there is more info in the logs.";
-                if (eventArgs.Channel.HasAttribute(ServerAttributes.DisconnectReasonAttribute))
-                {
-                    reason = eventArgs.Channel.GetAttribute(ServerAttributes.DisconnectReasonAttribute).Get();
-                }
-
-                this.CurrentSubpage = new DisconnectedRemotePageViewModel(reason, Remote)
-                {
-                    OkClicked = new RelayCommand(() => { this.CurrentSubpage = _notConnectedPage; })
-                };
+                this.CurrentSubpage = _notConnectedPage;
+                
+                TearDown();
+                return;
             }
 
-            _userDisconnected = false;
+            string reason = ctx switch
+            {
+                KickedDisconnectedConnectionStatusContext c     => c.Reason,
+                UnexpectedDisconnectedConnectionStatusContext c => c.Exception?.Message,
+                _                                                      => null
+            } ?? "Unknown disconnect reason";
+
+            this.CurrentSubpage = new DisconnectedRemotePageViewModel(reason, RemoteViewModel)
+            {
+                OkClicked = new RelayCommand(() => { this.CurrentSubpage = _notConnectedPage; })
+            };
+            
 
             TearDown();
         });
     }
-
-    public async Task Disconnect()
-    {
-        if (!Remote.Connected.Value)
-        {
-            return;
-        }
-        
-        Dispatcher.UIThread.Post(() =>
-        {
-            this.CurrentSubpage = _notConnectedPage;
-            _userDisconnected = true;
-        });
-        
-        await Remote.Socket.SendPacketAsync(new DisconnectPacket("User initiated disconnect"));
-        await Task.Delay(500);//wait for server to disconnect
-        await Remote.Socket.StopAsync();
-    } 
-
-    private void TearDown()
-    {
-        DeviceListControl?.Dispose();
-        DeviceListControl = null;
-            
-        _mainPage?.Dispose();
-        _mainPage = null;
-    }
     
-    private void OnConnected(object? sender, ConnectionStateTracker.ConnectionStateChangedEventArgs eventArgs)
+    private void OnConnected(IConnectionStatusContext ctx)
     {
         Dispatcher.UIThread.Post(() =>
         {
-            DeviceListControl = new DeviceListControlViewModel(Remote, this);
-            
-            _mainPage = new RemotePageViewModel(Remote, DeviceListControl, InfoViewModelStream.AsObservable());
+            _mainPage = new RemotePageViewModel(RemoteViewModel);
             this.CurrentSubpage = _mainPage;
         });
     }
 
+    private void TearDown()
+    {
+        _mainPage?.Dispose();
+        _mainPage = null;
+    }
+    
     public void Dispose()
     {
-        if (this.Remote?.Socket?.ConnectionState is { } state)
-        {
-            state.Disconnected -= OnDisconnected;
-            state.Connected -= OnConnected;
-        }
-        
+        _disposables.Dispose();
         TearDown();
-        DevicePages.Dispose();
     }
 
     void IRemoteRootPageDeviceNavigatorProxy.Navigate(RemoteDevice device)
     {
-        DeviceRootPageViewModel? p = DevicePages.FirstOrDefault(page => page.Device.Identifier == device.Identifier);
+        DeviceRootPageViewModel? p = RemoteViewModel.DevicePages.FirstOrDefault(page => page.Device.Identifier == device.Identifier);
         if (p != null)
         {
             Dispatcher.UIThread.Post(() => { CurrentSubpage = p; });
+        }
+    }
+
+    private void OnConnectionStateChanged(IConnectionStatusContext ctx)
+    {
+        switch (ctx.State)
+        {
+            case ConnectionState.Connecting:
+                CurrentSubpage = new LoadingViewModel("Connecting...", RemoteViewModel.Pipeline.Pipeline);
+                break;
+            case ConnectionState.Connected:
+                OnConnected(ctx);
+                break;
+            case ConnectionState.Disconnected:
+            case ConnectionState.UserDisconnected:
+            case ConnectionState.UnexpectedDisconnected:
+            case ConnectionState.KickedDisconnected:
+                OnDisconnected(ctx);
+                break;
+            case ConnectionState.Handshaking:
+            default:
+                break;
         }
     }
 }

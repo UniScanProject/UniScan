@@ -27,7 +27,15 @@ public class ContainerUIControlViewModelConverter(IServiceProvider serviceProvid
         
         IEnumerable<Control> c = node.Children
                                      .Select(factory.CreateView)
-                                     .Select(i => i as Control ?? ViewLocator.Instance.Build(i))
+                                     .Select(i =>
+                                      {
+                                          if (i is Control ctrl) return ctrl;
+
+                                          Control? view = ViewLocator.Instance.Build(i);
+                                          view?.DataContext = node;
+
+                                          return view;
+                                      })
                                      .OfType<Control>();
 
         StackPanel stackPanel = new()

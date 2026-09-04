@@ -24,7 +24,7 @@ public class ScannerHostManager
             }
             else
             {
-                Log.Logger.Error("Attempted to add scanner with duplicate identifier '{Identifier}'", identifier);
+                Log.Error("Attempted to add scanner with duplicate identifier '{Identifier}'", identifier);
             }
 
             return true;
@@ -49,7 +49,7 @@ public class ScannerHostManager
             }
             catch (Exception ex)
             {
-                Log.Logger.Error(ex, "Failed to start scanner '{Scanner}'", host.DisplayString);
+                Log.Error(ex, "Failed to start scanner '{Scanner}'", host.DisplayString);
                 await host.StopAsync();
             }
         });

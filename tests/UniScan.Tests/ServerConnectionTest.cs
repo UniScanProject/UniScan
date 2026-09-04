@@ -32,7 +32,7 @@ public class ServerConnectionTest
         // UniScanServer server = new(new SessionManager(), initializer => new ServerSocket(initializer, 9000), PacketRegistry.Instance, new ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs>()
         //                               .WithModulesFrom(new InternalModuleSource(typeof(InternalUniScanServerModule)), new UniScanServerModuleInitializationArgs()));
         //
-        // Log.Logger.Information("Starting server...");
+        // Log.Information("Starting server...");
         // TaskCompletionSource<bool> tcs = new();
         // Task serverTask = Task.Run(() =>
         // {
@@ -42,7 +42,7 @@ public class ServerConnectionTest
         //
         // await tcs.Task;
         // await Task.Delay(3000);
-        // Log.Logger.Information("Started");
+        // Log.Information("Started");
 
         ServiceCollection services = new();
         var sv = services.BuildServiceProvider();

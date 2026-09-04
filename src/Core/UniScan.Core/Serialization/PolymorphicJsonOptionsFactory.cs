@@ -13,7 +13,7 @@ public static class PolymorphicJsonOptionsFactory
         var types = AssembliesPolymorphicTypeSource.Load();
         foreach (var type in types)
         {
-            Log.Logger.Debug("Registering polymorphic type '{Id}' ({Type}) for base '{BaseType}'", type.Value.Id, type.Key.Name, type.Value.BaseType);
+            Log.Debug("Registering polymorphic type '{Id}' ({Type}) for base '{BaseType}'", type.Value.Id, type.Key.Name, type.Value.BaseType);
         }
 
         return new JsonSerializerOptions

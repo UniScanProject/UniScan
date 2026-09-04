@@ -32,25 +32,31 @@
                         <global:HeadedSeparatorControl Text="Remote" Grid.Row="0" />
                         <!-- create remote list -->
                         <ScrollViewer Grid.Row="1">
-                            <ItemsControl x:Name="RemotesList" ItemsSource="{Binding RemotesView}">
+                            <ItemsControl x:Name="RemotesList" ItemsSource="{Binding RemoteViewList.Output}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Spacing="5" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate x:DataType="{x:Type remote:SidebarRemoteItemControlViewModel}">
+                                    <DataTemplate DataType="{x:Type remote:RemoteViewModel}">
                                         <remote:SidebarRemoteItemControl />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                                 
-                                <ItemsControl.Styles>
-                                    <Style Selector="remote|SidebarRemoteItemControl">
-                                        <Setter Property="FlyoutBase.AttachedFlyout">
-                                            <MenuFlyout>
-                                                <MenuItem x:DataType="remote:SidebarRemoteItemControlViewModel" Header="Connect" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
-                                                <MenuItem x:DataType="remote:SidebarRemoteItemControlViewModel" Header="Remove" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
-                                            </MenuFlyout>
-                                        </Setter>
-                                        
-                                        <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" />
-                                    </Style>
-                                </ItemsControl.Styles>
+                                <!-- <ItemsControl.Styles> -->
+                                <!--     <Style Selector="remote|SidebarRemoteItemControl"> -->
+                                <!--         <Setter Property="FlyoutBase.AttachedFlyout"> -->
+                                <!--             <MenuFlyout> -->
+                                <!--                 <MenuItem x:DataType="remote:SidebarRemoteItemControlViewModel" Header="Connect" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/> -->
+                                <!--                 <MenuItem x:DataType="remote:SidebarRemoteItemControlViewModel" Header="Remove" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/> -->
+                                <!--             </MenuFlyout> -->
+                                <!--         </Setter> -->
+                                <!--          -->
+                                <!--         <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" /> -->
+                                <!--     </Style> -->
+                                <!-- </ItemsControl.Styles> -->
                             </ItemsControl>
                         </ScrollViewer>
                         <StackPanel VerticalAlignment="Bottom" Grid.Row="2">

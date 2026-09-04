@@ -11,6 +11,7 @@ public partial class RemoteConnectionPipeline
 {
     public async Task StartConnection(TaskContexts.ConnectionContext ctx, CancellationToken ct = default)
     {
+        ctx.RemoteServerMutationProxy.SetConnectionStatus(new DefaultConnectionStatusContext(ConnectionState.Connecting));
         ctx.Status.Value = $"Connecting to {ctx.RemoteServer.ConnectionMethod.ToDisplayString()}";
         
         await ctx.RemoteServer.Socket.StartAsync();
@@ -24,6 +25,8 @@ public partial class RemoteConnectionPipeline
     
     public async Task Handshake(TaskContexts.NegotiationContext ctx, CancellationToken ct = default)
     {
+        ctx.RemoteServerMutationProxy.SetConnectionStatus(new DefaultConnectionStatusContext(ConnectionState.Handshaking));
+
         ctx.Status.Value = $"Handshaking";
         
         ClientSoftwareInfo? clientSoftware = ctx.ServiceProvider.GetService<ClientSoftwareInfo>();
@@ -40,6 +43,8 @@ public partial class RemoteConnectionPipeline
         }
         else
         {
+            ctx.RemoteServerMutationProxy.SetConnectionStatus(new KickedDisconnectedConnectionStatusContext("Server rejected handshake"));
+            
             _logger.Error(serverSoftware.Error, "Server rejected handshake");
             throw new Exception("Server rejected handshake");
         }
@@ -47,6 +52,7 @@ public partial class RemoteConnectionPipeline
 
     public async Task GetDeviceList(TaskContexts.RemoteContext ctx, CancellationToken ct = default)
     {
+        ctx.RemoteServerMutationProxy.SetConnectionStatus(new DefaultConnectionStatusContext(ConnectionState.Connected));
         ctx.Status.Value = "Receiving devices";
         
         var devices = await ctx.RemoteServer.Socket.SendRequestAsync(GetDeviceListPacket.CreateRequest(), ct);

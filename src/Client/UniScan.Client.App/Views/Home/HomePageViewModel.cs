@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using ObservableCollections;
 using R3;
 using UniScan.Client.App.Views.Remote;
@@ -8,53 +10,53 @@ using UniScan.Client.Core.Remote;
 
 namespace UniScan.Client.App.Views.Home;
 
-public class RemoteConnectionStateFilter : ISynchronizedViewFilter<RemoteServer, RemoteRootPageViewModel>
+public class RemoteConnectionStateFilter : ISynchronizedViewFilter<RemoteViewModel, RemoteViewModel>
 {
-    public bool IsMatch(RemoteServer value, RemoteRootPageViewModel rootPageView)
+    public bool IsMatch(RemoteViewModel value, RemoteViewModel rootPageView)
     {
-        return value.Connected.Value;
+        return value.Remote.ConnectionStatus.Value.State is ConnectionState.Connected;
     }
 }
 
 public partial class HomePageViewModel : ViewModelBase, IDisposable
 {
-    public INotifyCollectionChangedSynchronizedViewList<RemoteRootPageViewModel> ConnectedRemotesView { get; }
-    private readonly ISynchronizedView<RemoteServer, RemoteRootPageViewModel> _remotesView;
+    public INotifyCollectionChangedSynchronizedViewList<RemoteViewModel> ConnectedRemotesView { get; }
+    private readonly ISynchronizedView<RemoteViewModel, RemoteViewModel> _connectedRemotesView;
 
-    private readonly Dictionary<RemoteServer, IDisposable> _subscriptions = [];
+    private readonly IReadOnlyObservableList<RemoteViewModel> _remotes;
 
-    private readonly IRemoteManager _remoteManager;
+    private readonly Dictionary<RemoteViewModel, IDisposable> _subscriptions = [];
     
-    public HomePageViewModel(IServiceProvider provider, IRemoteManager remoteManager)
+    public HomePageViewModel(IReadOnlyObservableList<RemoteViewModel> viewModels)
     {
-        _remoteManager = remoteManager;
+        _remotes = viewModels;
         
-        _remotesView = remoteManager.Remotes.CreateView(remote => new RemoteRootPageViewModel(provider, remote));
-        _remotesView.AttachFilter(new RemoteConnectionStateFilter());
-
-        ConnectedRemotesView = _remotesView.ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
-
-        foreach (RemoteServer remoteViewModel in remoteManager.Remotes)
+        _connectedRemotesView = viewModels.CreateView(v => v);
+        _connectedRemotesView.AttachFilter(new RemoteConnectionStateFilter());
+        
+        ConnectedRemotesView = _connectedRemotesView.ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
+        
+        foreach (RemoteViewModel vm in viewModels)
         {
-            Track(remoteViewModel);
+            Track(vm);
         }
-        _remoteManager.Remotes.CollectionChanged += OnRemotesChanged;
+        viewModels.CollectionChanged += OnRemotesChanged;
     }
 
-    private void Track(RemoteServer remote)
+    private void Track(RemoteViewModel remote)
     {
         if (_subscriptions.ContainsKey(remote)) return;
 
-        _subscriptions[remote] = remote.Connected.AsObservable().Skip(1).Subscribe((_) =>
+        _subscriptions[remote] = remote.Remote.ConnectionStatus.AsObservable().Skip(1).Subscribe(_ =>
         {
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
-                _remotesView.AttachFilter(new RemoteConnectionStateFilter());
+                _connectedRemotesView.AttachFilter(new RemoteConnectionStateFilter());
             });
         });
     }
 
-    private void Untrack(RemoteServer remote)
+    private void Untrack(RemoteViewModel remote)
     {
         if (_subscriptions.TryGetValue(remote, out IDisposable? subscription))
         {
@@ -63,29 +65,55 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         }
     }
 
-    private void OnRemotesChanged(in NotifyCollectionChangedEventArgs<RemoteServer> e)
+    private void OnRemotesChanged(in NotifyCollectionChangedEventArgs<RemoteViewModel> e)
     {
-        if (!e.NewItems.IsEmpty)
+        switch (e.Action)
         {
-            foreach (RemoteServer newItem in e.NewItems)
-            {
-                Track(newItem);
-            }
-        }
+            case NotifyCollectionChangedAction.Add:
+                if (e.IsSingleItem)
+                {
+                    Track(e.NewItem);
+                    break;
+                }
+                
+                foreach (RemoteViewModel vm in e.NewItems)
+                {
+                    Track(vm);
+                }
 
-        if (!e.OldItems.IsEmpty)
-        {
-            foreach (RemoteServer remote in e.OldItems)
-            {
-                Untrack(remote);
-            }
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                if (e.IsSingleItem)
+                {
+                    Untrack(e.OldItem);
+                    break;
+                }
+                
+                foreach (RemoteViewModel vm in e.OldItems)
+                {
+                    Untrack(vm);
+                }
+
+                break;
+            case NotifyCollectionChangedAction.Reset:
+                foreach (IDisposable s in _subscriptions.Values)
+                {
+                    s.Dispose();
+                }
+                _subscriptions.Clear();
+                
+                foreach (RemoteViewModel vm in _connectedRemotesView)
+                {
+                    Track(vm);
+                }
+
+                break;
         }
     }
 
-
     public void Dispose()
     {
-        _remoteManager.Remotes.CollectionChanged -= OnRemotesChanged;
+        _remotes.CollectionChanged -= OnRemotesChanged;
         
         foreach (IDisposable subscription in _subscriptions.Values)
         {
@@ -94,6 +122,6 @@ public partial class HomePageViewModel : ViewModelBase, IDisposable
         _subscriptions.Clear();
         
         ConnectedRemotesView.Dispose();
-        _remotesView.Dispose();
+        _connectedRemotesView.Dispose();
     }
 }

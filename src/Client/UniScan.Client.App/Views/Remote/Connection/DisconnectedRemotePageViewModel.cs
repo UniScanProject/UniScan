@@ -4,10 +4,10 @@ using UniScan.Client.Core.Remote;
 
 namespace UniScan.Client.App.Views.Remote.Connection;
 
-public partial class DisconnectedRemotePageViewModel(string reason, RemoteServer? remote) : ViewModelBase
+public partial class DisconnectedRemotePageViewModel(string reason, RemoteViewModel? remoteViewModel) : ViewModelBase
 {
     public string Reason { get; } = reason;
-    public RemoteServer? Remote { get; } = remote;
+    public RemoteViewModel? RemoteViewModel { get; } = remoteViewModel;
     
     public IRelayCommand OkClicked { get; init; } = new RelayCommand(() => {});
 }

@@ -18,7 +18,7 @@ public abstract class CommandBasedScannerConnection<TOpCode, TProtocol> : Scanne
     CommandBasedScannerProtocol<TOpCode> ICommandBasedScannerConnection<TOpCode>.Protocol => Protocol;
     public ITransport<ReadOnlyMemory<byte>> Transport { get; }
     
-    public ILogger Logger { get; set; } = Log.Logger.ForContext<CommandBasedScannerConnection<TOpCode, TProtocol>>();
+    public ILogger Logger { get; set; } = Log.ForContext<CommandBasedScannerConnection<TOpCode, TProtocol>>();
     public Dictionary<TOpCode, EventHandler<CommandPacketReceivedEventArgs<TOpCode>>> PayloadReceived { get; } = [];
 
     private readonly Dictionary<TOpCode, Queue<TaskCompletionSource<IScannerPayload>>> _commandQueues = new();

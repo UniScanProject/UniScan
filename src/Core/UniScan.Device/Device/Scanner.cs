@@ -59,7 +59,7 @@ public abstract class Scanner : IScanner, IScannerEvents
     
     public Scanner(IScannerConnection connection)
     {
-        this.Logger = Log.Logger.ForContext("SourceContext", this.GetType().Name);
+        this.Logger = Log.ForContext("SourceContext", this.GetType().Name);
 
         this.Connection = connection;
 

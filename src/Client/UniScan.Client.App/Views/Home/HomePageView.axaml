@@ -16,7 +16,7 @@
         <TextBlock HorizontalAlignment="Center" Text="Looks like you're not connected to any remotes." FontSize="20" FontWeight="Bold" IsVisible="{ReflectionBinding !ConnectedRemotesView.Count}" />
         <ItemsControl x:Name="RemotesList" ItemsSource="{Binding ConnectedRemotesView}">
             <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type remote:RemoteRootPageViewModel}">
+                <DataTemplate DataType="{x:Type remote:RemoteViewModel}">
                     <Expander IsExpanded="True" HorizontalAlignment="Stretch" Margin="5" CornerRadius="5">
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Spacing="10">

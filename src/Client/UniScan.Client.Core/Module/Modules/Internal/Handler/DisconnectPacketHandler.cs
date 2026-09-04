@@ -14,8 +14,14 @@ public class DisconnectPacketHandler : SimpleChannelInboundHandler<DisconnectPac
         string reason = msg.Reason ?? "Unknown reason, maybe the server sent back a malformed DisconnectPacket?";
         
         _logger.Information("Disconnected by server {ChannelIp}: {Information}", ctx.Channel.RemoteAddress, reason);
-        ctx.Channel.GetAttribute(ServerAttributes.DisconnectReasonAttribute).Set(reason);
-        
+        RemoteServer server = ctx.Channel.GetAttribute(ServerAttributes.ServerAttribute).Get();
+
+        if (server.ConnectionStatus.Value.State != ConnectionState.UserDisconnected)
+        {
+            ((IRemoteServerMutationProxy)server)
+               .SetConnectionStatus(new KickedDisconnectedConnectionStatusContext(reason));
+        }
+
         ctx.CloseAsync();
     }
 }

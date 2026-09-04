@@ -23,7 +23,7 @@ it up to the internet for others to listen to, and control it yourself by loggin
 | [UniScan.Network.Server](src/Network/UniScan.Network.Server) | 0.0.2 | Networking code specific to the server |
 | [UniScan.Network.CodeGenerator](src/Network/UniScan.Network.CodeGenerator) | 0.0.1 | Codegen for UniScan.Network |
 | [UniScan.Core](src/Core/UniScan.Core) | 0.0.2 |  |
-| [UniScan.Device](src/Core/UniScan.Device) | 0.3.0 |  |
+| [UniScan.Device](src/Core/UniScan.Device) | 0.3.0 | Device abstractions and transport methods |
 | [UniScan.UserInterface](src/Core/UniScan.UserInterface) | 0.0.1 | Serverside UI definitions |
 | [UniScan.Client.Core](src/Client/UniScan.Client.Core) | 0.3.0 | Holds shared client code, no dep on Avalonia |
 | [UniScan.Client.App](src/Client/UniScan.Client.App) | 0.1.1 | UniScan client |

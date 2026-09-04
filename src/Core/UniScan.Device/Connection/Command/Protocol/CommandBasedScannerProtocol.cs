@@ -33,7 +33,7 @@ public abstract class CommandBasedScannerProtocol<TOpCode> : IScannerProtocol<IS
     private readonly Dictionary<TOpCode, ICommandDefinition<TOpCode>> _definitionRegistry = new();
 
     /// <inheritdoc/>
-    public ILogger Logger { get; set; } = Log.Logger.ForContext<CommandBasedScannerProtocol<TOpCode>>();
+    public ILogger Logger { get; set; } = Log.ForContext<CommandBasedScannerProtocol<TOpCode>>();
 
     public CommandBasedScannerProtocol()
     {

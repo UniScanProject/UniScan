@@ -8,32 +8,17 @@ using Shiki.Common.Result;
 using UniScan.Network.Client.Extensions;
 using UniScan.Network.Client.Remote.Connection;
 using UniScan.Network.Protocol.PayloadPart;
-using UniScan.Network.Registry;
 using UniScan.Network.Request;
 using UniScan.Network.Socket;
-using UniScan.Network.Socket.Configuration;
 using UniScan.Network.Util;
 
 namespace UniScan.Network.Client;
 
-public interface IClientSocketFactory
-{
-    ClientSocket CreateInstance(IRemoteConnectionMethod connectionMethod);
-}
-
-public class ClientSocketFactory(
-    PacketRegistry registry,
-    IEnumerable<IPipelineConfigurator> configurators,
-    IServiceProvider provider
-) : IClientSocketFactory
-{
-    public ClientSocket CreateInstance(IRemoteConnectionMethod connectionMethod) => new(new UniScanClientChannelInitializer(registry, configurators, provider), connectionMethod);
-}
-
 public class ClientSocket : ISocket
 {
     public ILogger Logger => Log.ForContext<ClientSocket>();
-    private MultithreadEventLoopGroup? _group;
+    
+    private IEventLoopGroup? _group;
 
     private readonly UniScanClientChannelInitializer _channelInitializer;
     public UniScanChannelInitializer ChannelInitializer => _channelInitializer;
@@ -46,21 +31,20 @@ public class ClientSocket : ISocket
 
     private readonly RequestManager _requestManager = new();
 
-    public ClientSocket(UniScanClientChannelInitializer channelInitializer, IRemoteConnectionMethod connectionMethod)
+    public ClientSocket(UniScanClientChannelInitializer channelInitializer, IRemoteConnectionMethod connectionMethod, IEventLoopGroup group)
     {
         ArgumentNullException.ThrowIfNull(channelInitializer);
         ArgumentNullException.ThrowIfNull(connectionMethod);
 
         _connectionMethod = connectionMethod;
         _channelInitializer = channelInitializer;
+        _group = group;
     }
 
     public async Task StartAsync()
     {
         if (_connectionMethod is null) throw new NullReferenceException(nameof(_connectionMethod));
-
-        _group ??= new MultithreadEventLoopGroup();
-
+        
         try
         {
             Bootstrap bs = new Bootstrap().Group(_group)
@@ -88,16 +72,11 @@ public class ClientSocket : ISocket
     {
         if (_requestManager != null)
             await _requestManager.RejectAllAsync(new OperationCanceledException("Socket is shutting down"));
+        
         if (Channel != null)
         {
             await Channel.CloseAsync();
             Channel = null;
-        }
-
-        if (_group != null)
-        {
-            await _group.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
-            _group = null;
         }
     }
 

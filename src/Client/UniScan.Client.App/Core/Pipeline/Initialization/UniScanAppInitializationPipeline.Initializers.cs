@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using UniScan.Client.App.UI.ServersideRendering;
 using UniScan.Client.App.Views;
 using UniScan.Client.App.Views.Settings;
@@ -48,6 +49,9 @@ public partial class UniScanAppInitializationPipeline
         
         IRemoteStorage remoteStorage = ctx.Services.GetRequiredService<IRemoteStorage>();
         await remoteStorage.LoadAsync();
+        
+        IRemoteManager remoteManager = ctx.Services.GetRequiredService<IRemoteManager>();
+        Log.Information("Loaded {Count} remote(s)", remoteManager.Remotes.Count);
     }
     
     internal Task RegisterPackets(UniScanAppInitializationPipeline.TaskContexts.PostServiceProvider ctx,

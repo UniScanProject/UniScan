@@ -40,7 +40,7 @@ public sealed class ScannerHost
         DisplayName = displayName;
         Scanner = scanner;
 
-        this.Logger = Log.Logger.ForContext("SourceContext", ToString());
+        this.Logger = Log.ForContext("SourceContext", ToString());
         
         NetworkClients = new HostClientsHandler(Identifier, Scanner);
     }

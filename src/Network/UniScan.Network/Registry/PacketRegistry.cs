@@ -8,7 +8,7 @@ namespace UniScan.Network.Registry;
 
 public class PacketRegistry
 {
-    private readonly ILogger _logger = Log.Logger.ForContext<PacketRegistry>();
+    private readonly ILogger _logger = Log.ForContext<PacketRegistry>();
 
     private readonly BiDictionary<Identifier, Type> _packets = new();
 
