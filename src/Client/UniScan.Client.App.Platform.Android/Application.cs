@@ -3,6 +3,8 @@ using Android.App;
 using Android.Runtime;
 using Avalonia;
 using Avalonia.Android;
+using UniScan.Client.App.Platform.Android.Platform;
+using UniScan.Core;
 using UniScan.Platform;
 using UniScan.Platform.Implementations.Native;
 using UniScan.Platform.Implementations.Native.Filesystem;
@@ -18,7 +20,7 @@ public class Application : AvaloniaAndroidApplication<UniScanApp>
 
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
-        UniScanApp.InitializePlatform += () => Task.FromResult(new HostEnvironment(new AndroidPaths(), new NativePlatformSerilogInitializer(UniScan.Core.Constants.ConsoleOutputTemplate, UniScan.Core.Constants.FileOutputTemplate), new NativeDirectoryManager(), new NativeFileManager()));
+        UniScanApp.InitializePlatform += () => Task.FromResult(new HostEnvironment(new AndroidPaths(), new AndroidPlatformSerilogInitializer(Constants.ConsoleOutputTemplate, Constants.FileOutputTemplate), new NativeDirectoryManager(), new NativeFileManager()));
         
         return base.CustomizeAppBuilder(builder)
                    .WithInterFont();

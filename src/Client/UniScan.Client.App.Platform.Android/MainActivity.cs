@@ -19,6 +19,7 @@ namespace UniScan.Client.App.Platform.Android;
              Icon = "@drawable/icon",
              MainLauncher = true,
              ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
+[IntentFilter(["android.intent.action.MAIN"], Categories = ["android.intent.category.LEANBACK_LAUNCHER"])]
 public class MainActivity : AvaloniaMainActivity
 {
     protected override void OnCreate(Bundle? savedInstanceState)
