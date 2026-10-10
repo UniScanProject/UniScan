@@ -37,7 +37,8 @@ jobs:
         run: >
           dotnet publish ${{github.workspace}}/src/Client/UniScan.Client.App.Platform.Browser
           -c Release
-          -o ${{steps.strings.outputs.build-output-dir}}    
+          -o ${{steps.strings.outputs.build-output-dir}}  
+          -p:SolutionDir=${{github.workspace}}/
           /nr:false
           /m:1
 

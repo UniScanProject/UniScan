@@ -33,7 +33,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\external\Shiki\src\CodeGenerator\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" />
       <ProjectReference Include="..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
-      <ProjectReference Include="..\..\external\Shiki\src\Shiki.Tests\Shiki.Tests.csproj" />
+      <ProjectReference Include="..\..\external\Shiki\src\Tests\Shiki.Tests\Shiki.Tests.csproj" />
       <ProjectReference Include="..\..\src\Client\UniScan.Client.Core\UniScan.Client.Core.csproj" />
       <ProjectReference Include="..\..\src\Client\UniScan.Client.App.Platform.Desktop\UniScan.Client.App.Platform.Desktop.csproj" />
       <ProjectReference Include="..\..\src\Client\UniScan.Client.App\UniScan.Client.App.csproj" />

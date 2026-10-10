@@ -20,8 +20,11 @@
         <Project Path="external/Shiki/src/Shiki.Common/Shiki.Common.csproj" />
         <Project Path="external/Shiki/src/Shiki.Internationalization/Shiki.Internationalization.csproj" />
         <Project Path="external/Shiki/src/Shiki.TaskPipeline/Shiki.TaskPipeline.csproj" />
-        <Project Path="external/Shiki/src/Shiki.Tests/Shiki.Tests.csproj" />
     </Folder>
+    <Folder Name="/External/Shiki/Tests/">
+        <Project Path="external/Shiki/src/Tests/Shiki.Tests/Shiki.Tests.csproj" />
+    </Folder>
+
     <Folder Name="/External/Shiki/CodeGenerator/">
         <Project Path="external/Shiki/src/CodeGenerator/Shiki.CodeGenerator.Core/Shiki.CodeGenerator.Core.csproj" />
         <Project Path="external/Shiki/src/CodeGenerator/Shiki.CodeGenerator/Shiki.CodeGenerator.csproj" />

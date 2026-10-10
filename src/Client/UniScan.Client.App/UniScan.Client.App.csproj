@@ -230,4 +230,11 @@
         
         <AvaloniaXaml Remove="Views\Remote\Connection\ConnectionMethod\TCPConnectionMethodFactoryView.axaml" />
     </ItemGroup>
+
+    <Target Name="ClientDownloadMaterialSymbols" BeforeTargets="BeforeBuild;GenerateAvaloniaResources">
+        <Warning Text="SolutionDir is empty... won't download materialsymbols"
+                 Condition="'$(SolutionDir)' == '' OR '$(SolutionDir)' == '*Undefined*'" />
+        
+        <Exec Command="dotnet run --file 'scripts/PullMaterialIcons.cs'" WorkingDirectory="$(SolutionDir)" Condition="'$(SolutionDir)' != '' AND '$(SolutionDir)' != '*Undefined*'" />
+    </Target>
 </Project>
