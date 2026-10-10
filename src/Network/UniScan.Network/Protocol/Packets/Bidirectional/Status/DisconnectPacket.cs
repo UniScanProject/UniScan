@@ -1,4 +1,5 @@
 using MessagePack;
+using Shiki.Internationalization.Component;
 using UniScan.Network.Registry;
 
 namespace UniScan.Network.Protocol.Packets.Bidirectional.Status;
@@ -12,5 +13,5 @@ namespace UniScan.Network.Protocol.Packets.Bidirectional.Status;
 [RegistryPacket("UniScan", "packet", "bidirectional", "status", "disconnect")]
 [MessagePackObject]
 public readonly record struct DisconnectPacket(
-    [property: Key(0)] string Reason
+    [property: Key(0)] ITextComponent Reason
 ) : IBidirectionalPacket;

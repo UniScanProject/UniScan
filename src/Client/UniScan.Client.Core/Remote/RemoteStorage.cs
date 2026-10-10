@@ -2,9 +2,10 @@ using System;
 using ObservableCollections;
 using R3;
 using Serilog;
+using Shiki.FileSystem.Storage;
+using Shiki.FileSystem.Storage.Directory.KeyValue;
 using UniScan.Client.Core.Config.Remote;
 using UniScan.Client.Core.DI.Factory;
-using UniScan.Client.Core.Storage;
 
 namespace UniScan.Client.Core.Remote;
 
@@ -24,10 +25,24 @@ public class RemoteStorage(
 
     public async Task LoadAsync()
     {
-        var dtos = await remoteStorage.LoadAsync() ?? [];
-        var caches = cacheStorage != null ? await cacheStorage.LoadAsync() ?? [] : [];
+        var dtos = await remoteStorage.LoadAsync();
+        foreach (var err in dtos.Errors)
+        {
+            Log.Error(err.Exception, "Failed to load remote {Path}", err.Item);
+        }
+        
+        var cacheResult = cacheStorage != null ? await cacheStorage.LoadAsync() : null;
+        var caches = cacheResult?.Items ?? [];
+        
+        if (cacheResult != null)
+        {
+            foreach (var err in cacheResult.Errors)
+            {
+                Log.Error(err.Exception, "Failed to load remote cache at {Path}", err.Item);
+            }
+        }
 
-        foreach (var dto in dtos)
+        foreach (var dto in dtos.Items)
         {
             if (!Guid.TryParse(dto.Key, out Guid id))
             {
@@ -76,7 +91,7 @@ public class RemoteStorage(
     private void ObserveRemote(RemoteServer remote)
     {
         //TODO improve this by listening to multiple items when needed
-        remote.RemoteInfo.Skip(1).Subscribe(async _ =>
+        remote.RemoteInfo.AsObservable().Skip(1).Subscribe(async _ =>
         {
             await SaveCacheAsync(remote);
         }).AddTo(_disposables);

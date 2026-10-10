@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Avalonia;
+using Microsoft.Extensions.DependencyInjection;
+using Shiki.Common.Result;
+using Shiki.FileSystem.Abstractions;
+using Shiki.FileSystem.Implementations.Native;
+using UniScan.Client.App.Core.Pipeline.Initialization;
 using UniScan.Platform;
 using UniScan.Platform.Implementations.Native;
-using UniScan.Platform.Implementations.Native.Filesystem;
 
 namespace UniScan.Client.App.Platform.Desktop;
 
@@ -15,7 +19,23 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        UniScanApp.InitializePlatform += () => Task.FromResult(new HostEnvironment(new DesktopPaths(), new NativePlatformSerilogInitializer(UniScan.Core.Constants.ConsoleOutputTemplate, UniScan.Core.Constants.FileOutputTemplate), new NativeDirectoryManager(), new NativeFileManager()));
+        UniScanApp.InitializationPipelineCreated += pipeline =>
+        {
+            pipeline.PipelineBuilder.TryInsertBefore<UniScanAppInitializationPipeline.TaskContexts.PreEnvironment>(UniScanAppInitializationPipeline.Initializers.InitializeEnvironment, (ctx) =>
+            {
+                 ctx.StandardPaths = new DesktopPaths();
+                 ctx.SerilogInitializer = new NativePlatformSerilogInitializer(UniScan.Core.Constants.ConsoleOutputTemplate, UniScan.Core.Constants.FileOutputTemplate, ctx.StandardPaths);
+                 ctx.FileManager = new NativeFileManager();
+                 ctx.DirectoryManager = new NativeDirectoryManager();
+                 
+                 ctx.ServiceCollection.AddSingleton<IPlatformStandardPaths>(_ => ctx.StandardPaths);
+                 ctx.ServiceCollection.AddSingleton<IPlatformSerilogInitializer>(_ => ctx.SerilogInitializer);
+                 ctx.ServiceCollection.AddSingleton<IPlatformDirectoryManager>(_ => ctx.DirectoryManager);
+                 ctx.ServiceCollection.AddSingleton<IPlatformFileManager>(_ => ctx.FileManager);
+            }).ThrowIfError();
+
+            return Task.CompletedTask;
+        };
         
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }

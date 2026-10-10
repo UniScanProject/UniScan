@@ -5,6 +5,7 @@
         xmlns:views="clr-namespace:UniScan.Client.App.Views"
         xmlns:global="clr-namespace:UniScan.Client.App.Views.Global"
         xmlns:remote="clr-namespace:UniScan.Client.App.Views.Remote"
+        xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
         x:DataType="views:MainViewModel">
 
     <Design.DataContext>
@@ -16,11 +17,25 @@
     <dialogHostAvalonia:DialogHost Identifier="MainDialogHost" DialogMargin="16">
         <DrawerPage Content="{Binding CurrentSubpage}"
                     DrawerLayoutBehavior="CompactOverlay" x:Name="MainDrawerPage"
-                    CompactDrawerLength="60">
+                    CompactDrawerLength="66">
             <DrawerPage.Drawer>
                 <Grid RowDefinitions="Auto, Auto, *, Auto" Margin="12" RowSpacing="10">
                     <StackPanel Spacing="10">
-                        <Button Content="Home" Command="{Binding OnHomeClicked}" HorizontalAlignment="Stretch" />
+                        <Button AutomationProperties.Name="Home" Command="{Binding OnHomeClicked}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
+                                VerticalContentAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock FontFamily="{StaticResource MaterialSymbolsRounded}"
+                                           Text="home" 
+                                           FontSize="24"
+                                           Width="24"
+                                           Height="24"
+                                           Margin="0 0 0 0"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           TextAlignment="Center" />
+                                <TextBlock Text="Home" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                     
                     <StackPanel Grid.Row="1" Spacing="10">
@@ -32,7 +47,7 @@
                         <global:HeadedSeparatorControl Text="Remote" Grid.Row="0" />
                         <!-- create remote list -->
                         <ScrollViewer Grid.Row="1">
-                            <ItemsControl x:Name="RemotesList" ItemsSource="{Binding RemoteViewList.Output}">
+                            <ItemsControl x:Name="RemotesList" ItemsSource="{Binding RemoteViewList.OutputView}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Spacing="5" />
@@ -45,27 +60,56 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                                 
-                                <!-- <ItemsControl.Styles> -->
-                                <!--     <Style Selector="remote|SidebarRemoteItemControl"> -->
-                                <!--         <Setter Property="FlyoutBase.AttachedFlyout"> -->
-                                <!--             <MenuFlyout> -->
-                                <!--                 <MenuItem x:DataType="remote:SidebarRemoteItemControlViewModel" Header="Connect" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/> -->
-                                <!--                 <MenuItem x:DataType="remote:SidebarRemoteItemControlViewModel" Header="Remove" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/> -->
-                                <!--             </MenuFlyout> -->
-                                <!--         </Setter> -->
-                                <!--          -->
-                                <!--         <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" /> -->
-                                <!--     </Style> -->
-                                <!-- </ItemsControl.Styles> -->
+                                <ItemsControl.Styles>
+                                    <Style Selector="remote|SidebarRemoteItemControl">
+                                        <Setter Property="FlyoutBase.AttachedFlyout">
+                                            <MenuFlyout>
+                                                <MenuItem x:DataType="remote:RemoteViewModel" Header="Connect" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnConnectRemoteClicked}" CommandParameter="{Binding}"/>
+                                                <MenuItem x:DataType="remote:RemoteViewModel" Header="Edit" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnConnectRemoteClicked}" CommandParameter="{Binding}"/>
+                                                <MenuItem x:DataType="remote:RemoteViewModel" Header="Remove" Command="{ReflectionBinding #RemotesList.((views:MainViewModel)DataContext)?.OnRemoveRemoteClicked}" CommandParameter="{Binding}"/>
+                                            </MenuFlyout>
+                                        </Setter>
+                                
+                                        <Setter Property="ContextFlyout" Value="{Binding (FlyoutBase.AttachedFlyout), RelativeSource={RelativeSource Self}}" />
+                                    </Style>
+                                </ItemsControl.Styles>
                             </ItemsControl>
                         </ScrollViewer>
                         <StackPanel VerticalAlignment="Bottom" Grid.Row="2">
-                            <Button Content="Add Remote" Command="{Binding OnAddRemoteClicked}" HorizontalAlignment="Stretch" />
+                            <Button AutomationProperties.Name="Add Remote" Command="{Binding OnAddRemoteClicked}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
+                                    VerticalContentAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <TextBlock FontFamily="{StaticResource MaterialSymbolsRounded}"
+                                               Text="add" 
+                                               FontSize="24"
+                                               Width="24"
+                                               Height="24"
+                                               Margin="0 0 0 0"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center" />
+                                    <TextBlock Text="Add Remote" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                     </Grid>
 
                     <StackPanel Grid.Row="3" Spacing="10">
-                        <Button Content="Settings" Command="{Binding OnSettingsClicked}" HorizontalAlignment="Stretch" />
+                        <Button AutomationProperties.Name="Settings" Command="{Binding OnSettingsClicked}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
+                                VerticalContentAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock FontFamily="{StaticResource MaterialSymbolsRounded}"
+                                           Text="settings" 
+                                           FontSize="24"
+                                           Width="24"
+                                           Height="24"
+                                           Margin="0 0 0 0"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           TextAlignment="Center" />
+                                <TextBlock Text="Settings" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </DrawerPage.Drawer>

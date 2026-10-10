@@ -1,0 +1,13 @@
+{
+  "strings": {
+    "UniScan:client/i18n/disconnect_reason/unknown": "Unknown reason, maybe the server sent back a malformed DisconnectPacket?",
+    "UniScan:client/i18n/disconnect_reason/handshake_rejected": "Server rejected handshake",
+    "UniScan:client/i18n/disconnect_reason/no_reason": "Unknown disconnect reason, maybe check the log?",
+    "UniScan:client/i18n/disconnect_reason/exception_thrown": "Exception thrown: {0}",
+
+    "UniScan:client/i18n/errors/device/subscribe_failed": "Failed to subscribe to device '{0}'",
+    
+    "UniScan:client/i18n/view/dialog/default_title": "My cool dialog",
+    "UniScan:client/i18n/view/dialog/default_content": ""
+  }
+}

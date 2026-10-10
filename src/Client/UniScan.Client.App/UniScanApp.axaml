@@ -14,6 +14,7 @@
 
     <Application.Resources>
         <conversion:RelativeUnitConverter x:Key="RelativeUnitConverter" />
+        <FontFamily x:Key="MaterialSymbolsRounded">avares://UniScan.Client.App/Assets/Fonts/MaterialSymbolsRounded.ttf#Material Symbols Rounded</FontFamily>
     </Application.Resources>
 
     <Application.Styles>

@@ -18,7 +18,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.ModuleManagement.Implementations\Shiki.ModuleManagement.Implementations.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\FileSystem\Shiki.FileSystem.Implementations.Native\Shiki.FileSystem.Implementations.Native.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\ModuleManagement\Shiki.ModuleManagement.Implementations\Shiki.ModuleManagement.Implementations.csproj" />
       <ProjectReference Include="..\UniScan.Server.Core\UniScan.Server.Core.csproj" />
     </ItemGroup>
 

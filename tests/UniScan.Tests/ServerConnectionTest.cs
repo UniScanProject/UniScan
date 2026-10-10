@@ -45,13 +45,16 @@ public class ServerConnectionTest
         // Log.Information("Started");
 
         ServiceCollection services = new();
-        var sv = services.BuildServiceProvider();
-
         PacketRegistry reg = new();
         reg.RegisterFromSource<AssembliesPacketSource>();
+
+        services.AddSingleton(reg);
+        services.AddSingleton<IClientSocketFactory, ClientSocketFactory>();
         
-        ClientSocket client = new(new UniScanClientChannelInitializer(reg, [], sv),
-                                  new TCPRemoteConnectionMethod(new IPEndPoint(IPAddress.Any, 9000)));
+        var sv = services.BuildServiceProvider();
+
+        
+        ClientSocket client = sv.GetRequiredService<IClientSocketFactory>().CreateInstance(new TCPRemoteConnectionMethod(new IPEndPoint(IPAddress.Any, 9000)));
         await client.StartAsync();
 
         await client.SendPacketAsync(GetDeviceListPacket.CreateRequest());

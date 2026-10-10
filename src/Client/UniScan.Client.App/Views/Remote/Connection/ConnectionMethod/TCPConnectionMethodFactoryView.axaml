@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:connectionMethod1="clr-namespace:UniScan.Client.App.Views.Remote.Connection.ConnectionMethod"
+             xmlns:connectionMethod="clr-namespace:UniScan.Client.App.Views.Remote.Connection.ConnectionMethod"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.Connection.ConnectionMethod.TCPConnectionMethodFactoryView"
-             x:DataType="connectionMethod1:TCPConnectionMethodFactoryViewModel">
+             x:DataType="connectionMethod:TCPConnectionMethodFactoryViewModel">
     <StackPanel>
         
         <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10" HorizontalAlignment="Stretch">

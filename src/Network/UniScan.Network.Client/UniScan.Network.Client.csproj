@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <Folder Include="Remote\" />
+      <Folder Include="SSR\" />
     </ItemGroup>
 
 </Project>

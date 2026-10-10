@@ -1,5 +1,6 @@
 using R3;
 using Shiki.TaskPipeline;
+using Shiki.TaskPipeline.Context;
 
 namespace UniScan.Client.Core.Remote.Pipeline;
 
@@ -9,36 +10,30 @@ public partial class RemoteConnectionPipeline
     {
         public class ConnectionContext(IServiceProvider provider, RemoteServer server) : ITaskContext
         {
-            public BindableReactiveProperty<string> Status { get; } = new("Connecting...");
-
             public RemoteServer RemoteServer { get; } = server;
             public IRemoteServerMutationProxy RemoteServerMutationProxy => RemoteServer;
 
             public IServiceProvider ServiceProvider { get; } = provider;
         }
         
-        public class NegotiationContext(string status, IServiceProvider provider, RemoteServer server) : ITaskContext<NegotiationContext, ConnectionContext>
+        public class NegotiationContext(IServiceProvider provider, RemoteServer server) : ITransitionableTaskContext<NegotiationContext, ConnectionContext>
         {
-            public BindableReactiveProperty<string> Status { get; } = new(status);
-
             public RemoteServer RemoteServer { get; } = server;
             public IRemoteServerMutationProxy RemoteServerMutationProxy => RemoteServer;
 
             public IServiceProvider ServiceProvider { get; } = provider;
             
-            public static NegotiationContext TransitionFrom(ConnectionContext oldContext) => new(oldContext.Status.Value, oldContext.ServiceProvider, oldContext.RemoteServer);
+            public static NegotiationContext TransitionFrom(ConnectionContext oldContext) => new(oldContext.ServiceProvider, oldContext.RemoteServer);
         }
         
-        public class RemoteContext(string status, IServiceProvider provider, RemoteServer server) : ITaskContext<RemoteContext, NegotiationContext>
+        public class RemoteContext(IServiceProvider provider, RemoteServer server) : ITransitionableTaskContext<RemoteContext, NegotiationContext>
         {
-            public BindableReactiveProperty<string> Status { get; } = new(status);
-
             public RemoteServer RemoteServer { get; } = server;
             public IRemoteServerMutationProxy RemoteServerMutationProxy => RemoteServer;
 
             public IServiceProvider ServiceProvider { get; } = provider;
             
-            public static RemoteContext TransitionFrom(NegotiationContext oldContext) => new(oldContext.Status.Value, oldContext.ServiceProvider, oldContext.RemoteServer);
+            public static RemoteContext TransitionFrom(NegotiationContext oldContext) => new(oldContext.ServiceProvider, oldContext.RemoteServer);
         }
     }
 }

@@ -1,29 +1,26 @@
-﻿using System;
-using System.Runtime.InteropServices.JavaScript;
-using System.Threading.Tasks;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Browser;
 using Avalonia.Threading;
-using DotNetty.Common.Utilities;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
+using Shiki.Common.Result;
+using Shiki.FileSystem.Abstractions;
+using Shiki.FileSystem.Implementations.Web;
+using Shiki.FileSystem.Implementations.Web.Stream;
+using Shiki.TaskPipeline;
 using SpawnDev;
 using SpawnDev.SpawnJS;
 using SpawnDev.SpawnJS.WebWorkers;
+using UniScan.Client.App.Core.Pipeline.Initialization;
 using UniScan.Client.App.Platform.Browser.Interop;
-using UniScan.Client.Core;
 using UniScan.Core;
 using UniScan.Platform;
 using UniScan.Platform.Implementations.Web;
-using UniScan.Platform.Implementations.Web.Filesystem;
-using UniScan.Platform.Implementations.Web.Filesystem.Stream;
 
 namespace UniScan.Client.App.Platform.Browser;
 
+//TODO when possible create special browser module, then add warning dialog if OPFS is not available.
 internal sealed partial class Program
 {
-    public static IServiceProvider ServiceProvider { get; private set; }
-    
     private static async Task Main(string[] args)
     {
         await JSMethods.Initialize();
@@ -31,36 +28,43 @@ internal sealed partial class Program
         {
             JSMethods.OnExit(-1, e.Exception.ToString());
         };
-        
-        ServiceCollection serviceCollection = new();
 
-        serviceCollection.AddSpawnJSRuntime(out SpawnJSRuntime runtime);
-        serviceCollection.AddWebWorkerService(webWorkerService =>
+        UniScanApp.InitializationPipelineCreated += pipeline =>
         {
-            webWorkerService.TaskPool.MaxPoolSize = -1;
-            webWorkerService.TaskPool.PoolSize = webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
-        });
+            pipeline.PipelineBuilder.TryInsertBefore<UniScanAppInitializationPipeline.TaskContexts.PreEnvironment>(UniScanAppInitializationPipeline.Initializers.InitializeEnvironment, async Task (ctx) =>
+            {
+                IServiceCollection browserServices = new ServiceCollection();
+                
+                browserServices.AddSpawnJSRuntime(out SpawnJSRuntime runtime);
+                browserServices.AddWebWorkerService(webWorkerService =>
+                {
+                    webWorkerService.TaskPool.MaxPoolSize = -1;
+                    webWorkerService.TaskPool.PoolSize = webWorkerService.GlobalScope == GlobalScope.Window ? 2 : 0;
+                });
+
+                browserServices.AddSingleton<BrowserDirectoryManager>();
+                browserServices.AddSingleton<BrowserFileManager>();
+                
+                browserServices.AddSingleton<IOPFSWorkerService, OPFSWorkerService>();
+                IServiceProvider browserServiceProvider = browserServices.BuildServiceProvider();
+                await browserServiceProvider.StartBackgroundServices();
+                
+                ctx.StandardPaths = new BrowserPaths();
+                ctx.SerilogInitializer = new BrowserPlatformSerilogInitializer(UniScan.Core.Constants.ConsoleOutputTemplate);
+                ctx.FileManager = browserServiceProvider.GetRequiredService<BrowserFileManager>();
+                ctx.DirectoryManager = browserServiceProvider.GetRequiredService<BrowserDirectoryManager>();
+                
+                ctx.ServiceCollection.AddSingleton(runtime);
+                ctx.ServiceCollection.AddSingleton<WebWorkerService>(_ => browserServiceProvider.GetRequiredService<WebWorkerService>());
+                
+                ctx.ServiceCollection.AddSingleton<IPlatformStandardPaths>(_ => ctx.StandardPaths);
+                ctx.ServiceCollection.AddSingleton<IPlatformSerilogInitializer>(_ => ctx.SerilogInitializer);
+                ctx.ServiceCollection.AddSingleton<IPlatformDirectoryManager>(_ => ctx.DirectoryManager);
+                ctx.ServiceCollection.AddSingleton<IPlatformFileManager>(_ => ctx.FileManager);
+                ctx.ServiceCollection.AddSingleton<IOPFSWorkerService>(_ => browserServiceProvider.GetRequiredService<IOPFSWorkerService>());
+            }).ThrowIfError();
             
-        serviceCollection.AddSingleton<BrowserDirectoryManager>();
-        serviceCollection.AddSingleton<BrowserFileManager>();
-        
-        serviceCollection.AddSingleton<IOPFSWorkerService, OPFSWorkerService>();
-        
-        ServiceProvider = serviceCollection.BuildServiceProvider();
-        
-        await ServiceProvider.StartBackgroundServices();
-        
-        UniScanApp.InitializePlatform += () =>
-        {
-            try
-            {
-                return Task.FromResult(new HostEnvironment(new BrowserPaths(), new BrowserPlatformSerilogInitializer(Constants.ConsoleOutputTemplate),
-                                                           ServiceProvider.GetRequiredService<BrowserDirectoryManager>(), ServiceProvider.GetRequiredService<BrowserFileManager>()));
-            }
-            catch (Exception exception)
-            {
-                return Task.FromException<HostEnvironment>(exception);
-            }
+            return Task.CompletedTask;
         };
         
         await BuildAvaloniaApp()

@@ -10,7 +10,7 @@ public record RemoteCacheDto(
     [property: JsonPropertyName("remote_info")]
     RemoteInfo? RemoteInfo)
 {
-    public static RemoteCacheDto FromRemoteServer(RemoteServer remoteServer) => new(remoteServer.RemoteInfo.CurrentValue);
+    public static RemoteCacheDto FromRemoteServer(RemoteServer remoteServer) => new(remoteServer.RemoteInfo.Value);
 }
 
 [method: JsonConstructor]

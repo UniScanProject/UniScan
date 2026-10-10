@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -12,24 +12,26 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\external\Shiki\Extensions\Shiki.Extensions.MessagePack\Shiki.Extensions.MessagePack.csproj" />
+        <PackageReference Include="BidirectionalDictionary" />
+        <ProjectReference Include="..\..\..\external\Shiki\src\Extensions\Shiki.Extensions.MessagePack\Shiki.Extensions.MessagePack.csproj" />
+        <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Internationalization\Shiki.Internationalization.csproj" />
         <ProjectReference Include="..\..\Core\UniScan.UserInterface\UniScan.UserInterface.csproj" />
         <ProjectReference Include="..\UniScan.Network.CodeGenerator\UniScan.Network.CodeGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="DotNetty.Buffers" Version="0.7.6" />
-      <PackageReference Include="DotNetty.Codecs" Version="0.7.6" />
-      <PackageReference Include="DotNetty.Common" Version="0.7.6" />
-      <PackageReference Include="DotNetty.Handlers" Version="0.7.6" />
-      <PackageReference Include="DotNetty.Transport" Version="0.7.6" />
-      <PackageReference Include="MessagePack" Version="3.1.8" />
+      <PackageReference Include="DotNetty.Buffers" />
+      <PackageReference Include="DotNetty.Codecs" />
+      <PackageReference Include="DotNetty.Common" />
+      <PackageReference Include="DotNetty.Handlers" />
+      <PackageReference Include="DotNetty.Transport" />
+      <PackageReference Include="MessagePack" />
     </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@ public interface ICommandPayload<TOpCode>
 }
 
 public interface ICommandPayload<TOpCode, TPayload> : ICommandPayload<TOpCode>
-    where TPayload : IScannerPayload, ICommandPayload<TOpCode, TPayload>
+    where TPayload : IDevicePayload, ICommandPayload<TOpCode, TPayload>
     where TOpCode : notnull
 {
     /// <summary>

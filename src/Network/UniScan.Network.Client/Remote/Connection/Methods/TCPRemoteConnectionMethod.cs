@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text.Json.Serialization;
 using DotNetty.Transport.Bootstrapping;
@@ -10,6 +11,8 @@ namespace UniScan.Network.Client.Remote.Connection.Methods;
 
 #if !__WASM__
 [PolymorphicSerializable<IRemoteConnectionMethod>("TCP")]
+[method: JsonConstructor]
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
 public class TCPRemoteConnectionMethod(IPEndPoint endPoint) : IRemoteConnectionMethod
 {
     [JsonConverter(typeof(IPEndPointConverter))]

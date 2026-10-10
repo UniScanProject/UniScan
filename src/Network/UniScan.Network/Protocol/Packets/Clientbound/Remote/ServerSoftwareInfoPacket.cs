@@ -1,4 +1,5 @@
 using MessagePack;
+using Shiki.Common.Identity;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Protocol.PayloadPart;
 using UniScan.Network.Registry;
@@ -15,5 +16,6 @@ namespace UniScan.Network.Protocol.Packets.Clientbound.Remote;
 [MessagePackObject]
 public readonly record struct ServerSoftwareInfoPacket(
     [property: Key(0)] ServerSoftwareInfo Info,
-    [property: Key(1)] Guid? RequestId
+    [property: Key(1)] Dictionary<Identifier, ModuleInfo> Modules,
+    [property: Key(2)] Guid? RequestId
 ) : IClientboundPacket, IResponsePayloadPart;

@@ -12,12 +12,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.ModuleManagement.Implementations\Shiki.ModuleManagement.Implementations.csproj" />
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.ModuleManagement\Shiki.ModuleManagement.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\FileSystem\Shiki.FileSystem\Shiki.FileSystem.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\ModuleManagement\Shiki.ModuleManagement.Implementations\Shiki.ModuleManagement.Implementations.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\ModuleManagement\Shiki.ModuleManagement\Shiki.ModuleManagement.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.TaskPipeline\Shiki.TaskPipeline.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.TaskPipeline\Shiki.TaskPipeline.csproj" />
       <ProjectReference Include="..\..\Platform\UniScan.Platform\UniScan.Platform.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network.Client\UniScan.Network.Client.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network\UniScan.Network.csproj" />

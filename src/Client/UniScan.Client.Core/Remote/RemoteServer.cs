@@ -8,14 +8,10 @@ using UniScan.Client.Core.Config.Remote;
 using UniScan.Client.Core.Remote.Connection;
 using UniScan.Client.Core.Remote.Connection.Status;
 using UniScan.Client.Core.Remote.Device;
-using UniScan.Network;
 using UniScan.Network.Client;
 using UniScan.Network.Client.Remote.Connection;
-using UniScan.Network.Data;
 using UniScan.Network.Data.Info.Remote;
 using UniScan.Network.Data.Info.Software;
-using UniScan.Network.Protocol.Packets.Bidirectional.Status;
-using UniScan.Network.Socket.Configuration;
 
 namespace UniScan.Client.Core.Remote;
 
@@ -58,8 +54,8 @@ public class RemoteServer : IRemoteServerMutationProxy
     
     public ServerSoftwareInfo? SoftwareInfo { get; private set; }
     
-    private readonly ReactiveProperty<RemoteInfo?> _remoteInfo = new();
-    public ReadOnlyReactiveProperty<RemoteInfo?> RemoteInfo => _remoteInfo;
+    private readonly BindableReactiveProperty<RemoteInfo?> _remoteInfo = new();
+    public IReadOnlyBindableReactiveProperty<RemoteInfo?> RemoteInfo => _remoteInfo;
     
     public ClientSocket Socket { get; }
 

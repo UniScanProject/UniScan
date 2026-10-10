@@ -3,6 +3,7 @@ using R3;
 using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
+using Shiki.Common.Result;
 using UniScan.Core.State.Node;
 using UniScan.Network.Data;
 using UniScan.Network.Data.Device;
@@ -18,20 +19,23 @@ public class RemoteDevice(Slug<SnakeSlugFormatter> id, string? name, bool connec
     public string? DisplayName { get; } = name;
     public bool Connected { get; } = connected;
     
+    public RemoteServer Parent { get; } = parent;
+    
     private readonly BindableReactiveProperty<bool> _subscribed = new(false);
     public IReadOnlyBindableReactiveProperty<bool> Subscribed => _subscribed;
     
     public DeviceSpecifications? Specs { get; } = specs;
 
-    public ObservableDictionary<Identifier, IDeviceStateNode> States { get; set; } = [];
+    public ObservableDictionary<Identifier, IStateNode> States { get; set; } = [];
     
     public static RemoteDevice FromDto(DeviceDto dto, RemoteServer server) => new(dto.DeviceIdentifier, dto.DisplayName, dto.Connected, dto.Specs, server);
 
-    public async Task<bool> Subscribe()
+    public async ValueTask<BooleanResult<Exception>> Subscribe()
     {
-        _subscribed.Value = (await parent.Socket.SendRequestAsync<AcknowledgePacket>(SubscribePacket.CreateRequest(Identifier))).Value.Result.Success;
-
-        return _subscribed.CurrentValue;
+        var res = await parent.Socket.SendRequestAsync<AcknowledgePacket>(DeviceSubscribePacket.CreateRequest(Identifier));
+        
+        _subscribed.Value = res.Value.Result.IsSuccessful;
+        return !res.Value.Result.IsSuccessful ? new BooleanResult<Exception>(res.Value.Result.Error) : BooleanResult<Exception>.Successful;
     }
 
     public void Dispose()

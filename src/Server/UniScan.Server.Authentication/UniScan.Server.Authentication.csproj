@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
     </ItemGroup>
 
 </Project>

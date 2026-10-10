@@ -2,11 +2,11 @@ namespace UniScan.Core.State.Radio;
 
 public interface IScanGroup : IScanNode
 {
-    IEnumerable<ScanChannel> BaseChannels { get; }
+    IEnumerable<IScanChannel> BaseChannels { get; }
 }
 
 public interface IScanGroup<TChannel> : IScanGroup
-where TChannel : ScanChannel
+where TChannel : IScanChannel
 {
     List<TChannel> Channels { get; }
 }

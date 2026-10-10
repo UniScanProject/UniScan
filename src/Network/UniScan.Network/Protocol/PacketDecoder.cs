@@ -6,28 +6,34 @@ using DotNetty.Transport.Channels;
 using MessagePack;
 using Serilog;
 using Shiki.Common.Identity;
+using Shiki.Internationalization.Component;
 using UniScan.Core.Extensions;
 using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 using UniScan.Network.Registry;
 
 namespace UniScan.Network.Protocol;
 
+/// <summary>
+/// Decodes packets into IPacket instances
+/// </summary>
+/// <param name="packetRegistry">The packet registry</param>
 public class PacketDecoder(PacketRegistry packetRegistry) : MessageToMessageDecoder<IByteBuffer>
 {
     private readonly ILogger _logger = Log.ForContext<PacketDecoder>();
 
+    /// <inheritdoc/>
     protected override void Decode(IChannelHandlerContext context, IByteBuffer input, List<object> output)
     {
         if (input.ReadableBytes < 2)
         {
-            SendDisconnect(context, "Received packet is too small");
+            SendDisconnect(context, new TranslatableTextComponent("UniScan:i18n/disconnect/decoder_initiated/packet_too_small"));
             return;
         }
         
         ushort idLength = input.ReadUnsignedShortLE();
         if (input.ReadableBytes < idLength)
         {
-            SendDisconnect(context, "Malformed, not enough bytes present for identifier string of given length");
+            SendDisconnect(context, new TranslatableTextComponent("UniScan:i18n/disconnect/decoder_initiated/identifier_string_length_too_small"));
             return;
         }
 
@@ -37,7 +43,7 @@ public class PacketDecoder(PacketRegistry packetRegistry) : MessageToMessageDeco
         if (!id.HasValue)
         {
             _logger.Warning(id.Error, "Received packet with invalid Identifier string '{Id}', disconnecting.", ids);
-            SendDisconnect(context, "Received packet with invalid Identifier.");
+            SendDisconnect(context, new TranslatableTextComponent("UniScan:i18n/disconnect/decoder_initiated/invalid_identifier"));
             
             return;
         }
@@ -46,7 +52,7 @@ public class PacketDecoder(PacketRegistry packetRegistry) : MessageToMessageDeco
         if (type == null)
         {
             _logger.Warning("Received unknown packet with ID {Id}, disconnecting.", id.Value);
-            SendDisconnect(context, "Received unrecognized packet.");
+            SendDisconnect(context, new TranslatableTextComponent("UniScan:i18n/disconnect/decoder_initiated/unrecognized_packet"));
             
             return;
         }
@@ -71,14 +77,15 @@ public class PacketDecoder(PacketRegistry packetRegistry) : MessageToMessageDeco
                 //thank god this isn't new york city
                 rented = ArrayPool<byte>.Shared.Rent(readable);
                 input.ReadBytes(rented, 0, readable);
-            
-                payload = rented;
+
+                payload = rented.AsMemory(0, readable);
             }
 
 #if DEBUG
-            _logger.Debug("Received packet with identifier '{Identifier}': {Data}", id.Value, payload.Span.ToHexViewString());
+            _logger.Debug("Received packet with identifier '{Identifier}' ({Length}): {Data}", id.Value, payload.Length,
+                          payload.Span.ToHexViewString(HexViewStringArgs.DefaultConsole));
 #endif
-            
+
             //deserialize
             object? d = MessagePackSerializer.Deserialize(type, payload);
             if (d != null)
@@ -90,14 +97,26 @@ public class PacketDecoder(PacketRegistry packetRegistry) : MessageToMessageDeco
             {
                 _logger.Error("Received invalid packet of type '{Type}'", type.FullName);
 
-                SendDisconnect(context, "Received invalid packet.");
+                SendDisconnect(context, new TranslatableTextComponent("UniScan:i18n/disconnect/decoder_initiated/invalid_packet_data"));
             }
+        }
+        catch (FormatterNotRegisteredException ex)
+        {
+            _logger.Error(ex, "Failed to decode packet of type '{Type}' as it has not been registered", type.FullName);
+
+            SendDisconnect(context, new TranslatableTextComponent("UniScan:i18n/disconnect/decoder_initiated/unregistered_packet_deserializer"));
         }
         catch (MessagePackSerializationException ex)
         {
             _logger.Error(ex, "Failed to decode packet of type '{Type}'", type.FullName);
 
-            SendDisconnect(context, "Received invalid packet.");
+            SendDisconnect(context, new TranslatableTextComponent("UniScan:i18n/disconnect/decoder_initiated/packet_deserialization_fail"));
+        }
+        catch (Exception ex)
+        {
+            _logger.Error(ex, "Failed to decode packet");
+
+            SendDisconnect(context, new TranslatableTextComponent("UniScan:i18n/disconnect/decoder_initiated/generic"));
         }
         finally
         {
@@ -108,8 +127,8 @@ public class PacketDecoder(PacketRegistry packetRegistry) : MessageToMessageDeco
         }
     }
 
-    private static void SendDisconnect(IChannelHandlerContext context, string reason)
+    private static void SendDisconnect(IChannelHandlerContext context, ITextComponent reason)
     {
-        context.WriteAndFlushAsync(new DisconnectPacket(reason)).ContinueWith(_ => context.CloseAsync());
+        context.Channel.WriteAndFlushAsync(new DisconnectPacket(reason)).ContinueWith(_ => context.CloseAsync(), TaskContinuationOptions.ExecuteSynchronously);
     }
 }

@@ -1,106 +1,72 @@
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Shiki.FileSystem.Abstractions;
 using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
+using Shiki.TaskPipeline;
+using Shiki.TaskPipeline.Context;
 using UniScan.Client.App.Core.Module;
 using UniScan.Client.App.Core.Module.Modules.Internal;
 using UniScan.Client.App.Core.Pipeline.Initialization;
 using UniScan.Client.Core;
-using UniScan.Client.Core.DI.Factory;
-using UniScan.Client.Core.Remote;
-using UniScan.Network;
-using UniScan.Network.Registry.Source.Sources;
-using UniScan.Platform.DependencyInjection;
+using UniScan.Platform;
 
 namespace UniScan.Client.App;
 
 public partial class UniScanApp
 {
-    internal async Task InitializeEnvironment(UniScanAppInitializationPipeline.TaskContexts.Early context, CancellationToken ct = default)
+    internal async Task InitializeModules(UniScanAppInitializationPipeline.TaskContexts.PreTranslations ctx, ITaskExecutionContext execCtx)
     {
-        context.Status.Value = "Initializing environment";
+        execCtx.Status.Value = "Initializing modules";
 
-        if (InitializePlatform == null)
-            throw new ArgumentException("No platform initializer was provided");
+        var moduleStorageBuilder = new ModuleStorageBuilder<IUniScanClientAppModule, UniScanClientAppModuleInitializationArgs>()
+           .WithModuleOfType<InternalUniScanClientAppModule>(null);
 
-        _hostEnvironment = await InitializePlatform();
-
-        if (_hostEnvironment == null)
-            throw new ArgumentException("Platform not initialized");
-
-        await _hostEnvironment.StandardPaths.CreateAllAsync(_hostEnvironment.DirectoryManager);
-        Log.Logger = _hostEnvironment.SerilogInitializer.GetConfiguration(_hostEnvironment).CreateLogger()
-                                     .ForContext<UniScanApp>();
-
-        _hostEnvironment.AddToDi(context.ServiceCollection);
-
-        context.ServiceCollection.AddLogging(builder =>
-        {
-            builder.ClearProviders();
-            builder.AddSerilog();
-        });
-        Log.Debug("Initialized Environment {Env}", _hostEnvironment);
-    }
-
-    internal async Task InitializeSoftwareInfo(UniScanAppInitializationPipeline.TaskContexts.Early ctx, CancellationToken ct = default)
-    {
-        ctx.Status.Value = "Initializing SoftwareInfo";
-
-        ctx.ServiceCollection.AddSingleton(SoftwareInfo);
-        Log.Information("{Info}", SoftwareInfo);
-    }
-
-    internal async Task InitializeModules(UniScanAppInitializationPipeline.TaskContexts.Early ctx, CancellationToken ct = default)
-    {
-        ctx.Status.Value = "Initializing modules";
-
-        ModuleStorage = new ModuleStorage<IUniScanClientAppModule, UniScanClientAppModuleInitializationArgs>()
-           .WithModulesFrom(new TypeListModuleSource(typeof(InternalUniScanClientAppModule)),
-                            new UniScanClientAppModuleInitializationArgs(_hostEnvironment));
-
-        string moduleDir = Path.Combine(_hostEnvironment.StandardPaths.DataPath, "modules");
-        if (!(await _hostEnvironment.DirectoryManager.ExistsAsync(moduleDir)))
+        await using ServiceProvider serviceProvider = ctx.ServiceCollection.BuildServiceProvider();
+        IPlatformStandardPaths standardPaths = serviceProvider.GetRequiredService<IPlatformStandardPaths>();
+        IPlatformDirectoryManager directoryManager = serviceProvider.GetRequiredService<IPlatformDirectoryManager>();
+        
+        string moduleDir = Path.Combine(standardPaths.DataPath, "modules");
+        if (!(await directoryManager.ExistsAsync(moduleDir)))
         {
             Log.Information("Creating new modules folder");
-            await _hostEnvironment.DirectoryManager.CreateDirectoryAsync(moduleDir);
+            await directoryManager.CreateDirectoryAsync(moduleDir);
+        }
+        
+        moduleStorageBuilder.WithSource(new AssembliesModuleSource(moduleDir), new UniScanClientAppModuleInitializationArgs(this));
+
+        string localModules = Path.Combine(Environment.CurrentDirectory, "modules");
+        if (await directoryManager.ExistsAsync(localModules))
+        {
+            moduleStorageBuilder.WithSource(new AssembliesModuleSource(localModules), new UniScanClientAppModuleInitializationArgs(this));
         }
 
-        try
+        ModuleStorage = await moduleStorageBuilder.BuildAsync();
+        
+        foreach (var module in ModuleStorage.Modules)
         {
-            ModuleStorage.LoadFrom(new AssembliesModuleSource(moduleDir),
-                                   new UniScanClientAppModuleInitializationArgs(_hostEnvironment));
-        }
-        catch (Exception ex) when (ex is FileNotFoundException or DirectoryNotFoundException)
-        {
-            Log.Error(ex, "Failed to load assembly modules");
-        }
-
-        foreach (IUniScanClientAppModule module in ModuleStorage.Modules)
-        {
-            module.ConfigureDi(ctx.ServiceCollection);
-            ctx.ServiceCollection.AddSingleton(module);
+            execCtx.Status.Value = $"Initializing module '{module.Key}'";
+            
+            module.Value.ConfigureDi(ctx.ServiceCollection);
+            ctx.ServiceCollection.AddSingleton<IUniScanClientAppModule>(module.Value);
+            
+            Log.Information("Initialized client module '{Id}' ({TypeName})", module.Key, module.Value.Id);
         }
     }
 
-    internal async Task InitializeClient(UniScanAppInitializationPipeline.TaskContexts.PreClient ctx, CancellationToken ct = default)
-    {
-        ctx.Status.Value = "Initializing client";
-        ctx.ServiceCollection.AddUniScanClient(_hostEnvironment, SoftwareInfo);
-    }
-
-    internal Task FinishInitialization(UniScanAppInitializationPipeline.TaskContexts.PostServiceProvider ctx, CancellationToken ct = default)
+    internal Task FinishInitialization(UniScanAppInitializationPipeline.TaskContexts.UniScanAppReady ctx, ITaskExecutionContext execCtx)
     {
         try
         {
-            ctx.Status.Value = "Finishing up";
+            execCtx.Status.Value = "Finishing up";
 
-            ServiceProvider = ctx.Services;
+            ServiceProvider = ctx.ServiceProvider;
             LoadingComplete?.Invoke();
+            InitializationPipelineFinished?.Invoke(this);
             
             return Task.CompletedTask;
         }

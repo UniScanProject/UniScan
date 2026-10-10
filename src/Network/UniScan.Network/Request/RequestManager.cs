@@ -52,22 +52,23 @@ public class RequestManager : IAsyncDisposable
         
         //create req
         var r = new Request<TResponse>();
-        _pendingRequests.TryAdd(request.RequestId!.Value, r);
-        
+        if (!_pendingRequests.TryAdd(request.RequestId!.Value, r))
+        {
+            r.TrySetException(new Exception("Request id is already present or null"));
+            
+            return new Result<TResponse, Exception>(new Exception("Request id is already present or null"));
+        }
+
         try
         {
             //send
             await channel.WriteAndFlushAsync(packet);
-            
+
             //wait, if packet comes in too quickly I think it should be fine because task will be fulfilled already anyway
             TResponse res = await r.Task.WaitAsync(TimeSpan.FromSeconds(10), ct);
             return new Result<TResponse, Exception>(res);
         }
-        catch (TimeoutException ex)
-        {
-            return new Result<TResponse, Exception>(ex);
-        }
-        catch (InvalidCastException ex)
+        catch (Exception ex)
         {
             return new Result<TResponse, Exception>(ex);
         }

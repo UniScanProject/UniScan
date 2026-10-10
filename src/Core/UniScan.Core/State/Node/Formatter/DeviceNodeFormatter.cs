@@ -4,14 +4,25 @@ using MessagePack;
 using MessagePack.Formatters;
 using Serilog;
 using Shiki.Common.Identity;
+using Shiki.Common.Serialization.Polymorphism;
+using Shiki.Common.Serialization.Registry;
+using Shiki.Common.Serialization.Registry.Validators;
 using UniScan.Core.State.Node;
 using UniScan.Core.State.Node.Nodes;
 
 namespace UniScan.Network.Formatter.Device;
 
-public class DeviceNodeFormatter : IMessagePackFormatter<IDeviceStateNode?>
+public abstract class DeviceNodeTypeRegistryValidator : IHasAttributeTypeRegistryValidator<StateNodeAttribute>
 {
-    public void Serialize(ref MessagePackWriter writer, IDeviceStateNode? value, MessagePackSerializerOptions options)
+    static string ITypeRegistryValidator.GetKey(Type t) => t.GetCustomAttribute<StateNodeAttribute>()!.Identifier.ToString();
+}
+
+
+public class DeviceNodeTypeRegistry : SingletonTypeRegistry<DeviceNodeTypeRegistry, DeviceNodeTypeRegistryValidator, StateNodeAttribute>;
+
+public class DeviceNodeFormatter : IMessagePackFormatter<IStateNode?>
+{
+    public void Serialize(ref MessagePackWriter writer, IStateNode? value, MessagePackSerializerOptions options)
     {
         if (value == null)
         {
@@ -30,39 +41,19 @@ public class DeviceNodeFormatter : IMessagePackFormatter<IDeviceStateNode?>
         MessagePackSerializer.Serialize(t, ref writer, value, options);
     }
 
-    public IDeviceStateNode? Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+    public IStateNode? Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
     {
         if (reader.TryReadNil())
             return null;
         
         Identifier id = MessagePackSerializer.Deserialize<Identifier>(ref reader, options);
-        Type? type = GetType(id);
+        Type? type = DeviceNodeTypeRegistry.Instance.GetType(id.ToString());
 
         if (type == null)
         {
             return new SerializedStateNode(id, reader.ReadBytes()?.ToArray() ?? []);
         }
 
-        return (IDeviceStateNode?)MessagePackSerializer.Deserialize(type, ref reader, options);
-    }
-
-    //TODO TEMPORARY, I HOPE.
-    //reflection is very slow especially when we're fucking looping all loaded execs EVERY TIME WE NEED TO DESERIALIZE
-    //instead I will just make some registry i guess
-    public Type? GetType(Identifier id)
-    {
-        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-        {
-            foreach (Type type in assembly.GetTypes())
-            {
-                StateNodeAttribute? attr = type.GetCustomAttribute<StateNodeAttribute>();
-                if (attr is StateNodeAttribute && attr.Identifier == id)
-                {
-                    return type;
-                }
-            }
-        }
-
-        return null;
+        return (IStateNode?)MessagePackSerializer.Deserialize(type, ref reader, options);
     }
 }

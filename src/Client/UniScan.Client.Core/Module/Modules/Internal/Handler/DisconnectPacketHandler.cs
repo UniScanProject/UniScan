@@ -1,5 +1,7 @@
 using DotNetty.Transport.Channels;
 using Serilog;
+using Shiki.Internationalization;
+using Shiki.Internationalization.Component;
 using UniScan.Client.Core.Remote;
 using UniScan.Client.Core.Remote.Connection;
 using UniScan.Client.Core.Remote.Connection.Status;
@@ -13,12 +15,12 @@ public class DisconnectPacketHandler : SimpleChannelInboundHandler<DisconnectPac
     
     protected override void ChannelRead0(IChannelHandlerContext ctx, DisconnectPacket msg)
     {
-        string reason = msg.Reason ?? "Unknown reason, maybe the server sent back a malformed DisconnectPacket?";
+        ITextComponent reason = msg.Reason ?? new TranslatableTextComponent("UniScan:client/i18n/disconnect_reason/unknown");
         
         _logger.Information("Disconnected by server {ChannelIp}: {Information}", ctx.Channel.RemoteAddress, reason);
         RemoteServer server = ctx.Channel.GetAttribute(ServerAttributes.ServerAttribute).Get();
 
-        if (server.ConnectionStatus.Value.State != ConnectionState.UserDisconnected)
+        if (server.ConnectionStatus.Value.State != ConnectionState.UserDisconnected && server.ConnectionStatus.Value.State != ConnectionState.UnexpectedDisconnected)
         {
             ((IRemoteServerMutationProxy)server)
                .SetConnectionStatus(new KickedDisconnectedConnectionStatusContext(reason));

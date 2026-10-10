@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <!--If you are willing to use platform-specific APIs, use conditional compilation.
@@ -17,14 +17,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia.Desktop"/>
+        <PackageReference Include="Avalonia.Desktop" />
         <PackageReference Include="AvaloniaUI.DiagnosticsSupport">
-            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\external\Shiki\src\FileSystem\Shiki.FileSystem.Implementations.Native\Shiki.FileSystem.Implementations.Native.csproj" />
         <ProjectReference Include="..\..\Platform\UniScan.Platform.Implementations.Native\UniScan.Platform.Implementations.Native.csproj" />
         <ProjectReference Include="..\UniScan.Client.App\UniScan.Client.App.csproj" />
     </ItemGroup>

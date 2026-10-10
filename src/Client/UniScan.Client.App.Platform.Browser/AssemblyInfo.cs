@@ -1,3 +1,3 @@
 using UniScan.Client.App.Core.Platform;
 
-[assembly: UniScanPlatform("UniScan:client/app/platform/web")]
+[assembly: UniScanPlatform("UniScan:client/app/platform/web", "Web")]

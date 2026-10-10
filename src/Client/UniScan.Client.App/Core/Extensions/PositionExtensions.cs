@@ -1,5 +1,5 @@
 using Avalonia.Layout;
-using UniScan.UserInterface.Definitions;
+using UniScan.UserInterface.Properties.Styling;
 
 namespace UniScan.Client.App.Core.Extensions;
 

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
@@ -11,33 +11,40 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**"/>
+        <AvaloniaResource Include="Assets\**" />
+        <AvaloniaResource Include="..\..\..\external\MaterialSymbols\MaterialSymbolsRounded.ttf">
+            <Link>Assets\Fonts\MaterialSymbolsRounded.ttf</Link>
+        </AvaloniaResource>
+        
+        <EmbeddedResource Include="Assets\L10N\**\*" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="AsyncImageLoader.Avalonia" />
-        <PackageReference Include="Avalonia"/>
+        <PackageReference Include="Avalonia" />
         <PackageReference Include="Avalonia.Controls.ItemsRepeater" />
         <PackageReference Include="Avalonia.Labs.Controls" />
-        <PackageReference Include="Avalonia.Themes.Fluent"/>
-        <PackageReference Include="Avalonia.Fonts.Inter"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" />
+        <PackageReference Include="Avalonia.Fonts.Inter" />
         <PackageReference Include="AvaloniaUI.DiagnosticsSupport">
-            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="CommunityToolkit.Mvvm"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" />
         <PackageReference Include="DialogHost.Avalonia" />
         <PackageReference Include="DotNetty.Common" />
+        <PackageReference Include="R3Extensions.Avalonia" />
         <PackageReference Include="Serilog.Extensions.Logging" />
         <PackageReference Include="Serilog.Sinks.File" />
+        <PackageReference Include="SmartFormat" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\external\Shiki\Shiki.CodeGenerator\Shiki.CodeGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\..\..\external\Shiki\src\CodeGenerator\Shiki.CodeGenerator\Shiki.CodeGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\FileSystem\Shiki.FileSystem.Implementations.Assembly\Shiki.FileSystem.Implementations.Assembly.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.UserInterface\UniScan.UserInterface.csproj" />
@@ -113,7 +120,7 @@
         <SubType>Code</SubType>
       </Compile>
       <Compile Update="Views\Remote\Action\AddRemoteDialog.axaml.cs">
-        <DependentUpon>AddRemoteDialog.axaml</DependentUpon>
+        <DependentUpon>AddRemoteDialogView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
       <Compile Update="Views\Global\HeadedSeparatorControlViewModel.cs">
@@ -128,8 +135,8 @@
       <Compile Update="Views\Home\HomePageViewModel.cs">
         <DependentUpon>HomePageView.axaml</DependentUpon>
       </Compile>
-      <Compile Update="Views\Remote\Action\AddRemoteDialogViewModel.cs">
-        <DependentUpon>AddRemoteDialog.axaml</DependentUpon>
+      <Compile Update="Views\Remote\Action\AddRemoteDialogView.cs">
+        <DependentUpon>AddRemoteDialogView.axaml</DependentUpon>
       </Compile>
       <Compile Update="Views\Remote\Connection\ConnectionMethod\TCPConnectionMethodFactoryViewModel.cs">
         <DependentUpon>TCPConnectionMethodFactoryView.axaml</DependentUpon>
@@ -173,8 +180,18 @@
       <Compile Update="Views\Remote\Device\DeviceRootPageViewModel.cs">
         <DependentUpon>DeviceRootPageView.axaml</DependentUpon>
       </Compile>
-      <Compile Update="Views\SSR\UISlotControlViewModel.cs">
-        <DependentUpon>UISlotControl.axaml</DependentUpon>
+      <Compile Update="Views\Global\Dialog\DialogView.axaml.cs">
+        <DependentUpon>AddRemoteDialog.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Global\Dialog\DialogViewModel.cs">
+        <DependentUpon>DialogView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\Action\AddRemoteDialogView.axaml.cs">
+        <DependentUpon>AddRemoteDialogView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Remote\Action\AddRemoteDialogViewModel.cs">
+        <DependentUpon>AddRemoteDialogView.axaml</DependentUpon>
       </Compile>
     </ItemGroup>
 

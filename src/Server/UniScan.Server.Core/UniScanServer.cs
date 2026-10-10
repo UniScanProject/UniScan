@@ -12,7 +12,17 @@ using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using Shiki.Common.Util;
+using Shiki.FileSystem.Implementations.Assembly;
+using Shiki.FileSystem.Storage;
+using Shiki.FileSystem.Storage.Directory.KeyValue;
+using Shiki.FileSystem.Storage.Serializer;
+using Shiki.Internationalization;
+using Shiki.Internationalization.Component;
+using Shiki.Internationalization.Component.Resolver;
+using Shiki.Internationalization.Translation;
+using Shiki.Internationalization.Translation.LanguageSource;
 using Shiki.ModuleManagement;
+using UniScan.Core.State;
 using UniScan.Device.Device;
 using UniScan.Network;
 using UniScan.Network.Data.Info.Remote;
@@ -27,13 +37,14 @@ using UniScan.Network.Socket.Configuration;
 using UniScan.Server.Authentication.Session;
 using UniScan.Server.Core.Host;
 using UniScan.Server.Core.Module;
+using UniScan.Server.Core.UserInterface;
 using Constants = UniScan.Core.Constants;
 
 namespace UniScan.Server.Core;
 
 public class UniScanServer
 {
-    public readonly ScannerHostManager ScannerManager;
+    public readonly DeviceHostManager DeviceManager;
 
     //modules
     private readonly ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> _moduleStorage;
@@ -42,7 +53,6 @@ public class UniScanServer
 
     //management
     public readonly SessionManager SessionManager;
-    private readonly IGroupManager _networkGroupManager;
 
     public delegate ISocket ServerSocketInitializer(UniScanServerChannelInitializer channelInitializer);
 
@@ -55,8 +65,7 @@ public class UniScanServer
 
     public static readonly ServerSoftwareInfo SoftwareInfo = new(
                                                                  new SoftwareAssemblyInfo(Identifier,
-                                                                     SemVersion.Parse(Assembly.GetCallingAssembly()
-                                                                        .InformationalVersionString)),
+                                                                     SemVersion.Parse(Assembly.GetCallingAssembly().InformationalVersionString!)),
                                                                  Network.Constants.ProtocolVersion,
                                                                  "UniScan Server",
                                                                  "https://github.com/UniScanProject/UniScan"
@@ -109,6 +118,7 @@ public class UniScanServer
                                                                         })
                                                       );
 
+    //TODO use TaskPipeline
     public UniScanServer(SessionManager sessionManager, ServerSocketInitializer socketInitializer,
                          PacketRegistry packetRegistry,
                          ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> moduleStorage)
@@ -116,24 +126,42 @@ public class UniScanServer
         SessionManager = sessionManager;
         _moduleStorage = moduleStorage;
         _packetRegistry = packetRegistry;
-        _networkGroupManager = new MultithreadedGroupManager();
 
-        ScannerManager = new ScannerHostManager();
+        DeviceManager = new DeviceHostManager();
 
         //init di
         ServiceCollection services = new();
+        
+        services.AddSingleton(_moduleStorage);
 
-        services.AddSingleton(ScannerManager);
+        services.AddSingleton(DeviceManager);
         services.AddSingleton(SessionManager);
+        
+        services.AddSingleton(_packetRegistry);
+        
+        TranslationManager mgr = new();
+        mgr.ApplyLanguagesFromSourceAsync(new DirectoryKeyValueLanguageSource(
+                                                     new ReadOnlyDirectoryKeyValueStorage<LanguageFileDto>("/Assets/L10N", new EmbeddedDirectoryManager(Assembly.GetExecutingAssembly()), new EmbeddedFileManager(Assembly.GetExecutingAssembly()), new JsonStorageSerializer<LanguageFileDto>())
+                                                    ), "server".ToSlug<SnakeSlugFormatter>(), 20).GetAwaiter().GetResult(); 
+        mgr.ApplyLanguagesFromSourceAsync(new DirectoryKeyValueLanguageSource(
+                                                     new ReadOnlyDirectoryKeyValueStorage<LanguageFileDto>("/Assets/L10N", new EmbeddedDirectoryManager(typeof(IDeviceState).Assembly), new EmbeddedFileManager(typeof(IDeviceState).Assembly), new JsonStorageSerializer<LanguageFileDto>())
+                                                    ), "core".ToSlug<SnakeSlugFormatter>(), 20).GetAwaiter().GetResult();
+        
+        services.AddSingleton<TranslationManager>(mgr);
+        
+        foreach (var module in _moduleStorage.Modules) module.Value.ConfigureDi(services);
 
-        foreach (IUniScanServerModule module in _moduleStorage.Modules)
-        {
-            module.ConfigureDi(services);
-        }
-
+        services.AddSingleton<ITextComponentResolver, FallbackTextComponentResolver>();
+        services.AddSingleton<ITextComponentResolver, AbsoluteTextComponentResolver>();
+        services.AddSingleton<ITextComponentResolver, TranslatableTextComponentResolver>();
+        
+        services.AddSingleton<TextComponentResolverService>();
+        
+        services.AddSingleton<IUISSRManager, UISSRManager>();
+        services.AddSingleton<IUISSRManagerMutationProxy>(p => p.GetRequiredService<IUISSRManager>());
+        
         _serviceProvider = services.BuildServiceProvider();
-
-
+        
         //init packets
         _packetRegistry.RegisterFromSource<AssembliesPacketSource>();
 
@@ -163,12 +191,12 @@ public class UniScanServer
         Log.Information("Closing socket...");
         if (Socket is ServerSocket serverSocket)
         {
-            await serverSocket.ClientManager.BroadcastAsync(new DisconnectPacket("Server shutting down..."));
+            await serverSocket.ClientManager.BroadcastAsync(new DisconnectPacket(new TranslatableTextComponent("UniScan:i18n/disconnect/server_shutting_down")));
         }
 
         await Socket.StopAsync();
 
-        Log.Information("Disconnecting scanners...");
-        await ScannerManager.DisconnectAllAsync();
+        Log.Information("Disconnecting devices...");
+        await DeviceManager.DisconnectAllAsync();
     }
 }

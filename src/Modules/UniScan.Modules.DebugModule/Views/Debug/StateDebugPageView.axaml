@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:debug="clr-namespace:UniScan.Modules.DebugModule.Views.Debug"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UniScan.Modules.DebugModule.Views.Debug.StateDebugPageView"
+             x:DataType="debug:StateDebugPageViewModel">
+    <ItemsControl ItemsSource="{Binding BindingsRegistry.Properties, FallbackValue='FUCK'}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate x:CompileBindings="False">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <TextBlock Text="{Binding Key, StringFormat={}{0}, TargetNullValue='null'}" FontWeight="Bold" />
+                    <TextBlock Text="->" />
+                    <TextBlock Text="{Binding Value.Value, StringFormat={}{0}, TargetNullValue='null'}" />
+                </StackPanel>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

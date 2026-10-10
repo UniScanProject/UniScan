@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -13,7 +13,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
       <ProjectReference Include="..\UniScan.Core\UniScan.Core.csproj" />
     </ItemGroup>
 
@@ -22,8 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Semver" Version="3.0.0" />
-      <PackageReference Include="Serilog" Version="4.4.0" />
+      <PackageReference Include="Semver" />
+      <PackageReference Include="Serilog" />
     </ItemGroup>
 
 </Project>

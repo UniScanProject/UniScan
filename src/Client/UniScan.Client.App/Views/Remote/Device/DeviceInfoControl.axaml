@@ -3,37 +3,40 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:device="clr-namespace:UniScan.Client.App.Views.Remote.Device"
-             xmlns:conversion="clr-namespace:UniScan.Client.App.UI.Conversion"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.Device.DeviceInfoControl"
              x:DataType="device:DeviceInfoControlViewModel"
              x:Name="Root">
     <Border Name="DeviceCard" MinHeight="200"
             Height="{Binding $self.Bounds.Width}" Background="{DynamicResource ButtonBackground}" CornerRadius="5"
-            BorderThickness="2" BorderBrush="{DynamicResource ButtonBorderBrush}">
-        <Grid RowDefinitions="Auto, *, Auto" RowSpacing="5">
+            BorderThickness="2" BorderBrush="{DynamicResource ButtonBorderBrush}" Padding="5">
+        <Grid RowDefinitions="Auto, *, Auto" RowSpacing="10">
             <TextBlock DockPanel.Dock="Top" Grid.Row="0" HorizontalAlignment="Center"
-                       Text="{Binding Device.DisplayName}" FontWeight="Bold" />
+                       Text="{Binding DeviceViewModel.Device.DisplayName}" FontWeight="Bold" FontSize="14" />
 
             <Border Grid.Row="1" BorderThickness="2" BorderBrush="{DynamicResource ButtonBorderBrushPointerOver}"
                     CornerRadius="5">
                 <Panel>
-                    <StackPanel Spacing="10" VerticalAlignment="Center" IsVisible="{Binding Device.Subscribed.Value}">
-                        <!-- TODO show mini view -->
-                        <Button Command="{Binding ShowDevicePage}"
-                                VerticalAlignment="Center" HorizontalAlignment="Center">
-                            Go to page
-                        </Button>
-                    </StackPanel>
+                    <Panel IsVisible="{Binding DeviceViewModel.Device.Connected}">
+                        <StackPanel Spacing="10" VerticalAlignment="Center" IsVisible="{Binding DeviceViewModel.Device.Subscribed.Value}">
+                            <!-- TODO show mini view -->
+                            <Button Command="{Binding ShowDevicePage}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                Go to page
+                            </Button>
+                        </StackPanel>
 
-                    <StackPanel Spacing="10" VerticalAlignment="Center" IsVisible="{Binding Device.Subscribed.Value, Converter={x:Static BoolConverters.Not}}">
-                        <TextBlock Text="Not subscribed" VerticalAlignment="Center"
-                                   HorizontalAlignment="Center" FontWeight="DemiBold" />
-                        <Button Command="{Binding SubscribeCommand}"
-                                VerticalAlignment="Center" HorizontalAlignment="Center">
-                            Subscribe
-                        </Button>
-                    </StackPanel>
+                        <StackPanel Spacing="10" VerticalAlignment="Center" IsVisible="{Binding DeviceViewModel.Device.Subscribed.Value, Converter={x:Static BoolConverters.Not}}">
+                            <TextBlock Text="Not subscribed" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold" />
+                            <Button Command="{Binding SubscribeCommand}"
+                                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                                Subscribe
+                            </Button>
+                        </StackPanel>
+                    </Panel>
+                    
+                    <Panel IsVisible="{Binding !DeviceViewModel.Device.Connected}">
+                        <TextBlock Text="Device not connected" Foreground="{DynamicResource TextControlForegroundDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Bold" />
+                    </Panel>
                 </Panel>
             </Border>
 
@@ -42,12 +45,12 @@
                     <StackPanel Orientation="Horizontal"
                                 IsVisible="{Binding $parent[Border].((device:DeviceInfoControlViewModel)DataContext)?.HasModelInfo}"
                                 Spacing="2">
-                        <TextBlock Text="{Binding Device.Specs?.Model}" />
-                        <TextBlock Text="{Binding Device.Specs?.Version}" FontSize="12"
+                        <TextBlock Text="{Binding DeviceViewModel.Device.Specs?.Model}" />
+                        <TextBlock Text="{Binding DeviceViewModel.Device.Specs?.Version}" FontSize="12"
                                    Foreground="{DynamicResource TextControlForegroundDisabled}" />
                     </StackPanel>
                     <TextBlock Foreground="{DynamicResource TextControlForegroundDisabled}" FontSize="12"
-                               Text="{Binding Device.Identifier}" />
+                               Text="{Binding DeviceViewModel.Device.Identifier}" />
                 </StackPanel>
             </Grid>
         </Grid>

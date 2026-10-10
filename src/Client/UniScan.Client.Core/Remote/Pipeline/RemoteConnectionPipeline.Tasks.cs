@@ -1,5 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using Shiki.Common.Identity;
+using Shiki.Internationalization.Component;
+using Shiki.ModuleManagement;
+using Shiki.TaskPipeline;
+using Shiki.TaskPipeline.Context;
+using UniScan.Client.Core.Module;
 using UniScan.Client.Core.Remote.Connection;
 using UniScan.Client.Core.Remote.Connection.Status;
 using UniScan.Client.Core.Remote.Device;
@@ -11,10 +17,10 @@ namespace UniScan.Client.Core.Remote.Pipeline;
 
 public partial class RemoteConnectionPipeline
 {
-    public async Task StartConnection(TaskContexts.ConnectionContext ctx, CancellationToken ct = default)
+    public async Task StartConnection(TaskContexts.ConnectionContext ctx, ITaskExecutionContext execCtx)
     {
         ctx.RemoteServerMutationProxy.SetConnectionStatus(new DefaultConnectionStatusContext(ConnectionState.Connecting));
-        ctx.Status.Value = $"Connecting to {ctx.RemoteServer.ConnectionMethod.ToDisplayString()}";
+        execCtx.Status.Value = $"Connecting to {ctx.RemoteServer.ConnectionMethod.ToDisplayString()}";
         
         await ctx.RemoteServer.Socket.StartAsync();
         if (!ctx.RemoteServer.Socket.Connected)
@@ -25,19 +31,19 @@ public partial class RemoteConnectionPipeline
         ctx.RemoteServer.Socket.Channel?.GetAttribute(ServerAttributes.ServerAttribute).Set(ctx.RemoteServer);
     }
     
-    public async Task Handshake(TaskContexts.NegotiationContext ctx, CancellationToken ct = default)
+    public async Task Handshake(TaskContexts.NegotiationContext ctx, ITaskExecutionContext execCtx)
     {
         ctx.RemoteServerMutationProxy.SetConnectionStatus(new DefaultConnectionStatusContext(ConnectionState.Handshaking));
-
-        ctx.Status.Value = $"Handshaking";
+        execCtx.Status.Value = "Handshaking";
         
         ClientSoftwareInfo? clientSoftware = ctx.ServiceProvider.GetService<ClientSoftwareInfo>();
         if (clientSoftware == null)
         {
             throw new NullReferenceException(nameof(clientSoftware));
         }
-        
-        var serverSoftware = await ctx.RemoteServer.Socket.SendRequestAsync(ClientSoftwareInfoPacket.CreateRequest(clientSoftware), ct);
+
+        var modules = ctx.ServiceProvider.GetRequiredService<ModuleStorage<IUniScanClientModule, UniScanClientModuleInitializationArgs>>();
+        var serverSoftware = await ctx.RemoteServer.Socket.SendRequestAsync(ClientSoftwareInfoPacket.CreateRequest(clientSoftware, modules.Modules.ToDictionary(kvp => kvp.Key, kvp => new ModuleInfo(kvp.Value.Id))), execCtx.CancellationToken);
         if (serverSoftware.HasValue)
         {
             ctx.RemoteServerMutationProxy.SetSoftwareInfo(serverSoftware.Value.Info);
@@ -45,19 +51,19 @@ public partial class RemoteConnectionPipeline
         }
         else
         {
-            ctx.RemoteServerMutationProxy.SetConnectionStatus(new KickedDisconnectedConnectionStatusContext("Server rejected handshake"));
+            ctx.RemoteServerMutationProxy.SetConnectionStatus(new KickedDisconnectedConnectionStatusContext(new TranslatableTextComponent("UniScan:client/i18n/disconnect_reason/handshake_rejected")));
             
             _logger.Error(serverSoftware.Error, "Server rejected handshake");
             throw new Exception("Server rejected handshake");
         }
     }
 
-    public async Task GetDeviceList(TaskContexts.RemoteContext ctx, CancellationToken ct = default)
+    public async Task GetDeviceList(TaskContexts.RemoteContext ctx, ITaskExecutionContext execCtx)
     {
         ctx.RemoteServerMutationProxy.SetConnectionStatus(new DefaultConnectionStatusContext(ConnectionState.Connected));
-        ctx.Status.Value = "Receiving devices";
+        execCtx.Status.Value = "Receiving devices";
         
-        var devices = await ctx.RemoteServer.Socket.SendRequestAsync(GetDeviceListPacket.CreateRequest(), ct);
+        var devices = await ctx.RemoteServer.Socket.SendRequestAsync(GetDeviceListPacket.CreateRequest(), execCtx.CancellationToken);
 
         if (devices.HasValue)
         {

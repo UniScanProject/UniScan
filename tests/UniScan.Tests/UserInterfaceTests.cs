@@ -4,7 +4,9 @@ using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Core.Extensions;
 using UniScan.UserInterface;
-using UniScan.UserInterface.Definitions;
+using UniScan.UserInterface.Nodes.Core.Node;
+using ContainerUIControl = UniScan.UserInterface.Nodes.Layout.Container.ContainerUIControl;
+using TextBlockUIControl = UniScan.UserInterface.Nodes.Text.TextBlockUIControl;
 
 namespace UniScan.Tests;
 

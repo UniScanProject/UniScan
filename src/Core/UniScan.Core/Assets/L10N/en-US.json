@@ -1,0 +1,24 @@
+{
+  "strings": {
+    "UniScan:i18n/disconnect/handshake_not_completed": "Client has not completed handshake.",
+    "UniScan:i18n/disconnect/handshake_already_completed": "Client has already completed software info handshake",
+    "UniScan:i18n/disconnect/mismatching_protocol_version": "Client protocol version '{0}' does not match expected '{1}'",
+    "UniScan:i18n/disconnect/client_disconnect": "Client initiated disconnect with reason '{0}'",
+    "UniScan:i18n/disconnect/client_exception_thrown": "Exception thrown on client",
+    "UniScan:i18n/disconnect/user_disconnect": "User initiated disconnect",
+    "UniScan:i18n/disconnect/decoder_initiated/packet_too_small": "Received packet is too small",
+    "UniScan:i18n/disconnect/decoder_initiated/identifier_string_length_too_small": "Malformed, not enough bytes present for identifier string of given length",
+    "UniScan:i18n/disconnect/decoder_initiated/invalid_identifier": "Received packet with invalid Identifier.",
+    "UniScan:i18n/disconnect/decoder_initiated/unrecognized_packet": "Received unrecognized packet.",
+    "UniScan:i18n/disconnect/decoder_initiated/invalid_packet_data": "Received invalid packet.",
+    "UniScan:i18n/disconnect/decoder_initiated/unregistered_packet_deserializer": "Received unregistered packet",
+    "UniScan:i18n/disconnect/decoder_initiated/packet_deserialization_fail": "Received invalid packet",
+    "UniScan:i18n/disconnect/decoder_initiated/generic": "Unknown error",
+    "UniScan:i18n/disconnect/server_shutting_down": "Server shutting down...",
+
+    "UniScan:i18n/device/disconnected_inactive": "Device has been unplugged or is otherwise inactive.",
+    
+    "UniScan:i18n/ssr/property/volume": "Volume: {0}",
+    "UniScan:i18n/ssr/property/squelch": "Squelch: {0}"
+  }
+}

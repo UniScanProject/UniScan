@@ -2,6 +2,7 @@ using MessagePack;
 using Shiki.Common.Identity;
 using UniScan.Network.Registry;
 using UniScan.UserInterface;
+using UniScan.UserInterface.Nodes.Core.Node;
 
 namespace UniScan.Network.Protocol.Packets.Clientbound.SSR;
 

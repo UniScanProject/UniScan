@@ -12,25 +12,25 @@ namespace UniScan.Server.Core.Module.Modules.Internal.Handler;
 /// <summary>
 /// Handles incoming GetDeviceList, sent by clients to retrieve the device list
 /// </summary>
-/// <param name="scannerHostManager">The host manager</param>
-public class GetDeviceListPacketHandler(ScannerHostManager scannerHostManager) : SimpleChannelInboundHandler<GetDeviceListPacket>
+/// <param name="deviceHostManager">The host manager</param>
+public class GetDeviceListPacketHandler(DeviceHostManager deviceHostManager) : SimpleChannelInboundHandler<GetDeviceListPacket>
 {
-    private readonly ScannerHostManager _scannerHostManager = scannerHostManager;
+    private readonly DeviceHostManager _deviceHostManager = deviceHostManager;
 
     protected override void ChannelRead0(IChannelHandlerContext ctx, GetDeviceListPacket msg)
     {
         if (msg.RequestId == null)
             return;
 
-        var devices = _scannerHostManager.Scanners.ToDictionary(i => i.Key, h =>
+        var devices = _deviceHostManager.Devices.ToDictionary(i => i.Key, h =>
         {
             DeviceSpecifications? info = null;
-            if (h.Value.Scanner.ScannerInfo != null)
+            if (h.Value.Device.DeviceInfo != null)
             {
-                info = new DeviceSpecifications(h.Value.Scanner.ScannerInfo.Model, h.Value.Scanner.ScannerInfo.Version);
+                info = new DeviceSpecifications(h.Value.Device.DeviceInfo.Model, h.Value.Device.DeviceInfo.Version);
             }
 
-            return new DeviceDto(h.Key, h.Value.DisplayName, h.Value.Scanner.Active, info);
+            return new DeviceDto(h.Key, h.Value.DisplayName, h.Value.Device.Active.Value, info);
         });
         ctx.WriteAndFlushAsync(new DeviceListPacket(devices, msg.RequestId));
     }

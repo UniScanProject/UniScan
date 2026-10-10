@@ -1,24 +1,20 @@
 using System;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
 using Serilog;
-using UniScan.Client.App.UI.ServersideRendering;
+using Shiki.Common.Identity;
+using Shiki.Internationalization.Component;
+using UniScan.Client.App.Views.Global.Dialog;
 using UniScan.Client.App.Views.ViewModel;
-using UniScan.Client.Core.Remote;
-using UniScan.Client.Core.Remote.Device;
-using UniScan.Network.Data;
-using UniScan.Network.Protocol.Packets.Bidirectional.Status;
-using UniScan.Network.Protocol.Packets.Serverbound.Subscription;
 
 namespace UniScan.Client.App.Views.Remote.Device;
 
 public partial class DeviceInfoControlViewModel : ViewModelBase, IDisposable
 {
-    public RemoteDevice Device { get; }
+    public DeviceViewModel DeviceViewModel { get; }
     
-    public bool HasModelInfo => Device.Specs != null;
+    public bool HasModelInfo => DeviceViewModel.Device.Specs != null;
 
     private readonly CompositeDisposable _subscriptions = new();
     
@@ -26,20 +22,20 @@ public partial class DeviceInfoControlViewModel : ViewModelBase, IDisposable
 
     private readonly IRemoteRootPageDeviceNavigatorProxy _navigator;
     
-    public DeviceInfoControlViewModel(RemoteDevice device, IRemoteRootPageDeviceNavigatorProxy navigator)
+    public DeviceInfoControlViewModel(DeviceViewModel deviceViewModel, IRemoteRootPageDeviceNavigatorProxy navigator)
     {
-        Device = device;
+        DeviceViewModel = deviceViewModel;
         _navigator = navigator;
 
-        Device.Subscribed.AsObservable().Skip(1).Subscribe(b =>
+        DeviceViewModel.Device.Subscribed.AsObservable().Skip(1).Subscribe(b =>
         {
             if (b)
             {
-                _logger.Information("Now subscribed to device '{Identifier}'", device.Identifier);
+                _logger.Information("Now subscribed to device '{Identifier}'", deviceViewModel.Device.Identifier);
             }
             else
             {
-                _logger.Information("No longer subscribed to device '{Identifier}'", device.Identifier);
+                _logger.Information("No longer subscribed to device '{Identifier}'", deviceViewModel.Device.Identifier);
             }
         }).AddTo(_subscriptions);
     }
@@ -47,13 +43,21 @@ public partial class DeviceInfoControlViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     public async Task OnSubscribe()
     {
-        await Device.Subscribe();
+        var res = await DeviceViewModel.Device.Subscribe();
+        if (!res.IsSuccessful)
+        {
+            object? result = await DialogHostAvalonia.DialogHost.Show(new DialogViewModel()
+            {
+                TitleText = new TranslatableTextComponent(Identifier.CreateInstance("UniScan:client/i18n/errors/device/subscribe_failed"), DeviceViewModel.Device.DisplayName ?? DeviceViewModel.Device.Identifier),
+                ContentText = new AbsoluteTextComponent(res.Error!.ToString()),
+            }, "MainDialogHost");
+        }
     }
 
     [RelayCommand]
     public async Task ShowDevicePage()
     {
-        _navigator.Navigate(Device);
+        _navigator.Navigate(DeviceViewModel.Device);
     }
 
     public void Dispose()

@@ -2,6 +2,8 @@ using DotNetty.Common.Utilities;
 using DotNetty.Transport.Channels;
 using Serilog;
 using Serilog.Core;
+using Shiki.Common.Identity;
+using Shiki.Internationalization.Component;
 using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 using UniScan.Network.Protocol.PayloadPart;
 using UniScan.Network.Server;
@@ -23,7 +25,7 @@ public class AcceptedClientPacketFilter : ChannelHandlerAdapter
                 _logger.Error("Client '{RemoteAddress}' sent packet of type '{Type}' without completing handshake.", context.Channel.RemoteAddress, message.GetType().FullName);
                 ReferenceCountUtil.Release(message);
                 
-                context.WriteAndFlushAsync(new DisconnectPacket("Client has not completed handshake.")).ContinueWith(_ => context.CloseAsync());
+                context.WriteAndFlushAsync(new TranslatableTextComponent("UniScan:i18n/disconnect/handshake_not_completed")).ContinueWith(_ => context.CloseAsync());
                 return;
             }
         }

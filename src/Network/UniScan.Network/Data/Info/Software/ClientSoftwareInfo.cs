@@ -32,10 +32,11 @@ public record ClientSoftwareInfo(
     [property: Key(4)] string? Url
 ) : IClientSoftwareInfo
 {
+    /// <inheritdoc/>
     public override string ToString()
     {
         StringBuilder sb = new();
-        sb.Append($"{DisplayName} v{AppInfo.Version} ({AppInfo.Identifier} // {PlatformInfo.Identifier} v{PlatformInfo.Version}, PVN: {ProtocolVersion})");
+        sb.Append($"{DisplayName} v{AppInfo.Version} ({AppInfo.Identifier} | {PlatformInfo.Identifier} v{PlatformInfo.Version}, PVN: {ProtocolVersion})");
 
         if (Url != null)
         {
@@ -45,3 +46,9 @@ public record ClientSoftwareInfo(
         return sb.ToString();
     }
 }
+
+[MessagePackObject]
+public record ModuleInfo(
+    [property: Key(0)] Identifier Identifier
+    // [property: Key(1), MessagePackFormatter(typeof(SemVersionFormatter))] SemVersion Version
+);

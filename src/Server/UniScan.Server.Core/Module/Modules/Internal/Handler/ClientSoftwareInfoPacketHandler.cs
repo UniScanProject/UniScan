@@ -1,7 +1,10 @@
 using DotNetty.Transport.Channels;
 using Serilog;
 using Shiki.Common.Result;
+using Shiki.Internationalization.Component;
+using Shiki.ModuleManagement;
 using UniScan.Network;
+using UniScan.Network.Data.Info.Software;
 using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 using UniScan.Network.Protocol.Packets.Clientbound.Remote;
 using UniScan.Network.Protocol.Packets.Serverbound.Client;
@@ -9,7 +12,7 @@ using UniScan.Network.Server;
 
 namespace UniScan.Server.Core.Module.Modules.Internal.Handler;
 
-public class ClientSoftwareInfoPacketHandler : SimpleChannelInboundHandler<ClientSoftwareInfoPacket>
+public class ClientSoftwareInfoPacketHandler(ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> moduleStorage) : SimpleChannelInboundHandler<ClientSoftwareInfoPacket>
 {
     private ILogger _logger = Log.ForContext<ClientSoftwareInfoPacketHandler>();
     
@@ -24,7 +27,7 @@ public class ClientSoftwareInfoPacketHandler : SimpleChannelInboundHandler<Clien
         {
             _logger.Information("Disconnecting client {ChannelIp} as they sent client info after already completing handshake.", ctx.Channel.RemoteAddress);
 
-            ctx.WriteAndFlushAsync(new DisconnectPacket("Client has already completed software info handshake")).ContinueWith(_ => ctx.CloseAsync());
+            ctx.WriteAndFlushAsync(new DisconnectPacket(new TranslatableTextComponent("UniScan:i18n/disconnect/handshake_already_completed"))).ContinueWith(_ => ctx.CloseAsync());
             return;
         }
 
@@ -32,13 +35,13 @@ public class ClientSoftwareInfoPacketHandler : SimpleChannelInboundHandler<Clien
         {
             _logger.Information("Disconnecting client {ChannelIp} due to protocol version mismatch. (expected: {ServerProtocolVer}, got: {ProtocolVer})", ctx.Channel.RemoteAddress, Constants.ProtocolVersion, msg.Info.ProtocolVersion);
 
-            ctx.WriteAndFlushAsync(new DisconnectPacket($"Client protocol version '{msg.Info.ProtocolVersion}' does not match expected '{Constants.ProtocolVersion}'")).ContinueWith(_ => ctx.CloseAsync());
+            ctx.WriteAndFlushAsync(new DisconnectPacket(new TranslatableTextComponent("UniScan:i18n/disconnect/mismatching_protocol_version", msg.Info.ProtocolVersion, Constants.ProtocolVersion))).ContinueWith(_ => ctx.CloseAsync());
             return;
         }
         
         ctx.Channel.GetAttribute(ClientAttributes.SoftwareInfoAttribute).Set(msg.Info);
 
-        ctx.WriteAndFlushAsync(new ServerSoftwareInfoPacket(UniScanServer.SoftwareInfo, msg.RequestId));
+        ctx.WriteAndFlushAsync(new ServerSoftwareInfoPacket(UniScanServer.SoftwareInfo, moduleStorage.Modules.ToDictionary(m => m.Key, m => new ModuleInfo(m.Value.Id)), msg.RequestId));
         ctx.WriteAndFlushAsync(new RemoteInfoPacket(UniScanServer.RemoteInfo));
     }
 }

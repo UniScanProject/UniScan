@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -11,12 +11,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\external\Shiki\Extensions\Shiki.Extensions.MessagePack\Shiki.Extensions.MessagePack.csproj" />
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Extensions\Shiki.Extensions.MessagePack\Shiki.Extensions.MessagePack.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Internationalization\Shiki.Internationalization.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="MessagePack" Version="3.1.8" />
+      <PackageReference Include="MessagePack" />
+      <PackageReference Include="R3" />
     </ItemGroup>
 
 </Project>

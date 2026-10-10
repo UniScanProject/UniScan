@@ -4,16 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              xmlns:remote="clr-namespace:UniScan.Client.App.Views.Remote"
-             xmlns:remote1="clr-namespace:UniScan.Client.Core.Remote;assembly=UniScan.Client.Core"
              xmlns:connection="clr-namespace:UniScan.Client.Core.Remote.Connection;assembly=UniScan.Client.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.SidebarRemoteItemControl"
              x:DataType="remote:RemoteViewModel">
     <Grid ColumnDefinitions="*, Auto" HorizontalAlignment="Stretch">
-        <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Command="{Binding SwitchToPageCommand}">
-            <StackPanel Orientation="Horizontal" Spacing="5">
-                <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl}" Width="16" Height="16" IsVisible="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
-                <TextBlock VerticalAlignment="Center" Text="{Binding Remote.DisplayName.Value}" />
+        <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Command="{Binding SwitchToPageCommand}" ToolTip.Tip="{Binding Remote.DisplayName.Value}">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <!-- todo see if we can nuke sizing stuffs once we start styling -->
+                <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Remote.RemoteInfo.Value.Branding.LogoUrl}" Width="24" Height="24" IsVisible="{Binding Remote.RemoteInfo.Value.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
+                <TextBlock VerticalAlignment="Center" FontSize="16" Text="{Binding Remote.DisplayName.Value}" />
             </StackPanel>
         </Button>
         
@@ -26,8 +26,16 @@
                 </MultiBinding>
             </Border.IsVisible>
             
-            <Button Command="{Binding DisconnectCommand}">
-                <TextBlock>-</TextBlock>
+            <Button AutomationProperties.Name="Disconnect" ToolTip.Tip="Disconnect/Log out" Command="{Binding DisconnectCommand}" VerticalAlignment="Stretch" Width="{Binding $self.Bounds.Height}">
+                <TextBlock FontFamily="{StaticResource MaterialSymbolsRounded}"
+                           Text="logout" 
+                           FontSize="24"
+                           Width="24"
+                           Height="24"
+                           Margin="0 0 0 0"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center" />
             </Button>
         </Border>
     </Grid>

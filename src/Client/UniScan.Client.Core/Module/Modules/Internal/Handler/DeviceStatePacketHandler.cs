@@ -10,19 +10,17 @@ using UniScan.Network.Protocol.Packets.Clientbound.Device;
 
 namespace UniScan.Client.Core.Module.Modules.Internal.Handler;
 
-public class DeviceStatePacketHandler : SimpleChannelInboundHandler<DeviceStatePacket>
+public class DeviceStatePacketHandler : SimpleChannelInboundHandler<StatePacket>
 {
-    protected override void ChannelRead0(IChannelHandlerContext ctx, DeviceStatePacket msg)
+    protected override void ChannelRead0(IChannelHandlerContext ctx, StatePacket msg)
     {
         RemoteServer serv = ctx.Channel.GetAttribute(ServerAttributes.ServerAttribute).Get();
         if (!serv.Devices.TryGetValue(msg.DeviceIdentifier, out RemoteDevice? device))
             return; //todo disconnect
 
-        device.States = new ObservableDictionary<Identifier, IDeviceStateNode>(msg.States);
-        Log.Information("Received states: ");
-        foreach (var state in device.States)
+        foreach (var state in msg.States)
         {
-            Log.Information("[{Key}: {Value}]", state.Key, state.Value.ToString());
+            device.States[state.Key] = state.Value;
         }
     }
 }

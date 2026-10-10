@@ -6,8 +6,8 @@ public class PayloadDecodeException : IOException
 
     public PayloadDecodeException(Type type, string msg) : base($"Failed to decode in {type.FullName}: {msg}")
     {
-        if (!typeof(IScannerPayload).IsAssignableFrom(type))
-            throw new ArgumentException($"{type.FullName} is not a ScannerPayload");
+        if (!typeof(IDevicePayload).IsAssignableFrom(type))
+            throw new ArgumentException($"{type.FullName} is not a DevicePayload");
 
         this.DecoderType = type;
     }

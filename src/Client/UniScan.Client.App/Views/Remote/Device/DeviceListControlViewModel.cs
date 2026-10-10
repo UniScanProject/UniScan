@@ -8,7 +8,7 @@ namespace UniScan.Client.App.Views.Remote.Device;
 
 public class DeviceListControlViewModel(RemoteViewModel server, IRemoteRootPageDeviceNavigatorProxy navigator) : ViewModelBase, IDisposable
 {
-    public NotifyCollectionChangedSynchronizedViewList<DeviceInfoControlViewModel> DevicesView { get; } = server.Remote.Devices.CreateView(kvp => new DeviceInfoControlViewModel(kvp.Value, navigator)).ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
+    public NotifyCollectionChangedSynchronizedViewList<DeviceInfoControlViewModel> DevicesView { get; } = server.DevicesView.CreateView(value => new DeviceInfoControlViewModel(value, navigator)).ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
 
     public void Dispose()
     {

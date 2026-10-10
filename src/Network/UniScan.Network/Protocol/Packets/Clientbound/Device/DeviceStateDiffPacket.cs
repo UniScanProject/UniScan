@@ -11,6 +11,6 @@ namespace UniScan.Network.Protocol.Packets.Clientbound.Device;
 [RegistryPacket("UniScan", "packet", "clientbound", "device", "state_diff")]
 [MessagePackObject]
 public record DeviceStateDiffPacket(
-    [property: Key(0)] Dictionary<Identifier, IDeviceStateNode> States,
+    [property: Key(0)] Dictionary<Identifier, IStateNode> States,
     [property: Key(1)] Slug<SnakeSlugFormatter> DeviceIdentifier
 ) : IClientboundPacket, ISelectedDevicePayloadPart;

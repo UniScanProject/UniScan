@@ -8,13 +8,19 @@ namespace UniScan.Client.App.Core.Helpers;
 public class SynchronizedViewMirror<T, TNew> : IDisposable
 {
     private readonly ObservableList<TNew> _output = [];
+    
+    
     public IReadOnlyObservableList<TNew> Output => _output;
+    public INotifyCollectionChangedSynchronizedViewList<TNew> OutputView { get; }
 
     private readonly ISynchronizedView<T, TNew> _view;
     
     public SynchronizedViewMirror(ISynchronizedView<T, TNew> view)
     {
         _view = view;
+
+        OutputView = Output.CreateView(x => x)
+                            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
         
         Reset();
         Attach();
@@ -43,33 +49,78 @@ public class SynchronizedViewMirror<T, TNew> : IDisposable
             case NotifyCollectionChangedAction.Add:
                 if (args.IsSingleItem)
                 {
-                    _output.Add(args.NewItem.View);
+                    //we lost the plot man
+                    if (args.NewStartingIndex != -1)
+                    {
+                        _output.Insert(args.NewStartingIndex, args.NewItem.View);
+                    }
+                    else
+                    {
+                        _output.Add(args.NewItem.View);
+                    }
+
                     break;
                 }
-                
-                _output.AddRange(args.NewViews);
+
+                if (args.NewStartingIndex != -1)
+                {
+                    _output.InsertRange(args.NewStartingIndex, args.NewViews);
+                }
+                else
+                {
+                    _output.AddRange(args.NewViews);
+                }
+
                 break;
             case NotifyCollectionChangedAction.Remove:
                 if (args.IsSingleItem)
                 {
-                    _output.Remove(args.OldItem.View);
+                    if (args.OldStartingIndex != -1)
+                    {
+                        _output.RemoveAt(args.OldStartingIndex);
+                    }
+                    else
+                    {
+                        _output.Remove(args.OldItem.View);
+                    }
+
                     break;
                 }
-                
-                foreach (TNew v in args.OldViews)
+
+                if (args.OldStartingIndex != -1)
                 {
-                    _output.Remove(v);
+                    _output.RemoveRange(args.OldStartingIndex, args.OldViews.Length);
+                }
+                else
+                {
+                    foreach (TNew v in args.OldViews)
+                    {
+                        _output.Remove(v);
+                    }
                 }
 
                 break;
             case NotifyCollectionChangedAction.Replace:
-                _output[args.NewStartingIndex] = args.NewItem.View;
+                if (args.IsSingleItem)
+                {
+                    _output[args.NewStartingIndex] = args.NewItem.View;
+                    break;
+                }
+                
+                //TODO
+
                 break;
             case NotifyCollectionChangedAction.Move:
+                if (args.NewStartingIndex != -1 || args.OldStartingIndex != -1)
+                {
+                    Reset();//just rebuild the whole thing because you're fucked if this happens somehow
+                    return;
+                }
+                
                 _output.Move(args.OldStartingIndex, args.NewStartingIndex);
                 break;
             case NotifyCollectionChangedAction.Reset:
-                _output.Clear();
+                Reset();
                 break;
             default:
                 break;
@@ -80,5 +131,6 @@ public class SynchronizedViewMirror<T, TNew> : IDisposable
     {
         Detach();
         _output.Clear();
+        OutputView.Dispose();
     }
 }

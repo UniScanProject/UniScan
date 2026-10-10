@@ -5,6 +5,8 @@ namespace UniScan.Network.Registry.Source.Sources;
 
 public class AssembliesPacketSource : IPacketSource
 {
+    //TODO use TypeRegistry even though this really only is initialized once
+    
     /// <inheritdoc/>
     public IReadOnlyDictionary<Type, RegistryPacketAttribute> GetPacketTypes()
     {

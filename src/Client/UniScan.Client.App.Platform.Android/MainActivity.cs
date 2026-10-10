@@ -1,15 +1,7 @@
-﻿using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Views;
-using Avalonia;
 using Avalonia.Android;
-using Microsoft.Extensions.DependencyInjection;
-using UniScan.Platform;
-using UniScan.Platform.Implementations.Native;
-using UniScan.Platform.Implementations.Native.Filesystem;
-
 
 namespace UniScan.Client.App.Platform.Android;
 

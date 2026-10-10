@@ -14,6 +14,7 @@ namespace UniScan.Client.App.UI;
                              Url = "https://docs.avaloniaui.net/docs/concepts/view-locator")]
 public class ViewLocator : IDataTemplate
 {
+    //TODO in the future don't we want to use some registry for this or similar for AOT compatibility?
     public static ViewLocator Instance { get; } = new();
     
     public Control? Build(object? param)

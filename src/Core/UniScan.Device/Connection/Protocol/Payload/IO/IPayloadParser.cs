@@ -4,7 +4,7 @@ using UniScan.Device.Connection.Protocol.Payload.IO.Exception;
 
 namespace UniScan.Device.Connection.Protocol.Payload.IO;
 
-public interface IPayloadParser<TSelf> where TSelf : IScannerPayload
+public interface IPayloadParser<TSelf> where TSelf : IDevicePayload
 {
     public delegate ErrorCodeResult<TSelf, PayloadParseError> ParseDelegate(
         ReadOnlySequence<byte> buffer, out SequencePosition consumed);

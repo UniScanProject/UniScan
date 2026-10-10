@@ -9,4 +9,13 @@
         <FileVersion>0.0.1</FileVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Client\UniScan.Client.App\UniScan.Client.App.csproj" />
+      <ProjectReference Include="..\..\Client\UniScan.Client.Core\UniScan.Client.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\ConnectionMethod\NoOpConnectionMethodFactoryView.axaml" />
+    </ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -15,14 +15,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Semver" Version="3.0.0" />
-      <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-      <PackageReference Include="System.IO.Ports" Version="11.0.0-preview.2.26159.112" />
+      <PackageReference Include="ObservableCollections.R3" />
+      <PackageReference Include="Semver" />
+      <PackageReference Include="Serilog.Sinks.File" />
+      <PackageReference Include="System.IO.Ports" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.ModuleManagement\Shiki.ModuleManagement.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\FileSystem\Shiki.FileSystem.Implementations.Assembly\Shiki.FileSystem.Implementations.Assembly.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\ModuleManagement\Shiki.ModuleManagement\Shiki.ModuleManagement.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network.Server\UniScan.Network.Server.csproj" />
@@ -30,8 +32,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.8" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     </ItemGroup>
 
     <ItemGroup>

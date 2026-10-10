@@ -1,31 +1,33 @@
+using System;
 using Shiki.Common.Identity;
 using UniScan.Client.App.UI.ServersideRendering;
 using UniScan.Client.App.Views.SSR;
 using UniScan.Client.App.Views.ViewModel;
 using UniScan.Client.Core.Remote.Device;
+using UniScan.Client.Core.SSR;
+using UniScan.Network.Client.Serialization;
 
 namespace UniScan.Client.App.Views.Remote.Device;
 
 public class DevicePageViewModel : ViewModelBase
 {
-    public RemoteDevice Device { get; }
+    public DeviceViewModel DeviceViewModel { get; }
     
-    public IUISlotControlViewModel SSRViewModel { get; }
+    public SSRSlotContext SSRViewModel { get; }
 
-    public DevicePageViewModel(RemoteDevice device, IUISlotRegistry registry)
+    public DevicePageViewModel(DeviceViewModel deviceViewModel, IUISlotRegistry registry)
     {
-        Device = device;
-
-        Identifier id = new("UniScan", "ssr", "slot", "device", Device.Identifier);
-        if (registry.TryGet(id, out IUISlotControlViewModel? vm))//stupid hack because for some reason it keeps creating new SSRViewModel or something weird
+        DeviceViewModel = deviceViewModel;
+        
+        Identifier id = new("UniScan", "ssr", "slot", "device", DeviceViewModel.Device.Identifier);
+        if (registry.TryGet(id, out SSRSlotContext? vm))//stupid hack because for some reason it keeps creating new SSRViewModel or something weird
         {
             SSRViewModel = vm;
         }
         else
         {
-            SSRViewModel = new UISlotControlViewModel(id);
+            SSRViewModel = new SSRSlotContext(id);
             registry.Add(SSRViewModel);
         }
-        
     }
 }

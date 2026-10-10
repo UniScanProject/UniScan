@@ -10,4 +10,4 @@ public abstract class StatePropertyAttribute(string id, Type type) : System.Attr
 
 [AttributeUsage(AttributeTargets.Property)]
 public sealed class StatePropertyAttribute<T>(string id) : StatePropertyAttribute(id, typeof(T))
-where T : IDeviceStateNode;
+where T : IStateNode;

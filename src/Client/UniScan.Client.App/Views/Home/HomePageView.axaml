@@ -20,7 +20,7 @@
                     <Expander IsExpanded="True" HorizontalAlignment="Stretch" Margin="5" CornerRadius="5">
                         <Expander.Header>
                             <StackPanel Orientation="Horizontal" Spacing="10">
-                                <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl}" Width="32" Height="32" IsVisible="{Binding Remote.RemoteInfo.CurrentValue?.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
+                                <Image VerticalAlignment="Center" asyncImageLoader:ImageLoader.Source="{Binding Remote.RemoteInfo.Value.Branding.LogoUrl}" Width="32" Height="32" IsVisible="{Binding Remote.RemoteInfo.Value.Branding.LogoUrl, Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue=False, TargetNullValue=False}" />
                                 <TextBlock VerticalAlignment="Center" Text="{Binding Remote.DisplayName.Value}" />
                             </StackPanel>
                         </Expander.Header>

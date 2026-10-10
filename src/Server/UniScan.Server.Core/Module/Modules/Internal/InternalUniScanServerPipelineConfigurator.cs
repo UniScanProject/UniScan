@@ -24,6 +24,8 @@ public class InternalUniScanServerPipelineConfigurator : IPipelineConfigurator
 
     public void ConfigureHandlers(IChannelPipeline pipeline)
     {
+        pipeline.AddLast(nameof(UIContextUnsubscribePacketHandler), _serviceProvider.GetRequiredService<UIContextUnsubscribePacketHandler>());
+        pipeline.AddLast(nameof(UIContextSubscribePacketHandler), _serviceProvider.GetRequiredService<UIContextSubscribePacketHandler>());
         pipeline.AddLast(nameof(ClientSoftwareInfoPacketHandler), _serviceProvider.GetRequiredService<ClientSoftwareInfoPacketHandler>());
         pipeline.AddLast(nameof(SubscribePacketHandler), _serviceProvider.GetRequiredService<SubscribePacketHandler>());
         pipeline.AddLast(nameof(GetDeviceListPacketHandler), _serviceProvider.GetRequiredService<GetDeviceListPacketHandler>());

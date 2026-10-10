@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -24,17 +24,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Humanizer.Core" Version="3.0.10" GeneratePathProperty="true" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="5.6.0">
+        <PackageReference Include="Humanizer.Core" GeneratePathProperty="true" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.6.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
-            <ProjectReference Include="..\..\..\external\Shiki\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" />
-            <ProjectReference Include="..\..\..\external\Shiki\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" GeneratePathProperty="true" PrivateAssets="all" />
+            <ProjectReference Include="..\..\..\external\Shiki\src\CodeGenerator\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" />
+            <ProjectReference Include="..\..\..\external\Shiki\src\CodeGenerator\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" GeneratePathProperty="true" PrivateAssets="all" />
     </ItemGroup>
 
     <!-- https://github.com/dotnet/roslyn/issues/52017 -->
@@ -43,7 +43,7 @@
     </PropertyGroup>
 
     <Target Name="GetDependencyTargetPaths">
-        <MSBuild Projects="..\..\..\external\Shiki\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" Targets="GetTargetPath">
+        <MSBuild Projects="..\..\..\external\Shiki\src\CodeGenerator\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" Targets="GetTargetPath">
             <Output TaskParameter="TargetOutputs" ItemName="ShikiOutput" />
         </MSBuild>
         

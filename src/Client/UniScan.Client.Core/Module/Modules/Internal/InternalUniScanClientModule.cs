@@ -16,10 +16,15 @@ public class InternalUniScanClientModule : IUniScanClientModule
 
     public void ConfigureDi(IServiceCollection services)
     {
+        services.AddTransient<SetUISlotPacketHandler>();
+        services.AddTransient<SetUINodePacketHandler>();
+        
         services.AddTransient<DisconnectPacketHandler>();
         services.AddTransient<RemoteInfoPacketHandler>();
         services.AddTransient<DeviceStatePacketHandler>();
         
         services.AddSingleton<IPipelineConfigurator, InternalUniScanClientPipelineConfigurator>();
     }
+
+    public void Dispose() { }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
@@ -10,6 +11,8 @@ using R3;
 using Serilog;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
+using Shiki.Internationalization;
+using Shiki.Internationalization.Component;
 using UniScan.Client.App.UI.ServersideRendering;
 using UniScan.Client.App.Views.Global;
 using UniScan.Client.App.Views.Remote.Connection;
@@ -32,9 +35,12 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
     private RemotePageViewModel? _mainPage;
     
     private readonly CompositeDisposable _disposables = new();
+
+    private readonly TextComponentResolverService _textComponentResolver;
     
-    public RemoteRootPageViewModel(RemoteViewModel remoteViewModel) : base(new NotConnectedRemotePageViewModel(remoteViewModel), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(remoteViewModel.Remote.Id.ToString())))
+    public RemoteRootPageViewModel(RemoteViewModel remoteViewModel, TextComponentResolverService resolver) : base(new NotConnectedRemotePageViewModel(remoteViewModel), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(remoteViewModel.Remote.Id.ToString())))
     {
+        _textComponentResolver = resolver;
         _notConnectedPage = (NotConnectedRemotePageViewModel)CurrentSubpage;
         
         RemoteViewModel = remoteViewModel;
@@ -56,10 +62,10 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
 
     void IRemoteRootPageDeviceNavigatorProxy.Navigate(RemoteDevice device)
     {
-        DeviceRootPageViewModel? p = RemoteViewModel.DevicePages.FirstOrDefault(page => page.Device.Identifier == device.Identifier);
+        DeviceViewModel? p = RemoteViewModel.DevicesView.FirstOrDefault(page => page.Device.Identifier == device.Identifier);
         if (p != null)
         {
-            Dispatcher.UIThread.Post(() => { CurrentSubpage = p; });
+            Dispatcher.UIThread.Post(() => { CurrentSubpage = p.RootPageViewModel; });
         }
     }
 
@@ -75,20 +81,27 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
                 return;
             }
 
-            string reason = ctx switch
+            ITextComponent? reason = ctx switch
             {
                 KickedDisconnectedConnectionStatusContext c     => c.Reason,
-                UnexpectedDisconnectedConnectionStatusContext c => c.Exception?.Message,
+                UnexpectedDisconnectedConnectionStatusContext c => new TranslatableTextComponent("UniScan:client/i18n/disconnect_reason/exception_thrown", c.Exception?.Message),
                 _                                               => null
-            } ?? "Unknown disconnect reason";
+            } ?? new TranslatableTextComponent("UniScan:client/i18n/disconnect_reason/no_reason");
 
             CurrentSubpage = new DisconnectedRemotePageViewModel(reason, RemoteViewModel)
             {
                 OkClicked = new RelayCommand(() => { CurrentSubpage = _notConnectedPage; })
             };
             
-
             TearDown();
+        });
+    }
+
+    private void OnConnecting(IConnectionStatusContext ctx)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            CurrentSubpage = new LoadingViewModel("Connecting...", RemoteViewModel.Pipeline.PipelineBuilder.ExecutionState);
         });
     }
     
@@ -106,7 +119,7 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
         switch (ctx.State)
         {
             case ConnectionState.Connecting:
-                CurrentSubpage = new LoadingViewModel("Connecting...", RemoteViewModel.Pipeline.Pipeline);
+                OnConnecting(ctx);
                 break;
             case ConnectionState.Connected:
                 OnConnected(ctx);

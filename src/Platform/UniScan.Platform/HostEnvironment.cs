@@ -1,9 +1,4 @@
-using UniScan.Platform.Filesystem;
+using Shiki.FileSystem.Abstractions;
+using Shiki.FileSystem.Abstractions;
 
 namespace UniScan.Platform;
-
-public record HostEnvironment(
-    IPlatformStandardPaths StandardPaths,
-    IPlatformSerilogInitializer SerilogInitializer,
-    IPlatformDirectoryManager DirectoryManager,
-    IPlatformFileManager FileManager);

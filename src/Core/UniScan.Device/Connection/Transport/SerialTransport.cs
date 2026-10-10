@@ -1,11 +1,12 @@
 using System.Buffers;
 using System.IO.Ports;
 using System.Text.Json.Serialization;
+using R3;
 using Shiki.Common.Serialization.Polymorphism;
 
 namespace UniScan.Device.Connection.Transport;
 
-[PolymorphicSerializable<ITransport>("Serial")]
+[PolymorphicSerializable<ITransport<ReadOnlyMemory<byte>>>("Serial")]
 public class SerialTransport : ITransport<ReadOnlyMemory<byte>>
 {
     [JsonPropertyName("port")]
@@ -21,7 +22,9 @@ public class SerialTransport : ITransport<ReadOnlyMemory<byte>>
     [JsonIgnore] private CancellationTokenSource? _portCts;
 
     [JsonIgnore]
-    public bool IsOpen => _port is { IsOpen: true };
+    public IReadOnlyBindableReactiveProperty<bool> IsOpen => _isOpen;
+
+    private readonly BindableReactiveProperty<bool> _isOpen = new(false);
 
     public SerialTransport(string port)
     {
@@ -30,7 +33,7 @@ public class SerialTransport : ITransport<ReadOnlyMemory<byte>>
 
     public Task OpenAsync(CancellationToken ct = default)
     {
-        if (IsOpen) return Task.CompletedTask;
+        if (IsOpen.Value) return Task.CompletedTask;
         
         _port = new SerialPort(Port, BaudRate)
         {
@@ -41,7 +44,7 @@ public class SerialTransport : ITransport<ReadOnlyMemory<byte>>
         };
         
         _port.Open();
-        ConnectionStateChanged?.Invoke(this, true);
+        _isOpen.Value = true;
         
         _portCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         _ = RunReadAsync(_portCts.Token);
@@ -81,28 +84,28 @@ public class SerialTransport : ITransport<ReadOnlyMemory<byte>>
         {
             ArrayPool<byte>.Shared.Return(buffer);
 
-            if (IsOpen)
+            if (IsOpen.Value)
                 _ = CloseAsync();
         }
     }
     
     public Task CloseAsync()
     {
-        ConnectionStateChanged?.Invoke(this, false);
-
         _portCts?.Cancel();
-        if (IsOpen)
+        if (IsOpen.Value)
         {
             _port!.BaseStream.Close();
             _port.Close();
         }
+
+        _isOpen.Value = false;
         
         return Task.CompletedTask;
     }
 
     public async ValueTask SendAsync(ReadOnlyMemory<byte> buffer, CancellationToken ct = default)
     {
-        if (!IsOpen) throw new InvalidOperationException("Serial port is not open");
+        if (!IsOpen.Value) throw new InvalidOperationException("Serial port is not open");
         
         await _port!.BaseStream.WriteAsync(buffer, ct);
     }
@@ -110,7 +113,6 @@ public class SerialTransport : ITransport<ReadOnlyMemory<byte>>
     public async ValueTask DisposeAsync() => await CloseAsync();
     public void Dispose() => this._port?.Dispose();
     
-    public event EventHandler<bool>? ConnectionStateChanged;
     public event EventHandler<ReadOnlyMemory<byte>>? DataReceived;
     public event EventHandler<Exception>? Error;
 }

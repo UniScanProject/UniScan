@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
@@ -23,12 +23,16 @@
         <Description>Platform implementations for the restrictive WASM environment</Description>
     </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="Serilog" Version="4.4.0" />
-      <PackageReference Include="Serilog.Sinks.Avalonia.Browser" Version="2.0.0" />
-      <PackageReference Include="SpawnDev.SpawnJS" Version="2.1.8" />
-      <PackageReference Include="SpawnDev.SpawnJS.WebWorkers" Version="2.1.8" />
+      <PackageReference Include="Serilog" />
+      <PackageReference Include="Serilog.Sinks.Avalonia.Browser" />
+      <PackageReference Include="SpawnDev.SpawnJS" />
+      <PackageReference Include="SpawnDev.SpawnJS.WebWorkers" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\..\..\external\Shiki\src\FileSystem\Shiki.FileSystem\Shiki.FileSystem.csproj" />
       <ProjectReference Include="..\UniScan.Platform\UniScan.Platform.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Filesystem\" />
     </ItemGroup>
 </Project>

@@ -16,13 +16,13 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.0" />
         <PackageReference Include="NUnit" Version="4.6.1" />
-        <PackageReference Include="NUnit.Analyzers" Version="4.14.0">
+        <PackageReference Include="NUnit.Analyzers" Version="4.15.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="NUnit3TestAdapter" Version="6.2.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
         <PackageReference Include="Serilog.Sinks.NUnit" Version="1.0.3" />
     </ItemGroup>
 
@@ -31,9 +31,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\external\Shiki\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" />
-      <ProjectReference Include="..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
-      <ProjectReference Include="..\..\external\Shiki\Shiki.Tests\Shiki.Tests.csproj" />
+      <ProjectReference Include="..\..\external\Shiki\src\CodeGenerator\Shiki.CodeGenerator.Core\Shiki.CodeGenerator.Core.csproj" />
+      <ProjectReference Include="..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\external\Shiki\src\Shiki.Tests\Shiki.Tests.csproj" />
       <ProjectReference Include="..\..\src\Client\UniScan.Client.Core\UniScan.Client.Core.csproj" />
       <ProjectReference Include="..\..\src\Client\UniScan.Client.App.Platform.Desktop\UniScan.Client.App.Platform.Desktop.csproj" />
       <ProjectReference Include="..\..\src\Client\UniScan.Client.App\UniScan.Client.App.csproj" />

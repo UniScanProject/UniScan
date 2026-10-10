@@ -12,12 +12,12 @@ public interface ICommandDefinition<TOpCode>
     public TOpCode OpCode { get; }
     public ReadOnlyMemory<byte> OpCodeBytes { get; }
     public Type Type { get; }
-    public IPayloadParser<IScannerPayload>.ParseDelegate Parser { get; }
+    public IPayloadParser<IDevicePayload>.ParseDelegate Parser { get; }
 }
 
 public readonly struct CommandDefinition<TOpCode, TType>(TOpCode opCode, IPayloadParser<TType>.ParseDelegate parser) : ICommandDefinition<TOpCode>
     where TOpCode : notnull
-    where TType : IScannerPayload
+    where TType : IDevicePayload
 {
     public TOpCode OpCode { get; } = opCode;
     public required ReadOnlyMemory<byte> OpCodeBytes { get; init; }
@@ -25,9 +25,9 @@ public readonly struct CommandDefinition<TOpCode, TType>(TOpCode opCode, IPayloa
     public Type Type { get; } = typeof(TType);
     public IPayloadParser<TType>.ParseDelegate Parser { get; } = parser;
 
-    IPayloadParser<IScannerPayload>.ParseDelegate ICommandDefinition<TOpCode>.Parser => Parse;
+    IPayloadParser<IDevicePayload>.ParseDelegate ICommandDefinition<TOpCode>.Parser => Parse;
 
-    private ErrorCodeResult<IScannerPayload, PayloadParseError> Parse(ReadOnlySequence<byte> buffer,
+    private ErrorCodeResult<IDevicePayload, PayloadParseError> Parse(ReadOnlySequence<byte> buffer,
                                                                              out SequencePosition consumed)
     {
         var v = Parser(buffer, out consumed);

@@ -1,26 +1,26 @@
 using R3;
 using Serilog;
 using Shiki.TaskPipeline;
+using Shiki.TaskPipeline.Builder;
 
 namespace UniScan.Client.Core.Remote.Pipeline;
 
 public partial class RemoteConnectionPipeline : IDisposable
 {
-    public TaskPipeline Pipeline { get; }
+    public TaskPipelineBuilder<TaskContexts.ConnectionContext, TaskContexts.RemoteContext> PipelineBuilder { get; }
     private readonly ILogger _logger = Log.ForContext<RemoteConnectionPipeline>();
     private readonly IDisposable _subscription;
 
     public RemoteConnectionPipeline()
     {
-        Pipeline = new TaskPipelineBuilder<TaskContexts.ConnectionContext>()
-                  .ThenRun(StartConnection)
-                  .ThenTransitionTo<TaskContexts.NegotiationContext>()
-                  .ThenRun(Handshake)
-                  .ThenTransitionTo<TaskContexts.RemoteContext>()
-                  .ThenRun(GetDeviceList)
-                  .Build();
+        PipelineBuilder = new TaskPipelineBuilder<TaskContexts.ConnectionContext, TaskContexts.ConnectionContext>()
+                         .ThenRunAsync(StartConnection)
+                         .ThenTransitionTo<TaskContexts.NegotiationContext>()
+                         .ThenRunAsync(Handshake)
+                         .ThenTransitionTo<TaskContexts.RemoteContext>()
+                         .ThenRunAsync(GetDeviceList);
         
-        _subscription = Pipeline.Status.Subscribe(s => { _logger.Information("{Status}", s); });
+        _subscription = PipelineBuilder.ExecutionState.CurrentStatus.AsObservable().Subscribe(s => { _logger.Information("{Status}", s); });
     }
 
     public void Dispose()

@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:debug="clr-namespace:UniScan.Modules.DebugModule.Views.Debug"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UniScan.Modules.DebugModule.Views.Debug.DebugFeaturesDialog"
+             x:DataType="debug:DebugFeaturesManager">
+    <Grid RowDefinitions="Auto, *" Width="600">
+        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Spacing="10">
+            <Button Command="{Binding CloseDialogCommand}">X</Button>
+        </StackPanel>
+        <TabbedPage Grid.Row="1">
+            <ContentPage Header="UI Bindings">
+                <debug:StateDebugPageView DataContext="{Binding DebugPageViewModel}" />
+            </ContentPage>
+
+            <ContentPage Header="Device States">
+                <ItemsControl ItemsSource="{Binding MainViewModel.RemoteViewList.OutputView}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding DevicesView}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ItemsControl ItemsSource="{Binding Device.States}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                                        <TextBlock Text="{Binding Key}" FontWeight="Bold" />
+                                                        <TextBlock Text="->" />
+                                                        <TextBlock Text="{Binding Value}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ContentPage>
+        </TabbedPage>
+    </Grid>
+</UserControl>

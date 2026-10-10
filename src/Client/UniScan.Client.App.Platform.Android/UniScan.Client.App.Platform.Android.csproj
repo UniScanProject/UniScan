@@ -39,6 +39,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\external\Shiki\src\FileSystem\Shiki.FileSystem.Implementations.Native\Shiki.FileSystem.Implementations.Native.csproj" />
         <ProjectReference Include="..\..\Platform\UniScan.Platform.Implementations.Native\UniScan.Platform.Implementations.Native.csproj" />
         <ProjectReference Include="..\..\Platform\UniScan.Platform\UniScan.Platform.csproj" />
         <ProjectReference Include="..\UniScan.Client.App\UniScan.Client.App.csproj" />

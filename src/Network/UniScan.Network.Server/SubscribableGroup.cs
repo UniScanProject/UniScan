@@ -7,6 +7,8 @@ public class SubscribableGroup
 {
     private readonly ConcurrentDictionary<IChannelId, IChannel> _channels = new();
     
+    public IReadOnlyDictionary<IChannelId, IChannel> Channels => _channels;
+    
     public int Count => _channels.Count;
 
     public void Add(IChannel channel)
@@ -18,6 +20,7 @@ public class SubscribableGroup
     }
 
     public void Remove(IChannel channel) => _channels.TryRemove(channel.Id, out _);
+    public IChannel? Remove(IChannelId channelId) => _channels.TryRemove(channelId, out IChannel? channel) ? channel : null;
     
     public bool Contains(IChannel channel) => _channels.ContainsKey(channel.Id);
 

@@ -25,7 +25,6 @@ using UniScan.Client.Core.DI.Factory;
 using UniScan.Client.Core.Module.Modules.Internal;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Platform;
-using UniScan.Platform.DependencyInjection;
 using MainView = UniScan.Client.App.Views.MainView;
 using MainViewModel = UniScan.Client.App.Views.MainViewModel;
 using MainWindow = UniScan.Client.App.Views.MainWindow;
@@ -40,11 +39,11 @@ public partial class UniScanApp : Application
 
     public RootViewModel RootViewModel { get; private set; }
 
-    public static Func<Task<HostEnvironment>>? InitializePlatform;
     private event Func<Task>? LoadingComplete;
 
-    private HostEnvironment _hostEnvironment = null!;
-
+    public static event Func<UniScanApp, Task>? InitializationPipelineFinished;
+    public static event Func<UniScanAppInitializationPipeline, Task>? InitializationPipelineCreated;
+    
     private static readonly Assembly? PlatformContainingAssembly = AppDomain.CurrentDomain.GetAssemblies()
                                                                   .FirstOrDefault(a =>
                                                                        a.IsDefined(typeof(
@@ -62,7 +61,7 @@ public partial class UniScanApp : Application
                                                                  "https://github.com/UniScanProject/UniScan"
                                                                 );
     
-    public static string VersionString => $"UniScan Client v{SoftwareInfo.AppInfo.Version} (Platform v{PlatformVersion})";
+    public static string VersionString => $"UniScan Client v{SoftwareInfo.AppInfo.Version} ({PlatformAttribute!.Identifier} v{PlatformVersion})";
 
     public ModuleStorage<IUniScanClientAppModule, UniScanClientAppModuleInitializationArgs>? ModuleStorage
     {
@@ -75,6 +74,7 @@ public partial class UniScanApp : Application
     public override void Initialize()
     {
         InitializationPipeline = new UniScanAppInitializationPipeline(this);
+        InitializationPipelineCreated?.Invoke(InitializationPipeline);
         AvaloniaXamlLoader.Load(this);
 
         LoadingComplete += OnLoadingComplete;
@@ -84,7 +84,12 @@ public partial class UniScanApp : Application
     {
         Log.Information("Loading root view");
 
-        RootViewModel = new RootViewModel(new LoadingViewModel("Loading...", InitializationPipeline.Pipeline));
+        TaskScheduler.UnobservedTaskException += (s, e) =>
+        {
+            Log.Error(e.Exception, "Exception thrown on avalonia background thread");
+        };
+        
+        RootViewModel = new RootViewModel(new LoadingViewModel("Loading...", InitializationPipeline.PipelineBuilder.ExecutionState));
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime desktop:
@@ -113,7 +118,7 @@ public partial class UniScanApp : Application
         {
             try
             {
-                await InitializationPipeline.RunAsync();
+                await InitializationPipeline.RunAsync(this);
             }
             catch (Exception ex)
             {
@@ -125,12 +130,20 @@ public partial class UniScanApp : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    private async Task OnLoadingComplete()
+    private Task OnLoadingComplete()
     {
-        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        try
         {
-            RootViewModel.CurrentSubpage =
-                ServiceProvider.GetRequiredService<MainViewModel>();
-        });
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                RootViewModel.CurrentSubpage =
+                    ServiceProvider.GetRequiredService<MainViewModel>();
+            });
+            return Task.CompletedTask;
+        }
+        catch (Exception exception)
+        {
+            return Task.FromException(exception);
+        }
     }
 }

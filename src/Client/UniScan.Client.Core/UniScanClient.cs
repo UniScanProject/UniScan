@@ -17,8 +17,7 @@ using UniScan.Client.Core.DI.Factory;
 using UniScan.Client.Core.Module;
 using UniScan.Client.Core.Module.Modules.Internal;
 using UniScan.Client.Core.Remote;
-using UniScan.Client.Core.Storage;
-using UniScan.Client.Core.Storage.Serializer;
+
 using UniScan.Core.Serialization;
 using UniScan.Network;
 using UniScan.Network.Data.Info.Software;

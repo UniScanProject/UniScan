@@ -10,14 +10,23 @@ public class PacketRegistry
 {
     private readonly ILogger _logger = Log.ForContext<PacketRegistry>();
 
-    private readonly BiDictionary<Identifier, Type> _packets = new();
+    private readonly BidirectionalDictionary<Identifier, Type> _packets = new();
 
     public int Count => this._packets.Count;
 
     public Type this[Identifier identifier] => _packets[identifier];
 
-    public Type? GetPacketType(Identifier identifier) => _packets.GetValueOrDefaultFromPrimary(identifier);
-    public Identifier? GetIdentifier(Type packetType) => _packets.GetValueOrDefaultFromReverse(packetType);
+    public Type? GetPacketType(Identifier identifier)
+    {
+        _packets.TryGetValue(identifier, out Type? type);
+        return type;
+    }
+
+    public Identifier? GetIdentifier(Type packetType)
+    {
+        _packets.Inverse.TryGetValue(packetType, out Identifier? identifier);
+        return identifier;
+    }
 
     public void Register<TPacket>()
         where TPacket : IPacket
@@ -49,10 +58,10 @@ public class PacketRegistry
     {
         ArgumentNullException.ThrowIfNull(attr);
 
-        if (_packets.PrimaryContainsKey(attr.Id))
+        if (_packets.TryGetValue(attr.Id, out Type? packet1))
         {
             throw new
-                InvalidOperationException($"Attempted to register packet of type '{packet.FullName}' with id '{attr.Id}' that is already registered by packet with type '{_packets[attr.Id].FullName}'");
+                InvalidOperationException($"Attempted to register packet of type '{packet.FullName}' with id '{attr.Id}' that is already registered by packet with type '{packet1.FullName}'");
         }
             
         _packets.Add(attr.Id, packet);

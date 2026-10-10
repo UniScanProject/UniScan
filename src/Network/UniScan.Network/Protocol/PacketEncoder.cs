@@ -42,7 +42,7 @@ public class PacketEncoder(PacketRegistry packetRegistry, MessagePackSerializerO
             byte[] msg = MessagePackSerializer.Serialize(type, message, options, ct);
 
             #if DEBUG
-                Log.Debug("Sent {Type}: {lines}", type.FullName, msg.AsSpan().ToHexViewString());
+                Log.Debug("Sent {Type} ({Size}): {lines}", type.FullName, msg.Length, msg.AsSpan().ToHexViewString(HexViewStringArgs.DefaultConsole));
             #endif
 
             output.WriteBytes(msg);

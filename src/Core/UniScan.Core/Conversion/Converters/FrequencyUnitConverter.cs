@@ -15,26 +15,26 @@ public class FrequencyUnitConverter : ICanConvertFrom<string, FrequencyUnit>, IC
             _                                  => throw new ArgumentException("Invalid frequency unit")
         };
 
-    public static FrequencyUnit ConvertFrom(string frequencyNumber, out string restFreqNumber)
+    public static FrequencyUnit ConvertFrom(string frequency, out string rest)
     {
-        string freq = frequencyNumber.ToUpper().Replace(" ", "");
+        string freq = frequency.ToUpper().Replace(" ", "");
 
         switch (freq)
         {
             case not null when freq.EndsWith("THZ"):
-                restFreqNumber = frequencyNumber[..^"THz".Length];
+                rest = frequency[..^"THz".Length];
                 return FrequencyUnit.THz;
             case not null when freq.EndsWith("GHZ"):
-                restFreqNumber = frequencyNumber[..^"GHz".Length];
+                rest = frequency[..^"GHz".Length];
                 return FrequencyUnit.GHz;
             case not null when freq.EndsWith("MHZ"):
-                restFreqNumber = frequencyNumber[..^"MHz".Length];
+                rest = frequency[..^"MHz".Length];
                 return FrequencyUnit.MHz;
             case not null when freq.EndsWith("KHZ"):
-                restFreqNumber = frequencyNumber[..^"KHz".Length];
+                rest = frequency[..^"KHz".Length];
                 return FrequencyUnit.KHz;
             case not null when freq.EndsWith("HZ"):
-                restFreqNumber = frequencyNumber[..^"Hz".Length];
+                rest = frequency[..^"Hz".Length];
                 return FrequencyUnit.Hz;
         }
 

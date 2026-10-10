@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -12,24 +12,36 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>bin\Debug/net10.0</OutputPath>
+        <OutputPath>bin\Debug/net10.0</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>bin\Release/net10.0</OutputPath>
+        <OutputPath>bin\Release/net10.0</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MessagePack" Version="3.1.8" />
-      <PackageReference Include="R3" Version="1.3.1" />
-      <PackageReference Include="Semver" Version="3.0.0" />
-      <PackageReference Include="Serilog" Version="4.4.0" />
-      <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
-      <PackageReference Include="System.IO.Ports" Version="11.0.0-preview.2.26159.112" />
+        <PackageReference Include="MessagePack"/>
+        <PackageReference Include="R3"/>
+        <PackageReference Include="Semver"/>
+        <PackageReference Include="Serilog"/>
+        <PackageReference Include="Serilog.Sinks.Console"/>
+        <PackageReference Include="System.IO.Ports"/>
+        <ProjectReference Include="..\..\..\external\Shiki\src\CodeGenerator\Shiki.CodeGenerator\Shiki.CodeGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\external\Shiki\Extensions\Shiki.Extensions.MessagePack\Shiki.Extensions.MessagePack.csproj" />
-      <ProjectReference Include="..\..\..\external\Shiki\Shiki.Common\Shiki.Common.csproj" />
+        <ProjectReference Include="..\..\..\external\Shiki\src\Extensions\Shiki.Extensions.MessagePack\Shiki.Extensions.MessagePack.csproj"/>
+        <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj"/>
+        <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Internationalization\Shiki.Internationalization.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="BidirectionalDictionary">
+            <HintPath>..\..\..\..\..\..\..\.nuget\packages\bidirectionaldictionary\3.1.5\lib\net9.0\BidirectionalDictionary.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Assets\**\*" />
     </ItemGroup>
 </Project>

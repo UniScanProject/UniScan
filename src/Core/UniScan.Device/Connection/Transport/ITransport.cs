@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using R3;
+using Shiki.Common.Serialization.Polymorphism;
 
 namespace UniScan.Device.Connection.Transport;
 
@@ -11,7 +13,7 @@ public interface ITransport : IAsyncDisposable, IDisposable
     /// Whether the connection is open
     /// </summary>
     [JsonIgnore]
-    public bool IsOpen { get; }
+    public IReadOnlyBindableReactiveProperty<bool> IsOpen { get; }
 
     /// <summary>
     /// Opens the connection
@@ -22,11 +24,6 @@ public interface ITransport : IAsyncDisposable, IDisposable
     /// Closes the connection
     /// </summary>
     public Task CloseAsync();
-    
-    /// <summary>
-    /// Fired when the connection state changes
-    /// </summary>
-    public event EventHandler<bool>? ConnectionStateChanged;
     
     /// <summary>
     /// Fired when an error was encountered in transport
@@ -42,5 +39,4 @@ public interface ITransport<TData> : ITransport
     public event EventHandler<TData>? DataReceived;
     
     public ValueTask SendAsync(TData data, CancellationToken ct = default);
-
 }

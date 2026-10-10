@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
@@ -6,17 +7,26 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using ObservableCollections;
 using R3;
+using Shiki.Common.Identity.Slug;
+using Shiki.Common.Identity.Slug.Formatting.Formatters;
+using Shiki.Internationalization;
+using Shiki.Internationalization.Component;
+using UniScan.Client.App.Core.Helpers;
 using UniScan.Client.App.UI.ServersideRendering;
+using UniScan.Client.App.UI.ServersideRendering.Binding;
 using UniScan.Client.App.Views.Remote.Device;
 using UniScan.Client.App.Views.ViewModel;
 using UniScan.Client.Core.Remote;
 using UniScan.Client.Core.Remote.Connection;
 using UniScan.Client.Core.Remote.Connection.Status;
+using UniScan.Client.Core.Remote.Device;
 using UniScan.Client.Core.Remote.Pipeline;
+using UniScan.Client.Core.SSR;
 using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 
 namespace UniScan.Client.App.Views.Remote;
 
+//TODo I don't like calling this a viewmodel but ig that is what it is
 public partial class RemoteViewModel : ViewModelBase, IDisposable
 {
     public RemoteServer Remote { get; }
@@ -30,7 +40,8 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
     public BehaviorSubject<RemoteInfoControlViewModel?> InfoViewModelStream { get; } = new(null); 
     public RemoteInfoControlViewModel? InfoViewModel => InfoViewModelStream.Value;
 
-    public INotifyCollectionChangedSynchronizedViewList<DeviceRootPageViewModel> DevicePages { get; }
+    private readonly SynchronizedViewMirror<KeyValuePair<Slug<SnakeSlugFormatter>, RemoteDevice>, DeviceViewModel> _deviceList;
+    public IReadOnlyObservableList<DeviceViewModel> DevicesView { get; }
     
     private readonly CompositeDisposable _disposables = new();
     
@@ -42,17 +53,21 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
         Pipeline = new RemoteConnectionPipeline();
         _serviceProvider = provider;
 
-        RootPageViewModel = new RemoteRootPageViewModel(this);
-        
-        DevicePages = Remote.Devices.CreateView(kvp => new DeviceRootPageViewModel(kvp.Value, provider.GetRequiredService<IUISlotRegistry>())).ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
+        RootPageViewModel = new RemoteRootPageViewModel(this, provider.GetRequiredService<TextComponentResolverService>());
 
-        Remote.RemoteInfo.Subscribe((v) =>
+        IUIBindingsRegistry bindingsRegistry = provider.GetRequiredService<IUIBindingsRegistry>();
+        IUISlotRegistry slotRegistry = provider.GetRequiredService<IUISlotRegistry>();
+        
+        _deviceList = new SynchronizedViewMirror<KeyValuePair<Slug<SnakeSlugFormatter>, RemoteDevice>, DeviceViewModel>(Remote.Devices.CreateView(kvp => new DeviceViewModel(kvp.Value, bindingsRegistry, slotRegistry)));
+        DevicesView = _deviceList.Output;
+
+        Remote.RemoteInfo.AsObservable().Subscribe((v) =>
         {
             RemoteInfoControlViewModel? n = v != null ? new RemoteInfoControlViewModel(v) : null;
             
             InfoViewModelStream.OnNext(n);
             OnPropertyChanged(nameof(InfoViewModel));
-        });
+        }).AddTo(_disposables);
         
         Remote.ConnectionStatus.AsObservable().Skip(1).Subscribe((b) =>
         {
@@ -78,7 +93,7 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
         {
             DeviceListControl = new DeviceListControlViewModel(this, RootPageViewModel);
             await
-                Pipeline.Pipeline.RunAsync(new RemoteConnectionPipeline.TaskContexts.ConnectionContext(_serviceProvider,
+                Pipeline.PipelineBuilder.Build().RunAsync(new RemoteConnectionPipeline.TaskContexts.ConnectionContext(_serviceProvider,
                                                Remote), _connectionCts.Token);
         }
         catch (OperationCanceledException)
@@ -87,6 +102,8 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
         }
         catch (Exception e)
         {
+            await Remote.Socket.SendPacketAsync(new DisconnectPacket(new TranslatableTextComponent("UniScan:i18n/disconnect/client_exception_thrown")));
+            
             ((IRemoteServerMutationProxy)Remote).SetConnectionStatus(new UnexpectedDisconnectedConnectionStatusContext(e));
             _connectionCts.Cancel();
         }
@@ -104,7 +121,7 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
         
         _connectionCts?.Cancel();
         
-        await Remote.Socket.SendPacketAsync(new DisconnectPacket("User initiated disconnect"));
+        await Remote.Socket.SendPacketAsync(new DisconnectPacket(new TranslatableTextComponent("UniScan:i18n/disconnect/user_disconnect")));
         await Task.Delay(500);
         await Remote.Socket.StopAsync();
     }
@@ -119,7 +136,7 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
     {
         _disposables.Dispose();
         
-        DevicePages.Dispose();
+        _deviceList.Dispose();
         DeviceListControl?.Dispose();
         
         InfoViewModelStream.Dispose();
