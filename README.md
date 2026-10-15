@@ -32,3 +32,7 @@ it up to the internet for others to listen to, and control it yourself by loggin
 | [UniScan.Client.App.Platform.Desktop](src/Client/UniScan.Client.App.Platform.Desktop) | 0.0.3 | UniScan client for desktop |
 | [UniScan.Client.App.Platform.iOS](src/Client/UniScan.Client.App.Platform.iOS) | 0.0.1 | UniScan client for iOS |
 | [UniScan.Modules.DebugModule](src/Modules/UniScan.Modules.DebugModule) | 0.0.1 |  |
+
+## Credits
+(in the future, these will be included in the About page.)
+- [Unobtainable Melon (Unomelon)](https://bsky.app/profile/unomelon.bsky.social) | Creating the base of the logo for me to work off of. (thus helping me learn a little about pixel art in the process)
