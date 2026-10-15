@@ -42,4 +42,8 @@
         <ProjectReference Include="..\..\Platform\UniScan.Platform.Implementations.Web\UniScan.Platform.Implementations.Web.csproj" />
         <ProjectReference Include="..\UniScan.Client.App\UniScan.Client.App.csproj" AdditionalProperties="UniScanPlatform=browser" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\assets\" />
+    </ItemGroup>
 </Project>
