@@ -9,18 +9,12 @@
         <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
         <Company>UniScanProject</Company>
         <Product>UniScan Android</Product>
-        <AssemblyVersion>0.0.5</AssemblyVersion>
-        <FileVersion>0.0.5</FileVersion>
-        <ApplicationVersion>1</ApplicationVersion>
+        <AssemblyVersion>0.0.6</AssemblyVersion>
+        <FileVersion>0.0.6</FileVersion>
+        <ApplicationVersion>2</ApplicationVersion>
         <ApplicationDisplayVersion>$(AssemblyVersion)</ApplicationDisplayVersion>
         <Description>UniScan client for Android</Description>
     </PropertyGroup>
-
-    <ItemGroup>
-        <AndroidResource Include="Icon.png">
-            <Link>Resources\drawable\Icon.png</Link>
-        </AndroidResource>
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Android"/>

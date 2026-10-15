@@ -1,5 +1,5 @@
 <div align="center">
-<img src="/branding/logo.svg" width="128" height="128" alt="UniScan logo">
+<img src="/branding/desktop/pixel/logo.svg" width="128" height="128" alt="UniScan logo">
 <h1 style="padding-top: 0;">UniScan</h1>
 
 ![GitHub Release](https://img.shields.io/github/v/release/UniScanProject/UniScan?sort=date&filter=UniScan.Client.App%2F*&label=Client)
@@ -29,8 +29,8 @@ it up to the internet for others to listen to, and control it yourself by loggin
 | [UniScan.UserInterface](src/Core/UniScan.UserInterface) | 0.0.1 | Serverside UI definitions |
 | [UniScan.Client.Core](src/Client/UniScan.Client.Core) | 0.3.0 | Holds shared client code, no dep on Avalonia |
 | [UniScan.Client.App](src/Client/UniScan.Client.App) | 0.1.1 | UniScan client |
-| [UniScan.Client.App.Platform.Android](src/Client/UniScan.Client.App.Platform.Android) | 0.0.5 | UniScan client for Android |
-| [UniScan.Client.App.Platform.Browser](src/Client/UniScan.Client.App.Platform.Browser) | 0.1.3 | UniScan client for web browsers (https://uniscan.dexrn.me) |
+| [UniScan.Client.App.Platform.Android](src/Client/UniScan.Client.App.Platform.Android) | 0.0.6 | UniScan client for Android |
+| [UniScan.Client.App.Platform.Browser](src/Client/UniScan.Client.App.Platform.Browser) | 0.1.4 | UniScan client for web browsers (https://uniscan.dexrn.me) |
 | [UniScan.Client.App.Platform.Desktop](src/Client/UniScan.Client.App.Platform.Desktop) | 0.0.3 | UniScan client for desktop |
 | [UniScan.Client.App.Platform.iOS](src/Client/UniScan.Client.App.Platform.iOS) | 0.0.1 | UniScan client for iOS |
 | [UniScan.Modules.DebugModule](src/Modules/UniScan.Modules.DebugModule) | 0.0.1 |  |
