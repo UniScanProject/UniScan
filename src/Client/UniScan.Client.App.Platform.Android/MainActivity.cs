@@ -8,7 +8,7 @@ namespace UniScan.Client.App.Platform.Android;
 [Activity(
              Label = "UniScan",
              Theme = "@style/MyTheme.NoActionBar",
-             Icon = "@drawable/icon",
+             Icon = "@mipmap/ic_launcher",
              MainLauncher = true,
              ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
 [IntentFilter(["android.intent.action.MAIN"], Categories = ["android.intent.category.LEANBACK_LAUNCHER"])]

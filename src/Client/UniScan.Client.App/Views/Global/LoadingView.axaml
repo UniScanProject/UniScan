@@ -9,7 +9,7 @@
              x:DataType="global:LoadingViewModel">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
-            <Image Source="/Assets/Branding/logo.128x128.png" Width="128" Height="128" VerticalAlignment="Top" Margin="0 0 0 10" />
+            <Image Source="/Assets/Branding/desktop/pixel/logo.128x128.png" Width="128" Height="128" VerticalAlignment="Top" Margin="0 0 0 10" />
             <TextBlock Text="{Binding LoadingText}" />
             
             <TextBlock Text="{Binding TaskExecutionContext.CurrentStatus.Value}"/>
