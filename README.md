@@ -5,7 +5,6 @@
 ![GitHub Release](https://img.shields.io/github/v/release/UniScanProject/UniScan?sort=date&filter=UniScan.Client.App%2F*&label=Client)
 ![GitHub Release](https://img.shields.io/github/v/release/UniScanProject/UniScan?sort=date&filter=UniScan.Server.Host%2F*&display_name=tag&label=Server)
 </div>
----
 
 Modular scanner/radio client and multi-broadcast server. Plug in a scanner, set it up in the server software, and open
 it up to the internet for others to listen to, and control it yourself by logging into an admin user.
