@@ -87,7 +87,7 @@ public class UniScanServer
                                                                                           Uri("https://github.com/UniScanProject/UniScan")),
                                                                               new
                                                                                   RemoteLink(new
-                                                                                          Uri("https://uniscan.dexrn.me/assets/logo.512x512.png"),
+                                                                                          Uri("https://uniscan.dexrn.me/assets/branding/logo.512x512.png"),
                                                                                       "UniScan Web",
                                                                                       new
                                                                                           Uri("https://uniscan.dexrn.me")),

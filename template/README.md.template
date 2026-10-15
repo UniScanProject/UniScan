@@ -1,5 +1,5 @@
 <div align="center">
-<img src="/src/Client/UniScan.Client.App/Assets/logo.svg" width="128" height="128" alt="UniScan logo">
+<img src="/branding/logo.svg" width="128" height="128" alt="UniScan logo">
 <h1 style="padding-top: 0;">UniScan</h1>
 
 ![GitHub Release](https://img.shields.io/github/v/release/UniScanProject/UniScan?sort=date&filter=UniScan.Client.App%2F*&label=Client)
