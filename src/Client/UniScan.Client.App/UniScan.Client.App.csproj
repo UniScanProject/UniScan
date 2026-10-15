@@ -196,19 +196,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="Assets\logo_128x128.png">
+      <Content Update="Assets\logo.128x128.png">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Update="Assets\logo_192x192.png">
+      <Content Update="Assets\logo.192x192.png">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Update="Assets\logo_400x400.png">
+      <Content Update="Assets\logo.400x400.png">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Update="Assets\logo_512x512.png">
+      <Content Update="Assets\logo.512x512.png">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>

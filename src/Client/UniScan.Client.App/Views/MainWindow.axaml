@@ -5,7 +5,7 @@
         xmlns:views2="clr-namespace:UniScan.Client.App.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="UniScan.Client.App.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/logo.ico"
         Title="UniScan">
         <views2:RootView />
 </Window>
