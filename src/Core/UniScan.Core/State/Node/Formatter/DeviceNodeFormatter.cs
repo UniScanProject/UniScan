@@ -2,15 +2,12 @@ using System.Buffers;
 using System.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
-using Serilog;
 using Shiki.Common.Identity;
-using Shiki.Common.Serialization.Polymorphism;
 using Shiki.Common.Serialization.Registry;
 using Shiki.Common.Serialization.Registry.Validators;
-using UniScan.Core.State.Node;
 using UniScan.Core.State.Node.Nodes;
 
-namespace UniScan.Network.Formatter.Device;
+namespace UniScan.Core.State.Node.Formatter;
 
 public abstract class DeviceNodeTypeRegistryValidator : IHasAttributeTypeRegistryValidator<StateNodeAttribute>
 {
