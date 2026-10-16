@@ -23,6 +23,7 @@ using UniScan.Client.App.Views.Global;
 using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
 using UniScan.Client.Core.Module.Modules.Internal;
+using UniScan.Core.Settings;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Platform;
 using MainView = UniScan.Client.App.Views.MainView;
@@ -63,6 +64,8 @@ public partial class UniScanApp : Application
     
     public static string VersionString => $"UniScan Client v{SoftwareInfo.AppInfo.Version} ({PlatformAttribute!.Identifier} v{PlatformVersion})";
 
+    public SettingsManager Manager { get; private set; } = null!;
+    
     public ModuleStorage<IUniScanClientAppModule, UniScanClientAppModuleInitializationArgs>? ModuleStorage
     {
         get;

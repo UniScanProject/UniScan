@@ -22,12 +22,15 @@ public partial class UniScanAppInitializationPipeline
                        {
                            _logger = Log.ForContext<UniScanAppInitializationPipeline>();
                        })
-                  .ThenTransitionTo<TaskContexts.PreTranslations>()
+                  .ThenTransitionTo<TaskContexts.PreSettings>()//settingsbuilder created in here
+                      .ThenRun(Initializers.InitializeSettingsBuilder)
                       .ThenRun(Initializers.SetupClientMessagePackResolvers)
                       .ThenRun(Initializers.InitializeSoftwareInfo)
                       .ThenRun(Initializers.SetupSSRSlotRegistry)
                       .ThenRunAsync(app.InitializeModules)
                       .ThenRun(Initializers.SetupBindableRegistry)
+                      .ThenRunAsync(app.InitializeSettings)
+                  .ThenTransitionTo<TaskContexts.PreTranslations>()
                   .ThenRunToTransitionToAsync<TaskContexts.PreServiceProvider>(Initializers.SetupTranslations)
                       .ThenRun(Initializers.SetupTextComponentResolver)
                       .ThenRun(Initializers.SetupSSRUI)
