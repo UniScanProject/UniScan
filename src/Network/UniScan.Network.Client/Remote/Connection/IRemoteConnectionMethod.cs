@@ -1,11 +1,12 @@
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
+using UniScan.Network.Group;
 
 namespace UniScan.Network.Client.Remote.Connection;
 
 public interface IRemoteConnectionMethod
 {
-    void Apply(Bootstrap bootstrap);
+    void Apply(Bootstrap bootstrap, INetworkGroupManager networkGroupManager);
     Task<IChannel> ConnectAsync(Bootstrap bootstrap);
 
     string ToDisplayString();

@@ -7,6 +7,7 @@ using Serilog;
 using Shiki.Common.Result;
 using UniScan.Network.Client.Extensions;
 using UniScan.Network.Client.Remote.Connection;
+using UniScan.Network.Group;
 using UniScan.Network.Protocol.PayloadPart;
 using UniScan.Network.Request;
 using UniScan.Network.Socket;
@@ -18,7 +19,7 @@ public class ClientSocket : ISocket
 {
     public ILogger Logger => Log.ForContext<ClientSocket>();
     
-    private IEventLoopGroup? _group;
+    private readonly INetworkGroupManager _networkGroupManager;
 
     private readonly UniScanClientChannelInitializer _channelInitializer;
     public UniScanChannelInitializer ChannelInitializer => _channelInitializer;
@@ -31,14 +32,14 @@ public class ClientSocket : ISocket
 
     private readonly RequestManager _requestManager = new();
 
-    public ClientSocket(UniScanClientChannelInitializer channelInitializer, IRemoteConnectionMethod connectionMethod, IEventLoopGroup group)
+    public ClientSocket(UniScanClientChannelInitializer channelInitializer, IRemoteConnectionMethod connectionMethod, INetworkGroupManager groupManager)
     {
         ArgumentNullException.ThrowIfNull(channelInitializer);
         ArgumentNullException.ThrowIfNull(connectionMethod);
 
         _connectionMethod = connectionMethod;
         _channelInitializer = channelInitializer;
-        _group = group;
+        _networkGroupManager = groupManager;
     }
 
     public async Task StartAsync()
@@ -47,8 +48,8 @@ public class ClientSocket : ISocket
         
         try
         {
-            Bootstrap bs = new Bootstrap().Group(_group)
-                                          .ConnectionMethod(_connectionMethod)
+            Bootstrap bs = new Bootstrap()
+                                          .ConnectionMethod(_connectionMethod, _networkGroupManager)
                                           .Handler(new ActionChannelInitializer<IChannel>((channel) =>
                                            {
                                                IChannelPipeline pipeline = channel.Pipeline;

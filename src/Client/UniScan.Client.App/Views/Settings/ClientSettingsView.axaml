@@ -3,12 +3,31 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:app="clr-namespace:UniScan.Client.App"
+             xmlns:settings="clr-namespace:UniScan.Client.App.Views.Settings"
+             xmlns:conversion="clr-namespace:UniScan.Client.App.UI.Conversion"
+             xmlns:properties="clr-namespace:UniScan.Client.App.UI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="UniScan.Client.App.Views.Settings.ClientSettingsView">
-    <Grid>
-        <TextBlock Text="Coming soon" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" />
-        <Border Margin="5" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <TextBlock Text="{Binding Source={x:Static app:UniScanApp.VersionString}}" />
-        </Border>
+             x:Class="UniScan.Client.App.Views.Settings.ClientSettingsView"
+             x:DataType="settings:ClientSettingsViewModel">
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+        <TabStrip Grid.ColumnSpan="2"
+                  ItemsSource="{Binding Categories}"
+                  SelectedItem="{Binding Current}"
+        >
+            <TabStrip.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock properties:TextBlockTextComponentProperty.TextComponent="{Binding Category.Name}" FontSize="16" FontWeight="SemiBold" Margin="10,5" />
+                </DataTemplate>
+            </TabStrip.ItemTemplate>
+        </TabStrip>
+        
+        <DockPanel Grid.Row="1" Grid.Column="1">
+            <!-- TODO better navigation for mobile (no topbar, subpage style) -->
+            <ContentControl Content="{Binding CurrentSubpage}" Margin="20" />
+        </DockPanel>
+        
+        <!-- <Border Margin="5" HorizontalAlignment="Right" VerticalAlignment="Bottom"> -->
+        <!--     <TextBlock Text="{Binding Source={x:Static app:UniScanApp.VersionString}}" /> -->
+        <!-- </Border> -->
     </Grid>
 </UserControl>

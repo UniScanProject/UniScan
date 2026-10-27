@@ -12,6 +12,15 @@ public class RemoteInfoPacketHandler : SimpleChannelInboundHandler<RemoteInfoPac
     protected override void ChannelRead0(IChannelHandlerContext ctx, RemoteInfoPacket msg)
     {
         _logger.Information("Received remote info: {Information}", msg.Info);
+      
+        //TODO reimpl as RemoteSettingsPacket
+        // #if DEBUG
+        // Log.Debug("Server exposes the following settings: ");
+        // foreach (var kvp in msg.Info.Settings)
+        // {
+        //     Log.Debug("  - {Key} -> {Value}", kvp.Key, kvp.Value);
+        // }
+        // #endif
         
         RemoteServer serv = ctx.Channel.GetAttribute(ServerAttributes.ServerAttribute).Get();
         ((IRemoteServerMutationProxy)serv).SetRemoteInfo(msg.Info);

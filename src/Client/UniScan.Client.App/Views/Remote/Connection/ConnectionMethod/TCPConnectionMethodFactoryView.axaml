@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:connectionMethod="clr-namespace:UniScan.Client.App.Views.Remote.Connection.ConnectionMethod"
+             xmlns:network="clr-namespace:UniScan.Network;assembly=UniScan.Network"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.Connection.ConnectionMethod.TCPConnectionMethodFactoryView"
              x:DataType="connectionMethod:TCPConnectionMethodFactoryViewModel">
@@ -15,7 +16,7 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Spacing="5">
                 <TextBlock Text="Port" />
-                <TextBox Text="{Binding Port}" PlaceholderText="9000" MaxLines="1" AcceptsReturn="False" VerticalAlignment="Center" />
+                <TextBox Text="{Binding Port}" PlaceholderText="{Binding Source={x:Static network:Constants.DefaultPort}}" MaxLines="1" AcceptsReturn="False" VerticalAlignment="Center" />
             </StackPanel>
         </Grid>
     </StackPanel>

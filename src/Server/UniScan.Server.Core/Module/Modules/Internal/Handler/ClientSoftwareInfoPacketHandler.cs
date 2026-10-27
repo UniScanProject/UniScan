@@ -9,10 +9,11 @@ using UniScan.Network.Protocol.Packets.Bidirectional.Status;
 using UniScan.Network.Protocol.Packets.Clientbound.Remote;
 using UniScan.Network.Protocol.Packets.Serverbound.Client;
 using UniScan.Network.Server;
+using UniScan.Server.Core.Social;
 
 namespace UniScan.Server.Core.Module.Modules.Internal.Handler;
 
-public class ClientSoftwareInfoPacketHandler(ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> moduleStorage) : SimpleChannelInboundHandler<ClientSoftwareInfoPacket>
+public class ClientSoftwareInfoPacketHandler(RemoteInfoManager remoteInfoManager, ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> moduleStorage) : SimpleChannelInboundHandler<ClientSoftwareInfoPacket>
 {
     private ILogger _logger = Log.ForContext<ClientSoftwareInfoPacketHandler>();
     
@@ -25,23 +26,23 @@ public class ClientSoftwareInfoPacketHandler(ModuleStorage<IUniScanServerModule,
         
         if (ctx.Channel.HasAttribute(ClientAttributes.SoftwareInfoAttribute))
         {
-            _logger.Information("Disconnecting client {ChannelIp} as they sent client info after already completing handshake.", ctx.Channel.RemoteAddress);
+            _logger.Information("Disconnecting client {ChannelIp} as they sent client info after already completing handshake", ctx.Channel.RemoteAddress);
 
             ctx.WriteAndFlushAsync(new DisconnectPacket(new TranslatableTextComponent("UniScan:i18n/disconnect/handshake_already_completed"))).ContinueWith(_ => ctx.CloseAsync());
             return;
         }
 
-        if (msg.Info.ProtocolVersion != Constants.ProtocolVersion)
+        if (msg.Info.ProtocolVersion != Network.Constants.ProtocolVersion)
         {
-            _logger.Information("Disconnecting client {ChannelIp} due to protocol version mismatch. (expected: {ServerProtocolVer}, got: {ProtocolVer})", ctx.Channel.RemoteAddress, Constants.ProtocolVersion, msg.Info.ProtocolVersion);
+            _logger.Information("Disconnecting client {ChannelIp} due to protocol version mismatch. (expected: {ServerProtocolVer}, got: {ProtocolVer})", ctx.Channel.RemoteAddress, Network.Constants.ProtocolVersion, msg.Info.ProtocolVersion);
 
-            ctx.WriteAndFlushAsync(new DisconnectPacket(new TranslatableTextComponent("UniScan:i18n/disconnect/mismatching_protocol_version", msg.Info.ProtocolVersion, Constants.ProtocolVersion))).ContinueWith(_ => ctx.CloseAsync());
+            ctx.WriteAndFlushAsync(new DisconnectPacket(new TranslatableTextComponent("UniScan:i18n/disconnect/mismatching_protocol_version", msg.Info.ProtocolVersion, Network.Constants.ProtocolVersion))).ContinueWith(_ => ctx.CloseAsync());
             return;
         }
         
         ctx.Channel.GetAttribute(ClientAttributes.SoftwareInfoAttribute).Set(msg.Info);
 
         ctx.WriteAndFlushAsync(new ServerSoftwareInfoPacket(UniScanServer.SoftwareInfo, moduleStorage.Modules.ToDictionary(m => m.Key, m => new ModuleInfo(m.Value.Id)), msg.RequestId));
-        ctx.WriteAndFlushAsync(new RemoteInfoPacket(UniScanServer.RemoteInfo));
+        ctx.WriteAndFlushAsync(new RemoteInfoPacket(remoteInfoManager.GetRemoteInfo()));
     }
 }

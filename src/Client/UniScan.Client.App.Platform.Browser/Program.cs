@@ -50,7 +50,7 @@ internal sealed partial class Program
                 await browserServiceProvider.StartBackgroundServices();
                 
                 ctx.StandardPaths = new BrowserPaths();
-                ctx.SerilogInitializer = new BrowserPlatformSerilogInitializer(UniScan.Core.Constants.ConsoleOutputTemplate);
+                ctx.SerilogInitializer = new BrowserPlatformSerilogInitializer(Constants.ConsoleOutputTemplate);
                 ctx.FileManager = browserServiceProvider.GetRequiredService<BrowserFileManager>();
                 ctx.DirectoryManager = browserServiceProvider.GetRequiredService<BrowserDirectoryManager>();
                 

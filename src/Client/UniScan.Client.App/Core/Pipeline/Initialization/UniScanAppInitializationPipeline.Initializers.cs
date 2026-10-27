@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Shiki.Common.Extensions;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
+using Shiki.Common.Serialization.Polymorphism;
 using Shiki.FileSystem.Abstractions;
 using Shiki.FileSystem.Implementations.Assembly;
 using Shiki.FileSystem.Storage;
@@ -20,6 +21,7 @@ using Shiki.Internationalization.Translation;
 using Shiki.Internationalization.Translation.LanguageSource;
 using Shiki.TaskPipeline;
 using Shiki.TaskPipeline.Context;
+using UniScan.Client.App.Core.Module.Modules.Internal.Options;
 using UniScan.Client.App.Core.TextComponent.Resolver;
 using UniScan.Client.App.UI.ServersideRendering;
 using UniScan.Client.App.UI.ServersideRendering.Binding;
@@ -30,6 +32,7 @@ using UniScan.Client.Core.Remote;
 using UniScan.Client.Core.SSR;
 using UniScan.Core.State;
 using UniScan.Network;
+using UniScan.Network.Group;
 using UniScan.Network.Registry;
 using UniScan.Network.Registry.Source.Sources;
 using UniScan.Platform;
@@ -136,6 +139,32 @@ public partial class UniScanAppInitializationPipeline
                                                        ctx.PlatformDirectoryManager, ctx.SettingsManager);
         }
 
+        public static void InitializeNetworkGroupManager(TaskContexts.PreServiceProvider ctx,
+                                                         ITaskExecutionContext execCtx)
+        {
+            execCtx.Status.Value = "Initializing network group manager";
+            
+            NetworkOptionGroup? s = ctx.SettingsManager.TryGetGroup<NetworkOptionGroup>();
+            if (s != null && !string.IsNullOrWhiteSpace(s.NetworkGroupMethod))
+            {
+                Type? t = PolymorphicTypeRegistry<INetworkGroupManager>.Instance.GetType(s.NetworkGroupMethod);
+                if (t != null)
+                {
+                    Log.Information("Using network group method '{Key}' ({Type})", s.NetworkGroupMethod, t.FullName);
+                    ctx.ServiceCollection.AddSingleton(typeof(INetworkGroupManager), t);
+                    return;
+                }
+                
+                Log.Error("Network group method '{Key}' not found, defaulting to 'Multithreaded'", s.NetworkGroupMethod);
+            }
+            else
+            {
+                Log.Error("Empty/No network method provided, defaulting to 'Multithreaded'");
+            }
+
+            ctx.ServiceCollection.AddSingleton<INetworkGroupManager, MultithreadedNetworkGroupManager>();
+        }        
+        
         public static void SetupTextComponentResolver(TaskContexts.PreServiceProvider ctx,
                                                               ITaskExecutionContext execCtx)
         {

@@ -2,8 +2,8 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Shiki.FileSystem.Abstractions;
 using Shiki.Internationalization.Translation;
+using Shiki.Settings;
 using Shiki.TaskPipeline.Context;
-using UniScan.Core.Settings;
 using UniScan.Platform;
 
 namespace UniScan.Client.App.Core.Pipeline.Initialization;
@@ -25,7 +25,7 @@ public partial class UniScanAppInitializationPipeline
         public record PreSettings(UniScanApp UniScanApp, ServiceCollection ServiceCollection, IPlatformStandardPaths PlatformStandardPaths, IPlatformFileManager PlatformFileManager, IPlatformDirectoryManager PlatformDirectoryManager)
             : ITransitionableTaskContext<PreSettings, PreEnvironment>
         {
-            public SettingsManagerBuilder SettingsBuilder { get; } = new SettingsManagerBuilder();
+            public SettingsManagerBuilder SettingsBuilder { get; } = new();
             public SettingsManager? SettingsManager { get; set; }
 
             public static PreSettings TransitionFrom(PreEnvironment oldContext) => new(oldContext.UniScanApp, oldContext.ServiceCollection, oldContext.StandardPaths ?? throw new NullReferenceException(), oldContext.FileManager ?? throw new NullReferenceException(), oldContext.DirectoryManager ?? throw new NullReferenceException());

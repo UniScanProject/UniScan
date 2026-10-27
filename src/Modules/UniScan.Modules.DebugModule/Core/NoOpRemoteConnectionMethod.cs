@@ -6,6 +6,7 @@ using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Local;
 using Shiki.Common.Serialization.Polymorphism;
 using UniScan.Network.Client.Remote.Connection;
+using UniScan.Network.Group;
 
 namespace UniScan.Modules.DebugModule.Core;
 
@@ -15,7 +16,7 @@ public class NoOpRemoteConnectionMethod(string name) : IRemoteConnectionMethod
 {
     [JsonPropertyName("name")] public string Name { get; } = name;
     
-    public void Apply(Bootstrap bootstrap)
+    public void Apply(Bootstrap bootstrap, INetworkGroupManager networkGroupManager)
     {
     }
 

@@ -32,8 +32,8 @@
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageVersion Include="Serilog.Sinks.Xamarin" Version="1.0.0" />
     <PackageVersion Include="SmartFormat" Version="3.6.1" />
-    <PackageVersion Include="SpawnDev.SpawnJS" Version="2.1.17" />
-    <PackageVersion Include="SpawnDev.SpawnJS.WebWorkers" Version="2.1.18" />
+    <PackageVersion Include="SpawnDev.SpawnJS" Version="3.0.4" />
+    <PackageVersion Include="SpawnDev.SpawnJS.WebWorkers" Version="2.2.4" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.2.0.3" />
     <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Common" Version="2.11.0.1" />
     <PackageVersion Include="Xamarin.AndroidX.Lifecycle.Common.Jvm" Version="2.11.0.1" />

@@ -12,7 +12,7 @@
     <PackageVersion Include="DotNetty.Transport" Version="0.7.6" />
     <PackageVersion Include="DotNetty.Transport.Libuv" Version="0.7.6" />
     <PackageVersion Include="Humanizer.Core" Version="3.0.10" />
-    <PackageVersion Include="MessagePack" Version="3.1.8" />
+    <PackageVersion Include="MessagePack" Version="3.1.12" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="5.9.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
@@ -24,8 +24,8 @@
     <PackageVersion Include="Serilog.Sinks.Avalonia.Browser" Version="2.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
-    <PackageVersion Include="SpawnDev.SpawnJS" Version="2.1.13" />
-    <PackageVersion Include="SpawnDev.SpawnJS.WebWorkers" Version="2.1.14" />
+    <PackageVersion Include="SpawnDev.SpawnJS" Version="3.0.4" />
+    <PackageVersion Include="SpawnDev.SpawnJS.WebWorkers" Version="2.2.4" />
     <PackageVersion Include="System.IO.Ports" Version="11.0.0-preview.2.26159.112" />
   </ItemGroup>
 </Project>

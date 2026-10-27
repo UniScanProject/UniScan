@@ -25,7 +25,7 @@ using UniScan.Client.Core.Remote;
 
 namespace UniScan.Client.App.Views;
 
-public partial class MainViewModel : SingletonSubPagedViewModelBase<MainViewModel>, ISingletonSubPagedViewModel,
+public partial class MainViewModel : GlobalSubPagedViewModelBase<MainViewModel>, IGlobalSubPagedViewModel,
                                      IDisposable
 {
     public ClientSettingsViewModel Settings { get; }

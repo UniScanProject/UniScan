@@ -44,4 +44,8 @@
     <ItemGroup>
       <EmbeddedResource Include="Assets\**\*" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Settings\" />
+    </ItemGroup>
 </Project>

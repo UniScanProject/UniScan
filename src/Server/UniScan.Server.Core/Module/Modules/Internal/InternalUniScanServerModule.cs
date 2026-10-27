@@ -4,6 +4,14 @@ using Semver;
 using Shiki.Common.Extensions;
 using Shiki.Common.Identity;
 using Shiki.Common.Util;
+using Shiki.FileSystem.Storage;
+using Shiki.FileSystem.Storage.Serializer;
+using Shiki.Internationalization.Component;
+using Shiki.ModuleManagement.Module;
+using UniScan.Core.Serialization;
+using Shiki.Settings;
+using Shiki.Settings.Category;
+using Shiki.Settings.Option.Storage;
 using UniScan.Network.Socket.Configuration;
 using UniScan.Server.Core.Module.Modules.Internal.Filter;
 using UniScan.Server.Core.Module.Modules.Internal.Handler;
@@ -12,7 +20,7 @@ using UniScan.Server.Core.UserInterface.Providers;
 
 namespace UniScan.Server.Core.Module.Modules.Internal;
 
-public class InternalUniScanServerModule : IUniScanServerModule
+public class InternalUniScanServerModule : IUniScanServerModule, IInitializableModule<UniScanServerModuleInitializationArgs>
 {
     /// <inheritdoc/>
     public Identifier Id => Identifier.WithNamespaceOfType<UniScanServer>("modules", "internal");
@@ -22,6 +30,15 @@ public class InternalUniScanServerModule : IUniScanServerModule
     public void OnInitialize(UniScanServerModuleInitializationArgs args)
     {
         _server = args.ServerInstance;
+        
+        FileStorage<MainOptionGroup> storage = new FileStorage<MainOptionGroup>(Path.Combine(args.ServerInstance.RootDirectory, "settings"), "settings.json",
+                                                                          args.DirectoryManager, args.FileManager,
+                                                                          new JsonStorageSerializer<MainOptionGroup>(PolymorphicJsonTypeInfoResolverFactory.FancySerializerOptions));
+        var optionStorage = new OptionStorage<MainOptionGroup, FileStorage<MainOptionGroup>>(storage);
+        
+        args.SettingsBuilder.AddStorage(Constants.Settings.MainStorage, optionStorage)
+            .AddCategory(new SettingsCategory(Constants.Settings.MainCategory, new AbsoluteTextComponent("Main")))
+            .AddGroup(UniScanServer.Identifier.Derived("settings", "group", "main"), new MainOptionGroup(), Constants.Settings.MainStorage);
     }
 
     public void ConfigureDi(IServiceCollection services)

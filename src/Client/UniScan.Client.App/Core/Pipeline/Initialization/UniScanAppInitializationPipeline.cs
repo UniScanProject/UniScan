@@ -32,6 +32,7 @@ public partial class UniScanAppInitializationPipeline
                       .ThenRunAsync(app.InitializeSettings)
                   .ThenTransitionTo<TaskContexts.PreTranslations>()
                   .ThenRunToTransitionToAsync<TaskContexts.PreServiceProvider>(Initializers.SetupTranslations)
+                      .ThenRun(Initializers.InitializeNetworkGroupManager)
                       .ThenRun(Initializers.SetupTextComponentResolver)
                       .ThenRun(Initializers.SetupSSRUI)
                       .ThenRunAsync(Initializers.InitializeClient)

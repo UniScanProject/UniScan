@@ -23,8 +23,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\external\Shiki\src\FileSystem\Shiki.FileSystem.Implementations.Assembly\Shiki.FileSystem.Implementations.Assembly.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Settings\Shiki.Settings.csproj" />
       <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
       <ProjectReference Include="..\..\..\external\Shiki\src\ModuleManagement\Shiki.ModuleManagement\Shiki.ModuleManagement.csproj" />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.TaskPipeline\Shiki.TaskPipeline.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network.Server\UniScan.Network.Server.csproj" />

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Immutable;
+using System.Net;
 using DotNetty.Common.Utilities;
 using DotNetty.Handlers.Logging;
 using DotNetty.Transport.Bootstrapping;
@@ -9,9 +10,11 @@ using Serilog;
 using Shiki.Common.Identity;
 using Shiki.Common.Result;
 using UniScan.Network.Data.Info.Software;
+using UniScan.Network.Group;
 using UniScan.Network.Protocol.PayloadPart;
 using UniScan.Network.Request;
 using UniScan.Network.Server.Handler;
+using UniScan.Network.Server.HostMethod;
 using UniScan.Network.Socket;
 using UniScan.Network.Util;
 
@@ -32,42 +35,44 @@ public class ServerSocket : ISocket
 
     private UniScanServerChannelInitializer _channelInitializer;
     public UniScanChannelInitializer ChannelInitializer => _channelInitializer;
-    private int _port;
 
-    private IChannel? _channel;
-    private MultithreadEventLoopGroup? _masterGroup;
-    private MultithreadEventLoopGroup? _workerGroup;
+    private readonly ImmutableList<IServerHostMethod> _hostMethods;
+    private readonly List<IChannel> _channels = [];
+
+    private readonly IHostNetworkGroupManager _networkGroupManager;
     
     private readonly RequestManager _requestManager = new();
 
     public ClientsManager ClientManager { get; } = new();
 
-    // TODO IHostMethod
-    public ServerSocket(UniScanServerChannelInitializer channelInitializer, int port)
+    public ServerSocket(UniScanServerChannelInitializer channelInitializer, IEnumerable<IServerHostMethod> methods, IHostNetworkGroupManager groupManager)
     {
-        _port = port;
+        _hostMethods = [.. methods];
+        _channelInitializer = channelInitializer;
+        _networkGroupManager = groupManager;
         
-        this._channelInitializer = channelInitializer;
-        this.Logger = Log.ForContext<ServerSocket>();
+        Logger = Log.ForContext<ServerSocket>();
     }
     
     public async Task StartAsync()
     {
-        _masterGroup = new MultithreadEventLoopGroup(1);
-        _workerGroup = new MultithreadEventLoopGroup();
-
-        // TODO I need websocket server too for web
-        //I doubt I did enough abstraction for it yet
+        if (!_hostMethods.Any())
+        {
+            throw new Exception("No host methods found");
+        }
+        
         try
         {
-            ServerBootstrap bootstrap = new();
-
-            bootstrap.Group(_masterGroup, _workerGroup)
-                .Channel<TcpServerSocketChannel>()
-                .Option(ChannelOption.SoBacklog, 100)
-                .ChildHandler(new ActionChannelInitializer<IChannel>((channel) =>
+            var task = _hostMethods.Select(async m =>
+            {
+                ServerBootstrap bootstrap = new();
+                m.Apply(bootstrap, _networkGroupManager);
+                
+                bootstrap.ChildHandler(new ActionChannelInitializer<IChannel>((channel) =>
                 {
                     IChannelPipeline pipeline = channel.Pipeline;
+                    
+                    m.ApplyPipeline(pipeline);
                     
                     pipeline.AddLast(ChannelInitializer);
 
@@ -75,9 +80,13 @@ public class ServerSocket : ISocket
                     pipeline.AddFirst(ClientManager);
                     pipeline.AddLast(new ResponseHandler(_requestManager));
                 }));
-            
-            _channel = await bootstrap.BindAsync(new IPEndPoint(IPAddress.Any, _port));
-            Logger.Information("Listening on port {Port}...", _port);
+
+                _channels.Add(await m.BindAsync(bootstrap));
+                
+                Logger.Information("Listening on transport {Transport}", m.ToDisplayString());
+            });
+
+            await Task.WhenAll(task);
         }
         catch (Exception ex)
         {
@@ -89,9 +98,11 @@ public class ServerSocket : ISocket
     public async Task StopAsync()
     {
         if (_requestManager != null) await _requestManager.RejectAllAsync(new OperationCanceledException("Socket is shutting down")).ContinueWith(_ => _requestManager.DisposeAsync());
-        if (_channel != null) await _channel.CloseAsync();
-        if (_masterGroup != null) await _masterGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
-        if (_workerGroup != null) await _workerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
+
+        var t = _channels.Select(c => c.CloseAsync());
+        await Task.WhenAll(t);
+        
+        _channels.Clear();
     }
 
     public async Task<bool> SendPacketAsync(IChannel? client, IPacket packet)

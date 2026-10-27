@@ -7,7 +7,7 @@ namespace UniScan.Client.App.Views.ViewModel;
 
 public record NavigationMessage(ObservableObject Subpage);
 
-public interface ISingletonSubPagedViewModel : ISubPagedViewModel
+public interface IGlobalSubPagedViewModel : ISubPagedViewModel
 {
     new static abstract Identifier Identifier { get; }
 }
@@ -55,6 +55,6 @@ public interface ISubPagedViewNavigator
     void Navigate(ObservableObject page);
 }
 
-public abstract partial class SingletonSubPagedViewModelBase<TSingletonSelf>(ObservableObject subpage)
-    : SubPagedViewModelBase(subpage, TSingletonSelf.Identifier)
-    where TSingletonSelf : class, ISingletonSubPagedViewModel;
+public abstract class GlobalSubPagedViewModelBase<TSelf>(ObservableObject subpage)
+    : SubPagedViewModelBase(subpage, TSelf.Identifier)
+    where TSelf : class, IGlobalSubPagedViewModel;

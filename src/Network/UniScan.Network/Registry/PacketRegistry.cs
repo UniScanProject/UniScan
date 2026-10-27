@@ -65,6 +65,6 @@ public class PacketRegistry
         }
             
         _packets.Add(attr.Id, packet);
-        _logger.Information("Registered packet type {Id}", attr.Id);
+        _logger.Debug("Registered packet type {Id}", attr.Id);
     }
 }

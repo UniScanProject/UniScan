@@ -8,6 +8,17 @@
     "UniScan:client/i18n/errors/device/subscribe_failed": "Failed to subscribe to device '{0}'",
     
     "UniScan:client/i18n/view/dialog/default_title": "My cool dialog",
-    "UniScan:client/i18n/view/dialog/default_content": ""
+    "UniScan:client/i18n/view/dialog/default_content": "",
+
+    "UniScan:client/i18n/settings/page/empty/no_options": "Looks like there are no settings registered... :(",
+    "UniScan:client/i18n/remote/device/no_devices": "This remote has no devices... maybe the hoster should add some :P",
+    
+    "UniScan:client/i18n/options/category/main": "Main",
+
+    "UniScan:client/i18n/options/category/network": "Network",
+    "UniScan:client/i18n/options/category/network/advanced": "Advanced",
+    
+    "UniScan:client/app/settings/option/network_group_method/name": "Network Group Option",
+    "UniScan:client/app/settings/option/network_group_method/description": "Used to switch between event loop groups"
   }
 }

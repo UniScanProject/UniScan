@@ -23,8 +23,8 @@ public class Application
             {
                 ctx.StandardPaths = new iOSPaths();
                 ctx.SerilogInitializer = new NativePlatformSerilogInitializer(UniScan.Core.Constants.ConsoleOutputTemplate, UniScan.Core.Constants.FileOutputTemplate, ctx.StandardPaths);
-                ctx.FileManager = new NativeFileManager();
-                ctx.DirectoryManager = new NativeDirectoryManager();
+                ctx.FileManager = NativeFileManager.Instance;
+                ctx.DirectoryManager = NativeDirectoryManager.Instance;
                  
                 ctx.ServiceCollection.AddSingleton<IPlatformStandardPaths>(_ => ctx.StandardPaths);
                 ctx.ServiceCollection.AddSingleton<IPlatformSerilogInitializer>(_ => ctx.SerilogInitializer);

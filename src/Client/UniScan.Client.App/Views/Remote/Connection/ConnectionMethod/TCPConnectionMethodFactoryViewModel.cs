@@ -32,7 +32,7 @@ public partial class TCPConnectionMethodFactoryViewModel : ViewModelBase, IConne
     [ParsableValidator<ushort>(ErrorMessage = "Must be a valid port number, such as 9000")]
     public partial string Port { get; set; }
     
-    public bool IsValid => !GetErrors(nameof(Address)).Any();
+    public bool IsValid => !GetErrors(nameof(Address)).Any() && !GetErrors(nameof(Port)).Any();
     
     public TCPRemoteConnectionMethod Create() => new(new IPEndPoint(IPAddress.Parse(Address), int.Parse(Port)));
 }

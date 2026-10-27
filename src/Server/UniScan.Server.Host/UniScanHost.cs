@@ -12,6 +12,7 @@ using Shiki.FileSystem.Storage.Serializer;
 using Shiki.ModuleManagement;
 using Shiki.ModuleManagement.Implementations.Sources;
 using UniScan.Core.Serialization;
+using Shiki.Settings;
 using UniScan.Network;
 using UniScan.Network.Registry;
 using UniScan.Network.Registry.Source.Sources;
@@ -21,6 +22,9 @@ using UniScan.Server.Core;
 using UniScan.Server.Core.Host;
 using UniScan.Server.Core.Module;
 using UniScan.Server.Core.Module.Modules.Internal;
+using UniScan.Server.Core.Pipeline;
+using UniScan.Server.Core.Social;
+using UniScan.Server.Host.Pipeline;
 
 namespace UniScan.Server.Host;
 
@@ -28,54 +32,39 @@ class UniScanHost
 {
     private CancellationTokenSource _cts = new();
     private UniScanServer _server;
-
     private string _rootDirectory;
     
-    private readonly JsonSerializerOptions _jsonOptions;
-    
-    private readonly ModuleStorage<IUniScanServerModule, UniScanServerModuleInitializationArgs> _moduleStorage;
-
-    private readonly DirectoryKeyValueStorage<DeviceHostDto> _deviceStorage;
-    private readonly PacketRegistry _packetRegistry;
-
     private bool _stopping = false;
     private readonly SemaphoreSlim _stopSemaphore = new(1, 1);
 
-    //TODO pipeline too
     
     public UniScanHost(string rootDirectory)
     {
         _rootDirectory = rootDirectory;
-        
-        _moduleStorage = new ModuleStorageBuilder<IUniScanServerModule, UniScanServerModuleInitializationArgs>()
-                        .WithModuleOfType<InternalUniScanServerModule>(null)
-                        .WithSource(new AssembliesModuleSource("modules"), new UniScanServerModuleInitializationArgs())
-                        .BuildAsync().GetAwaiter().GetResult();
-        
-        //todo channel init????
-        
-        _jsonOptions = new JsonSerializerOptions()
-        {
-            TypeInfoResolver = PolymorphicJsonTypeInfoResolverFactory.Get(new DefaultJsonTypeInfoResolver())
-        };
-
-        _packetRegistry = new PacketRegistry();
-        
-        string devicesDirectory = Path.Combine(rootDirectory, "devices");
-        if (!Directory.Exists(devicesDirectory))
-            Directory.CreateDirectory(devicesDirectory);
-        
-        _server = new UniScanServer(new SessionManager(), initializer => new ServerSocket(initializer, 9000), _packetRegistry, _moduleStorage);
-        _deviceStorage = new DirectoryKeyValueStorage<DeviceHostDto>(devicesDirectory, new NativeDirectoryManager(),
-                                                                     new NativeFileManager(),
-                                                                     new JsonStorageSerializer<DeviceHostDto>(_jsonOptions));
+        _server = new UniScanServer(rootDirectory);
     }
     
     public async Task StartAsync()
     {
-        await File.WriteAllTextAsync(Path.Combine(_rootDirectory, "devices", "device.schema.json"), JsonSchemaUtil.GetSchema<DeviceHostDto>(_jsonOptions));
+        UniScanServerHostInitializationPipeline hostPipeline = new();
+        UniScanServerHostInitializationPipeline.TaskContexts.HostReady hostContext = await hostPipeline.RunAsync(_server, _rootDirectory);
 
-        var loaded = await _deviceStorage.LoadAsync();
+        UniScanServerInitializationPipeline serverPipeline = new(_server);
+        await serverPipeline.RunAsync(new UniScanServerInitializationPipeline.TaskContexts.PreEnvironment(_server,
+                                  hostContext.RootDirectory, hostContext.FileManager, hostContext.DirectoryManager, hostContext.ModuleStorage,
+                                  hostContext.SettingsBuilder));
+        
+        await _server.RemoteInfoManager.LoadAsync();
+        
+        await File.WriteAllTextAsync(Path.Combine(_rootDirectory, "devices", "device.schema.json"), JsonSchemaUtil.GetSchema<DeviceHostDto>(PolymorphicJsonTypeInfoResolverFactory.FancySerializerOptions));
+
+        var storage = new DirectoryKeyValueStorage<DeviceHostDto>(
+                                                                  Path.Combine(_rootDirectory, "devices"),
+                                                                  hostContext.DirectoryManager,
+                                                                  hostContext.FileManager,
+                                                                  new JsonStorageSerializer<DeviceHostDto>(PolymorphicJsonTypeInfoResolverFactory.FancySerializerOptions));
+        
+        var loaded = await storage.LoadAsync();
         foreach (var err in loaded.Errors)
         {
             Log.Warning(err.Exception, "Failed to load device file '{Path}'", err.Item);
@@ -85,9 +74,6 @@ class UniScanHost
         {
             _server.DeviceManager.AddDevice(device.Key.ToSlug<SnakeSlugFormatter>(), device.Value.DisplayName, device.Value.Device);
         }
-
-        //start scanners
-        await _server.DeviceManager.StartAllAsync();
         
         //start server
         await _server.RunAsync(_cts.Token);
