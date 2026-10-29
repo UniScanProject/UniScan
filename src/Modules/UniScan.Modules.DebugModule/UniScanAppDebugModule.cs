@@ -13,7 +13,7 @@ namespace UniScan.Modules.DebugModule;
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 public class UniScanAppDebugModule : IUniScanClientAppModule, IDisposable
 {
-    public Identifier Id => UniScanApp.Identifier.Derived("modules", "debug");
+    public Identifier Id { get; } = UniScanApp.Identifier.Derived("modules", "debug");
     
     private DebugFeaturesManager _debugFeaturesManager;
     

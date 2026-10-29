@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:device="clr-namespace:UniScan.Client.App.Views.Remote.Device"
+             xmlns:properties="clr-namespace:UniScan.Client.App.UI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.Device.DeviceListControl"
              x:DataType="device:DeviceListControlViewModel">
@@ -18,19 +19,27 @@
     </UserControl.Styles>
     
     <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Panel>
+            <TextBlock 
+                properties:TextBlockTranslationTextComponentProperty.TranslationId="UniScan:client/i18n/remote/device/no_devices"
+                FontSize="18"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                Margin="0 5 0 0"
+                IsVisible="{Binding !DevicesView.Count}" />
+            <ItemsRepeater x:Name="DeviceGrid" ItemsSource="{Binding DevicesView}" Margin="5">
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout ItemsJustification="Start" MinColumnSpacing="5" MinRowSpacing="5" MinItemWidth="200" 
+                                       ItemsStretch="Fill" />
+                </ItemsRepeater.Layout>
 
-        <ItemsRepeater x:Name="DeviceGrid" ItemsSource="{Binding DevicesView}" Margin="5">
-            <ItemsRepeater.Layout>
-                <UniformGridLayout ItemsJustification="Start" MinColumnSpacing="5" MinRowSpacing="5" MinItemWidth="200" 
-                                   ItemsStretch="Fill" />
-            </ItemsRepeater.Layout>
-
-            <ItemsRepeater.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type device:DeviceInfoControlViewModel}">
-                    <device:DeviceInfoControl />
-                </DataTemplate>
-            </ItemsRepeater.ItemTemplate>
-        </ItemsRepeater>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type device:DeviceInfoControlViewModel}">
+                        <device:DeviceInfoControl />
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </Panel>
     </ScrollViewer>
 
 </UserControl>

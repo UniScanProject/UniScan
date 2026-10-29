@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              xmlns:remote="clr-namespace:UniScan.Client.App.Views.Remote"
+             xmlns:properties="clr-namespace:UniScan.Client.App.UI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.RemoteInfoControl"
              x:DataType="remote:RemoteInfoControlViewModel">
@@ -14,8 +15,8 @@
                     <Image asyncImageLoader:ImageLoader.Source="{Binding Info.Branding.LogoUrl}" Width="64" Height="64" />
                 </Border>
                 <StackPanel VerticalAlignment="Center" Spacing="5">
-                    <TextBlock Text="{Binding Info.DisplayName}" TextWrapping="Wrap" FontSize="20" FontWeight="Bold" IsVisible="{Binding Info.DisplayName, Converter={x:Static ObjectConverters.IsNotNull}}" />
-                    <TextBlock Text="{Binding Info.Description}" TextWrapping="Wrap" IsVisible="{Binding Info.Description, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    <TextBlock Text="{Binding Info.DisplayName}" TextWrapping="Wrap" FontSize="20" FontWeight="Bold" IsVisible="{Binding Info.DisplayName, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                    <TextBlock properties:TextBlockTextComponentProperty.TextComponent="{Binding Info.Description}" TextWrapping="Wrap" IsVisible="{Binding Info.Description, Converter={x:Static ObjectConverters.IsNotNull}}" />
                 </StackPanel>
             </StackPanel>
         </Border>

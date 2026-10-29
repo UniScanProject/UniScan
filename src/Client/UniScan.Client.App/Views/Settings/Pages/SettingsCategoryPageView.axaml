@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:pages="clr-namespace:UniScan.Client.App.Views.Settings.Pages"
+             xmlns:conversion="clr-namespace:UniScan.Client.App.UI.Conversion"
+             xmlns:properties="clr-namespace:UniScan.Client.App.UI.Properties"
+             xmlns:settings1="clr-namespace:Shiki.Settings;assembly=Shiki.Settings"
+             xmlns:category="clr-namespace:Shiki.Settings.Category;assembly=Shiki.Settings"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UniScan.Client.App.Views.Settings.Pages.SettingsCategoryPageView"
+             x:DataType="pages:SettingsCategoryPageViewModel">
+    <ScrollViewer>
+        <StackPanel Spacing="20">
+            <TextBlock properties:TextBlockTextComponentProperty.TextComponent="{Binding Node.Category.Name}" FontSize="28" FontWeight="Bold" />
+            
+            <Separator Margin="0,5" HorizontalAlignment="Stretch" />
+            
+            <ItemsControl x:Name="OptionItemsControl" ItemsSource="{Binding Node.Options}" IsVisible="{Binding Node.Options.Length}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="20" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl><!--todo-->
+            
+            <TextBlock Text="No options in this category." IsVisible="{Binding !Node.Options.Length}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

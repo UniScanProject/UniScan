@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>UniScan.Modules.LibUvNetworkGroup</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
+      <ProjectReference Include="..\..\Client\UniScan.Client.Core\UniScan.Client.Core.csproj" />
+      <ProjectReference Include="..\..\Network\UniScan.Network\UniScan.Network.csproj" />
+      <ProjectReference Include="..\..\Server\UniScan.Server.Core\UniScan.Server.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="DotNetty.Transport.Libuv">
+        <HintPath>..\..\..\..\..\..\..\.nuget\packages\dotnetty.transport.libuv\0.7.6\lib\net6.0\DotNetty.Transport.Libuv.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

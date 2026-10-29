@@ -6,6 +6,7 @@ using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using Shiki.Common.Serialization.Polymorphism;
 using UniScan.Network.Client.Serialization;
+using UniScan.Network.Group;
 
 namespace UniScan.Network.Client.Remote.Connection.Methods;
 
@@ -19,9 +20,10 @@ public class TCPRemoteConnectionMethod(IPEndPoint endPoint) : IRemoteConnectionM
     [JsonPropertyName("endpoint")]
     public IPEndPoint EndPoint { get; } = endPoint;
 
-    public void Apply(Bootstrap bootstrap)
+    public void Apply(Bootstrap bootstrap, INetworkGroupManager networkGroupManager)
     {
-        bootstrap.Channel<TcpSocketChannel>()
+        bootstrap.Group(networkGroupManager.WorkerGroup)
+                 .Channel<TcpSocketChannel>()
                  .Option(ChannelOption.TcpNodelay, true)
                  .Option(ChannelOption.ConnectTimeout, TimeSpan.FromSeconds(5));
     }

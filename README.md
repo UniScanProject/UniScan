@@ -34,6 +34,7 @@ it up to the internet for others to listen to, and control it yourself by loggin
 | [UniScan.Client.App.Platform.Desktop](src/Client/UniScan.Client.App.Platform.Desktop) | 0.0.3 | UniScan client for desktop |
 | [UniScan.Client.App.Platform.iOS](src/Client/UniScan.Client.App.Platform.iOS) | 0.0.1 | UniScan client for iOS |
 | [UniScan.Modules.DebugModule](src/Modules/UniScan.Modules.DebugModule) | 0.0.1 |  |
+| [UniScan.Modules.LibUvNetworkGroupModule](src/Modules/UniScan.Modules.LibUvNetworkGroupModule) |  |  |
 
 ## Credits
 (in the future, these will be included in the About page.)

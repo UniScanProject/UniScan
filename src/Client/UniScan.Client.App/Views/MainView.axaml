@@ -38,10 +38,10 @@
                         </Button>
                     </StackPanel>
                     
-                    <StackPanel Grid.Row="1" Spacing="10">
-                        <global:HeadedSeparatorControl Text="Local" />
-                        <!-- TODO local scanners!!! -->
-                    </StackPanel>
+                    <!-- <StackPanel Grid.Row="1" Spacing="10"> -->
+                    <!--     <global:HeadedSeparatorControl Text="Local" /> -->
+                    <!--     ~1~ TODO local scanners!!! @1@ -->
+                    <!-- </StackPanel> -->
 
                     <Grid RowDefinitions="Auto, *, Auto" Grid.Row="2" RowSpacing="10">
                         <global:HeadedSeparatorControl Text="Remote" Grid.Row="0" />

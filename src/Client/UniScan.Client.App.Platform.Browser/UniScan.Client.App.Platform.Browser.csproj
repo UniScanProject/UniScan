@@ -8,6 +8,7 @@
         <CompressionEnabled>false</CompressionEnabled>
         <PublishTrimmed>false</PublishTrimmed>
         <RunAOTCompilation>false</RunAOTCompilation>
+        <DebuggerSupport>true</DebuggerSupport>
 
         <CompressionEnabled>false</CompressionEnabled>
         <WasmEnableHotReload>false</WasmEnableHotReload>

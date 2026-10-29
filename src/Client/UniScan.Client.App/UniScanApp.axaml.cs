@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
 using Semver;
@@ -19,10 +20,12 @@ using Shiki.ModuleManagement.Implementations.Sources;
 using UniScan.Client.App.Core.Module;
 using UniScan.Client.App.Core.Pipeline.Initialization;
 using UniScan.Client.App.Core.Platform;
+using UniScan.Client.App.Views;
 using UniScan.Client.App.Views.Global;
 using UniScan.Client.Core;
 using UniScan.Client.Core.DI.Factory;
 using UniScan.Client.Core.Module.Modules.Internal;
+using Shiki.Settings;
 using UniScan.Network.Data.Info.Software;
 using UniScan.Platform;
 using MainView = UniScan.Client.App.Views.MainView;
@@ -63,6 +66,8 @@ public partial class UniScanApp : Application
     
     public static string VersionString => $"UniScan Client v{SoftwareInfo.AppInfo.Version} ({PlatformAttribute!.Identifier} v{PlatformVersion})";
 
+    public SettingsManager Manager { get; private set; } = null!;
+    
     public ModuleStorage<IUniScanClientAppModule, UniScanClientAppModuleInitializationArgs>? ModuleStorage
     {
         get;
@@ -114,18 +119,19 @@ public partial class UniScanApp : Application
         // Initializes objects on background thread created during OnFrameworkInitializationCompleted
         //
         // Has to be done to allow for async, once it's done we switch away from the loading screen view.
-        Task.Run(async () =>
-        {
-            try
-            {
-                await InitializationPipeline.RunAsync(this);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "An error occured during initialization");
-                throw;
-            }
-        });
+        _ = InitializationPipeline.RunAsync(this);
+        // Task.Run(async () =>
+        // {
+        //     try
+        //     {
+        //         await InitializationPipeline.RunAsync(this);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Log.Error(ex, "An error occured during initialization");
+        //         throw;
+        //     }
+        // });
 
         base.OnFrameworkInitializationCompleted();
     }

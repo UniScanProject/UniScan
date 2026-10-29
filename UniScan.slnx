@@ -16,7 +16,7 @@
     </Folder>
     <Folder Name="/External/" />
     <Folder Name="/External/Shiki/">
-
+        <Project Path="external/Shiki/src/Shiki.Settings/Shiki.Settings.csproj" />
         <Project Path="external/Shiki/src/Shiki.Common/Shiki.Common.csproj" />
         <Project Path="external/Shiki/src/Shiki.Internationalization/Shiki.Internationalization.csproj" />
         <Project Path="external/Shiki/src/Shiki.TaskPipeline/Shiki.TaskPipeline.csproj" />
@@ -35,6 +35,7 @@
     </Folder>
     <Folder Name="/External/Shiki/Extensions/">
         <Project Path="external/Shiki/src/Extensions/Shiki.Extensions.MessagePack/Shiki.Extensions.MessagePack.csproj" />
+        <Project Path="external/Shiki/src/Extensions/Shiki.Extensions.OneOf/Shiki.Extensions.OneOf.csproj" />
     </Folder>
     <Folder Name="/External/Shiki/FileSystem/">
         <Project Path="external/Shiki/src/FileSystem/Shiki.FileSystem.Abstractions/Shiki.FileSystem.Abstractions.csproj" />
@@ -45,6 +46,7 @@
     </Folder>
     <Folder Name="/Modules/">
         <Project Path="src/Modules/UniScan.Modules.DebugModule/UniScan.Modules.DebugModule.csproj" />
+        <Project Path="src\Modules\UniScan.Modules.LibUvNetworkGroupModule\UniScan.Modules.LibUvNetworkGroupModule.csproj" />
     </Folder>
     <Folder Name="/Network/">
         <Project Path="src/Network/UniScan.Network.Client/UniScan.Network.Client.csproj" />

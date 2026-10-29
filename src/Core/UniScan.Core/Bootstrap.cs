@@ -11,7 +11,7 @@ using Shiki.Extensions.MessagePack.Formatter.Polymorphic;
 using Shiki.Internationalization;
 using Shiki.Internationalization.Component;
 using UniScan.Core.State.Node;
-using UniScan.Network.Formatter.Device;
+using UniScan.Core.State.Node.Formatter;
 
 namespace UniScan.Core;
 

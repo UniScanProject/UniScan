@@ -79,7 +79,7 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
     }
 
     [RelayCommand]
-    public async Task SwitchToPage()
+    public void SwitchToPage()
     {
         WeakReferenceMessenger.Default.Send(new NavigationMessage(RootPageViewModel), MainViewModel.Identifier);
     }
