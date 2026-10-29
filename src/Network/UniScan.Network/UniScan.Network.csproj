@@ -9,6 +9,8 @@
         <AssemblyVersion>0.3.0</AssemblyVersion>
         <FileVersion>0.3.0</FileVersion>
         <Description>Contains the protocol and shared networking code</Description>
+        <Configurations>Debug;Release;Debug Server;Debug Client;Release Server;Release Client;Release App;Debug App</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>

@@ -21,6 +21,8 @@
         <Version>0.0.1</Version>
         <Authors>DexrnZacAttack</Authors>
         <Company>UniScanProject</Company>
+        <Configurations>Debug;Release;Debug Server;Debug Client;Release Server;Release Client;Release App;Debug App</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>

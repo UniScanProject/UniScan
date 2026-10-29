@@ -1,13 +1,48 @@
 <Solution>
+    <Configurations>
+        <BuildType Name="Debug" />
+        <BuildType Name="Debug App" />
+        <BuildType Name="Debug Client" />
+        <BuildType Name="Debug Server" />
+        <BuildType Name="Release" />
+        <BuildType Name="Release App" />
+        <BuildType Name="Release Client" />
+        <BuildType Name="Release Server" />
+    </Configurations>
+    <Folder Name="/Audio/">
+        <Project Path="src/Audio/UniScan.Audio.Server/UniScan.Audio.Server.csproj">
+            <BuildType Solution="Debug|*" Project="Debug Server" />
+            <BuildType Solution="Release|*" Project="Release Server" />
+        </Project>
+        <Project Path="src/Audio/UniScan.Audio/UniScan.Audio.csproj" />
+    </Folder>
     <Folder Name="/Client/">
-        <Project Path="src/Client/UniScan.Client.App/UniScan.Client.App.csproj" />
-        <Project Path="src/Client/UniScan.Client.Core/UniScan.Client.Core.csproj" />
+        <Project Path="src/Client/UniScan.Client.App/UniScan.Client.App.csproj">
+            <BuildType Solution="Debug|*" Project="Debug App" />
+            <BuildType Solution="Release|*" Project="Release App" />
+        </Project>
+        <Project Path="src/Client/UniScan.Client.Core/UniScan.Client.Core.csproj">
+            <BuildType Solution="Debug|*" Project="Debug Client" />
+            <BuildType Solution="Release|*" Project="Release Client" />
+        </Project>
     </Folder>
     <Folder Name="/Client/Platform/">
-        <Project Path="src/Client/UniScan.Client.App.Platform.Android/UniScan.Client.App.Platform.Android.csproj" />
-        <Project Path="src/Client/UniScan.Client.App.Platform.Browser/UniScan.Client.App.Platform.Browser.csproj" />
-        <Project Path="src/Client/UniScan.Client.App.Platform.Desktop/UniScan.Client.App.Platform.Desktop.csproj" />
-        <Project Path="src/Client/UniScan.Client.App.Platform.iOS/UniScan.Client.App.Platform.iOS.csproj" />
+        <Project Path="src/Client/UniScan.Client.App.Platform.Android/UniScan.Client.App.Platform.Android.csproj">
+            <BuildType Solution="Debug|*" Project="Debug App" />
+            <BuildType Solution="Release|*" Project="Release App" />
+        </Project>
+        <Project Path="src/Client/UniScan.Client.App.Platform.Browser/UniScan.Client.App.Platform.Browser.csproj">
+            <BuildType Solution="Debug|*" Project="Debug App" />
+            <BuildType Solution="Release|*" Project="Release App" />
+        </Project>
+        <Project Path="src/Client/UniScan.Client.App.Platform.Desktop/UniScan.Client.App.Platform.Desktop.csproj">
+            <BuildType Solution="Debug|*" Project="Debug App" />
+            <BuildType Solution="Release|*" Project="Release App" />
+        </Project>
+        <Project Path="src/Client/UniScan.Client.App.Platform.iOS/UniScan.Client.App.Platform.iOS.csproj">
+            <BuildType Solution="Debug|*" Project="Debug App" />
+            <BuildType Solution="Release|*" Project="Release App" />
+        </Project>
     </Folder>
     <Folder Name="/Core/">
         <Project Path="src/Core/UniScan.Core/UniScan.Core.csproj" />
@@ -46,12 +81,19 @@
     </Folder>
     <Folder Name="/Modules/">
         <Project Path="src/Modules/UniScan.Modules.DebugModule/UniScan.Modules.DebugModule.csproj" />
+        <Project Path="src/Modules/UniScan.Modules.WebSocketTransportMethod/UniScan.Modules.WebSocketTransportMethod.csproj" />
         <Project Path="src\Modules\UniScan.Modules.LibUvNetworkGroupModule\UniScan.Modules.LibUvNetworkGroupModule.csproj" />
     </Folder>
     <Folder Name="/Network/">
-        <Project Path="src/Network/UniScan.Network.Client/UniScan.Network.Client.csproj" />
+        <Project Path="src/Network/UniScan.Network.Client/UniScan.Network.Client.csproj">
+            <BuildType Solution="Debug|*" Project="Debug Client" />
+            <BuildType Solution="Release|*" Project="Release Client" />
+        </Project>
         <Project Path="src/Network/UniScan.Network.CodeGenerator/UniScan.Network.CodeGenerator.csproj" />
-        <Project Path="src/Network/UniScan.Network.Server/UniScan.Network.Server.csproj" />
+        <Project Path="src/Network/UniScan.Network.Server/UniScan.Network.Server.csproj">
+            <BuildType Solution="Debug|*" Project="Debug Server" />
+            <BuildType Solution="Release|*" Project="Release Server" />
+        </Project>
         <Project Path="src/Network/UniScan.Network/UniScan.Network.csproj" />
     </Folder>
     <Folder Name="/Platform/">
@@ -61,9 +103,18 @@
         <Project Path="src/Platform/UniScan.Platform/UniScan.Platform.csproj" />
     </Folder>
     <Folder Name="/Server/">
-        <Project Path="src/Server/UniScan.Server.Authentication/UniScan.Server.Authentication.csproj" />
-        <Project Path="src/Server/UniScan.Server.Core/UniScan.Server.Core.csproj" />
-        <Project Path="src/Server/UniScan.Server.Host/UniScan.Server.Host.csproj" />
+        <Project Path="src/Server/UniScan.Server.Authentication/UniScan.Server.Authentication.csproj">
+            <BuildType Solution="Debug|*" Project="Debug-Server" />
+            <BuildType Solution="Release|*" Project="Release-Server" />
+        </Project>
+        <Project Path="src/Server/UniScan.Server.Core/UniScan.Server.Core.csproj">
+            <BuildType Solution="Debug|*" Project="Debug Server" />
+            <BuildType Solution="Release|*" Project="Release Server" />
+        </Project>
+        <Project Path="src/Server/UniScan.Server.Host/UniScan.Server.Host.csproj">
+            <BuildType Solution="Debug|*" Project="Debug Server" />
+            <BuildType Solution="Release|*" Project="Release Server" />
+        </Project>
     </Folder>
     <Folder Name="/Tests/">
         <Project Path="tests/UniScan.Tests/UniScan.Tests.csproj" />

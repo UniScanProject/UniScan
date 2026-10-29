@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text.Json.Serialization;
+using DotNetty.Codecs;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
@@ -14,11 +15,11 @@ namespace UniScan.Network.Client.Remote.Connection.Methods;
 [PolymorphicSerializable<IRemoteConnectionMethod>("TCP")]
 [method: JsonConstructor]
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
-public class TCPRemoteConnectionMethod(IPEndPoint endPoint) : IRemoteConnectionMethod
+public class TCPRemoteConnectionMethod(EndPoint endPoint) : IRemoteConnectionMethod
 {
-    [JsonConverter(typeof(IPEndPointConverter))]
+    [JsonConverter(typeof(EndPointConverter))]
     [JsonPropertyName("endpoint")]
-    public IPEndPoint EndPoint { get; } = endPoint;
+    public EndPoint EndPoint { get; } = endPoint;
 
     public void Apply(Bootstrap bootstrap, INetworkGroupManager networkGroupManager)
     {
@@ -26,6 +27,12 @@ public class TCPRemoteConnectionMethod(IPEndPoint endPoint) : IRemoteConnectionM
                  .Channel<TcpSocketChannel>()
                  .Option(ChannelOption.TcpNodelay, true)
                  .Option(ChannelOption.ConnectTimeout, TimeSpan.FromSeconds(5));
+    }
+
+    public void ApplyPipeline(IChannelPipeline pipeline)
+    {
+        pipeline.AddLast(new LengthFieldBasedFrameDecoder(DotNetty.Buffers.ByteOrder.LittleEndian, 1048576, 0, 4, 0, 4, true));
+        pipeline.AddLast(new LengthFieldPrepender(DotNetty.Buffers.ByteOrder.LittleEndian, 4, 0, false));
     }
 
     public async Task<IChannel> ConnectAsync(Bootstrap bootstrap) => await bootstrap.ConnectAsync(EndPoint);

@@ -19,10 +19,6 @@ public class UniScanClientChannelInitializer(
     {
         IChannelPipeline pipeline = channel.Pipeline;
         
-        // framing
-        pipeline.AddLast(new LengthFieldBasedFrameDecoder(DotNetty.Buffers.ByteOrder.LittleEndian, 1048576, 0, 4, 0, 4, true));
-        pipeline.AddLast(new LengthFieldPrepender(DotNetty.Buffers.ByteOrder.LittleEndian, 4, 0, false));
-
         //our decoders
         pipeline.AddLast(new PacketDecoder(_packetRegistry));
         pipeline.AddLast(new PacketEncoder(_packetRegistry));

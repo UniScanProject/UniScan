@@ -21,6 +21,8 @@
         <FileVersion>0.1.0</FileVersion>
         <OutputType>Library</OutputType>
         <Description>Platform implementations for the restrictive WASM environment</Description>
+        <Configurations>Debug;Release;Debug Server;Debug Client;Release Server;Release Client;Release App;Debug App</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <ItemGroup>
       <PackageReference Include="Serilog" />

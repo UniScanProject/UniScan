@@ -29,7 +29,7 @@ public class ClientAttributes
         AttributeKey<KeyValuePair<Guid, UniScan.Server.Authentication.User>>.ValueOf("session");
 }
 
-public class ServerSocket : ISocket
+public class ServerSocket : IHostSocket
 {
     public ILogger Logger { get; }
 
@@ -90,7 +90,7 @@ public class ServerSocket : ISocket
         }
         catch (Exception ex)
         {
-            Logger.Error(ex, "Failed to start server");
+            Logger.Error(ex, "Failed to start socket");
             await StopAsync();
         }
     }
@@ -112,7 +112,9 @@ public class ServerSocket : ISocket
         await client.WriteAndFlushAsync(packet);
         return true;
     }
-    
+
+    public async Task BroadcastPacketAsync(IPacket packet) => await ClientManager.BroadcastAsync(packet);
+
     public async Task<Result<TResponse, Exception>> SendRequestAsync<TResponse>(IChannel? client, IRequestPayloadPart<TResponse> packet, CancellationToken ct = default)
         where TResponse : IPacket, IResponsePayloadPart
     {

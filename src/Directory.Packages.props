@@ -7,6 +7,7 @@
     <PackageVersion Include="BidirectionalDictionary" Version="3.1.5" />
     <PackageVersion Include="DotNetty.Buffers" Version="0.7.6" />
     <PackageVersion Include="DotNetty.Codecs" Version="0.7.6" />
+    <PackageVersion Include="DotNetty.Codecs.Http" Version="0.7.6" />
     <PackageVersion Include="DotNetty.Common" Version="0.7.6" />
     <PackageVersion Include="DotNetty.Handlers" Version="0.7.6" />
     <PackageVersion Include="DotNetty.Transport" Version="0.7.6" />

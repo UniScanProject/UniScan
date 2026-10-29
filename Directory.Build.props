@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup Condition="$(Configuration.Contains('Server'))">
+        <UniScanModulePlatform>Server</UniScanModulePlatform>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(Configuration.Contains('Client'))">
+        <UniScanModulePlatform>Client</UniScanModulePlatform>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(Configuration.Contains('App'))">
+        <UniScanModulePlatform>App</UniScanModulePlatform>
+    </PropertyGroup>
+</Project>

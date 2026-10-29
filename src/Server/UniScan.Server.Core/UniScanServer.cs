@@ -26,6 +26,7 @@ using Shiki.ModuleManagement;
 using Shiki.TaskPipeline.Context;
 using Shiki.Settings;
 using Shiki.Settings.Option;
+using UniScan.Audio.Server;
 using UniScan.Core.State;
 using UniScan.Device.Device;
 using UniScan.Network;
@@ -61,6 +62,14 @@ public class MainOptionGroup : IIdentifiableOptionGroup
                                                                              Constants.Settings.MainCategory,
                                                                              []
                                                                             );
+    
+    [JsonIgnore]
+    public SettingOption<List<IAudioHostMethod>> AudioHostMethodsOption { get; } = new(
+         UniScanServer.Identifier.Derived("settings", "option",
+                                          "audio_host_methods"),
+         Constants.Settings.MainCategory,
+         []
+        );
 
     [JsonIgnore]
     public SettingOption<bool> AllowAnonymousLoginOption { get; } = new(UniScanServer.Identifier.Derived("settings",
@@ -97,11 +106,19 @@ public class MainOptionGroup : IIdentifiableOptionGroup
         set => HostMethodsOption.SetValue(value);
     }
     
+    [JsonPropertyName("audio_host_methods")]
+    public List<IAudioHostMethod> AudioHostMethods
+    {
+        get => AudioHostMethodsOption.Value;
+        set => AudioHostMethodsOption.SetValue(value);
+    }
+
     public IEnumerable<IOption> GetOptions()
     {
         yield return NetworkGroupMethodOption;
         yield return AllowAnonymousLoginOption;
         yield return HostMethodsOption;
+        yield return AudioHostMethodsOption;
     }
 }
 

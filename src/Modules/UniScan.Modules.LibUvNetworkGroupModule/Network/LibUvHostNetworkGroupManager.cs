@@ -1,9 +1,8 @@
 using DotNetty.Transport.Channels;
-using DotNetty.Transport.Libuv;
 using Shiki.Common.Serialization.Polymorphism;
 using UniScan.Network.Group;
 
-namespace UniScan.Modules.LibUvNetworkGroup;
+namespace UniScan.Modules.LibUvNetworkGroup.Network;
 
 [PolymorphicSerializable<IHostNetworkGroupManager>(Id)]
 public class LibUvHostNetworkGroupManager : LibUvNetworkGroupManager, IHostNetworkGroupManager
