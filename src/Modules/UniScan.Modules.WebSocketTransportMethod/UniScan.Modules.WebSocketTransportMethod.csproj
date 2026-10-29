@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Configurations>Debug;Release;Debug Server;Debug Client;Release Server;Release Client;Release App;Debug App</Configurations>
+        <Platforms>AnyCPU</Platforms>
+
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <FileVersion>1.0.0</FileVersion>
+        <AssemblyName>UniScan.Modules.WebSocketTransportMethod</AssemblyName>
+        <RootNamespace>UniScan.Modules.WebSocketTransportMethod</RootNamespace>
+    </PropertyGroup>
+
+<!--    <Target Name="AddModuleDependencies" BeforeTargets="AssignProjectConfiguration;ResolveProjectReferences">-->
+        <ItemGroup Condition="'$(UniScanModulePlatform)' == 'App'">
+            
+        </ItemGroup>
+    
+        <ItemGroup Condition="'$(UniScanModulePlatform)' == 'Client'">
+
+        </ItemGroup>
+    
+        <ItemGroup Condition="'$(UniScanModulePlatform)' == 'Server'">
+
+        </ItemGroup>
+<!--    </Target>-->
+    
+    <ItemGroup>
+      <PackageReference Include="DotNetty.Codecs.Http" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+
+    <Target Name="CheckModulePlatform" BeforeTargets="CoreCompile">
+        <PropertyGroup Condition="'$(UniScanModulePlatform)' == 'App'">
+            <DefineConstants>$(DefineConstants);UNISCAN_CLIENT;UNISCAN_APP</DefineConstants>
+        </PropertyGroup>
+    
+        <PropertyGroup Condition="'$(UniScanModulePlatform)' == 'Client'">
+            <DefineConstants>$(DefineConstants);UNISCAN_CLIENT</DefineConstants>
+        </PropertyGroup>
+    
+        <PropertyGroup Condition="'$(UniScanModulePlatform)' == 'Server'">
+            <DefineConstants>$(DefineConstants);UNISCAN_SERVER</DefineConstants>
+        </PropertyGroup>
+    </Target>
+
+    <ItemGroup Condition="'$(UniScanModulePlatform)' != 'App'">
+        <Compile Remove="View\**" />
+
+        <AvaloniaXaml Remove="View\**" />
+
+        <Compile Update="View\WebSocketConnectionMethodFactoryViewModel.cs">
+          <DependentUpon>WebSocketConnectionMethodFactoryView.axaml</DependentUpon>
+        </Compile>
+    </ItemGroup>
+    
+    <ItemGroup Condition="'$(UniScanModulePlatform)' == 'App'">
+        <Compile Update="View\WebSocketConnectionMethodFactoryViewModel.cs">
+            <DependentUpon>WebSocketConnectionMethodFactoryView.axaml</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Client\UniScan.Client.App\UniScan.Client.App.csproj" Private="false" ExcludeAssets="runtime" />
+        <ProjectReference Include="..\..\Client\UniScan.Client.Core\UniScan.Client.Core.csproj" Private="false" ExcludeAssets="runtime" />
+        <ProjectReference Include="..\..\Network\UniScan.Network.Client\UniScan.Network.Client.csproj" Private="false" ExcludeAssets="runtime"  />
+        <ProjectReference Include="..\..\Server\UniScan.Server.Core\UniScan.Server.Core.csproj" Private="false" ExcludeAssets="runtime" />
+        <ProjectReference Include="..\..\Network\UniScan.Network.Server\UniScan.Network.Server.csproj" Private="false" ExcludeAssets="runtime" />
+        
+      <ProjectReference Include="..\..\..\external\Shiki\src\ModuleManagement\Shiki.ModuleManagement\Shiki.ModuleManagement.csproj"  />
+      <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
+        
+      <ProjectReference Include="..\..\Network\UniScan.Network\UniScan.Network.csproj" Private="false" ExcludeAssets="runtime" />
+    </ItemGroup>
+    
+</Project>

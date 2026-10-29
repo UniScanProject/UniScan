@@ -54,7 +54,7 @@ public partial class UniScanApp : Application
     private static readonly UniScanPlatformAttribute? PlatformAttribute = PlatformContainingAssembly?.GetCustomAttribute<UniScanPlatformAttribute>();
     private static readonly Assembly PlatformAssembly = PlatformContainingAssembly ?? typeof(UniScanApp).Assembly;
 
-    public static readonly Identifier Identifier = UniScanClient.ClientIdentifier.Derived("app");
+    public static readonly Identifier Identifier = UniScanClient.Identifier.Derived("app");
     public static readonly SemVersion PlatformVersion = SemVersion.Parse(PlatformAssembly.InformationalVersionString);
 
     public static readonly ClientSoftwareInfo SoftwareInfo = new(new SoftwareAssemblyInfo(Identifier, SemVersion.Parse(typeof(UniScanApp).Assembly.InformationalVersionString)),

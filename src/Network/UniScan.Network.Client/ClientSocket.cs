@@ -15,7 +15,7 @@ using UniScan.Network.Util;
 
 namespace UniScan.Network.Client;
 
-public class ClientSocket : ISocket
+public class ClientSocket : ISocket, IRequestTransport
 {
     public ILogger Logger => Log.ForContext<ClientSocket>();
     
@@ -54,6 +54,8 @@ public class ClientSocket : ISocket
                                            {
                                                IChannelPipeline pipeline = channel.Pipeline;
 
+                                               _connectionMethod.ApplyPipeline(pipeline);
+                                               
                                                pipeline.AddFirst(ConnectionState);
 
                                                pipeline.AddLast(ChannelInitializer);

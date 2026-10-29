@@ -1,7 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Shiki.Common.Serialization.Registry;
+using Shiki.Common.Serialization.Registry.Validators;
 using UniScan.Client.App.Views.ViewModel;
 
 namespace UniScan.Client.App.UI;
@@ -23,7 +26,7 @@ public class ViewLocator : IDataTemplate
             return null;
     
         string name = param.GetType().FullName!.Replace("ControlViewModel", "Control", StringComparison.Ordinal).Replace("ViewModel", "View", StringComparison.Ordinal);
-        Type? type = Type.GetType(name);
+        Type? type = GlobalTypeRegistry<IHasNameTypeRegistryValidator<Control>>.GetScope(typeof(Control)).FirstOrDefault(kvp => kvp.Key == name).Value;
     
         if (type != null)
         {

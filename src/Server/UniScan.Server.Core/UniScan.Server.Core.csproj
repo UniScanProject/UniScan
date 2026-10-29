@@ -12,6 +12,8 @@
         <AssemblyVersion>0.3.0</AssemblyVersion>
         <FileVersion>0.3.0</FileVersion>
         <Description>Shared server code</Description>
+        <Configurations>Debug Server;Release Server</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,6 +29,7 @@
       <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.Common\Shiki.Common.csproj" />
       <ProjectReference Include="..\..\..\external\Shiki\src\ModuleManagement\Shiki.ModuleManagement\Shiki.ModuleManagement.csproj" />
       <ProjectReference Include="..\..\..\external\Shiki\src\Shiki.TaskPipeline\Shiki.TaskPipeline.csproj" />
+      <ProjectReference Include="..\..\Audio\UniScan.Audio.Server\UniScan.Audio.Server.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Core\UniScan.Core.csproj" />
       <ProjectReference Include="..\..\Core\UniScan.Device\UniScan.Device.csproj" />
       <ProjectReference Include="..\..\Network\UniScan.Network.Server\UniScan.Network.Server.csproj" />

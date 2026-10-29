@@ -8,7 +8,7 @@ namespace UniScan.Client.Core.Module.Modules.Internal;
 public class InternalUniScanClientModule : IUniScanClientModule
 {
     /// <inheritdoc/>
-    public Identifier Id => UniScanClient.ClientIdentifier.Derived("modules", "internal");
+    public Identifier Id => UniScanClient.Identifier.Derived("modules", "internal");
     
     public void OnInitialize(UniScanClientModuleInitializationArgs args)
     {

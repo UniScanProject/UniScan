@@ -20,6 +20,8 @@ public class NoOpRemoteConnectionMethod(string name) : IRemoteConnectionMethod
     {
     }
 
+    public void ApplyPipeline(IChannelPipeline pipeline) {}
+
     public Task<IChannel> ConnectAsync(Bootstrap bootstrap) => Task.FromResult<IChannel>(new LocalChannel());
 
     public string ToDisplayString() => Name;

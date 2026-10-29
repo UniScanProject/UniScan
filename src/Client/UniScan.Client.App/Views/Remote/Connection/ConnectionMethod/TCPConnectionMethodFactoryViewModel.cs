@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using CommunityToolkit.Mvvm.ComponentModel;
+using UniScan.Client.App.Core;
 using UniScan.Client.App.UI.ConnectionMethod;
 using UniScan.Client.App.UI.Validation;
 using UniScan.Client.App.Views.ViewModel;
@@ -22,7 +23,7 @@ public partial class TCPConnectionMethodFactoryViewModel : ViewModelBase, IConne
     [NotifyDataErrorInfo]
     [Required(ErrorMessage = "IP Address is required")]
     [NotifyPropertyChangedFor(nameof(IsValid))]
-    [ParsableValidator<IPAddress>(ErrorMessage = "Must be a valid IP Address, such as 127.0.0.1")]
+    [ValidatorParser<EndpointValidatorParser>(ErrorMessage = "Must be a valid IP Address, such as 127.0.0.1")]
     public partial string Address { get; set; }
     
     [ObservableProperty]
@@ -34,6 +35,14 @@ public partial class TCPConnectionMethodFactoryViewModel : ViewModelBase, IConne
     
     public bool IsValid => !GetErrors(nameof(Address)).Any() && !GetErrors(nameof(Port)).Any();
     
-    public TCPRemoteConnectionMethod Create() => new(new IPEndPoint(IPAddress.Parse(Address), int.Parse(Port)));
+    public TCPRemoteConnectionMethod Create()
+    {
+        ushort port = ushort.Parse(Port);
+        EndPoint e = IPAddress.TryParse(Address, out IPAddress? addr)
+                         ? new IPEndPoint(addr, port)
+                         : new DnsEndPoint(Address, port);
+        
+        return new TCPRemoteConnectionMethod(e);
+    }
 }
 #endif

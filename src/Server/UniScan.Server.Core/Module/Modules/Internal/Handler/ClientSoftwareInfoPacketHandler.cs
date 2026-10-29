@@ -22,7 +22,7 @@ public class ClientSoftwareInfoPacketHandler(RemoteInfoManager remoteInfoManager
         if (msg.RequestId == null)
             return;
 
-        _logger.Information("Received client information from channel {ChannelIp}: {Information}", ctx.Channel.RemoteAddress, msg.Info);
+        _logger.Information("Received client information from channel {ChannelIp} ({Name}): {Information}", ctx.Channel.RemoteAddress, ctx.Name, msg.Info);
         
         if (ctx.Channel.HasAttribute(ClientAttributes.SoftwareInfoAttribute))
         {

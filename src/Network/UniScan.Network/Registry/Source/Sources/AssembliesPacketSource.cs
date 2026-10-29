@@ -10,7 +10,7 @@ public class AssembliesPacketSource : IPacketSource
     /// <inheritdoc/>
     public IReadOnlyDictionary<Type, RegistryPacketAttribute> GetPacketTypes()
     {
-        var loaded = AppDomain.CurrentDomain.GetAssemblies()
+        var loaded = AppDomain.CurrentDomain.GetAssemblies().DistinctBy(a => a.GetName().Name)
                               .ToDictionary(a => a.GetName().FullName);
 
         var referenced =

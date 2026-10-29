@@ -7,6 +7,8 @@ namespace UniScan.Network.Client.Remote.Connection;
 public interface IRemoteConnectionMethod
 {
     void Apply(Bootstrap bootstrap, INetworkGroupManager networkGroupManager);
+
+    void ApplyPipeline(IChannelPipeline pipeline);
     Task<IChannel> ConnectAsync(Bootstrap bootstrap);
 
     string ToDisplayString();

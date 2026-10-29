@@ -11,8 +11,8 @@
         
         <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10" HorizontalAlignment="Stretch">
             <StackPanel Spacing="5">
-                <TextBlock Text="IP Address" />
-                <TextBox Text="{Binding Address}" PlaceholderText="127.0.0.1" MaxLines="1" AcceptsReturn="False" VerticalAlignment="Center"  />
+                <TextBlock Text="Host" />
+                <TextBox Text="{Binding Address}" PlaceholderText="example.com / 127.0.0.1" MaxLines="1" AcceptsReturn="False" VerticalAlignment="Center"  />
             </StackPanel>
             <StackPanel Grid.Column="1" Spacing="5">
                 <TextBlock Text="Port" />

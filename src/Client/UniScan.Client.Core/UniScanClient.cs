@@ -34,7 +34,7 @@ public partial class UniScanClient(
 {
     private readonly IRemoteStorage _remoteStorage = remoteStorage;
     
-    public static readonly Identifier ClientIdentifier = Constants.IdentifierNamespace.Derived("client");
+    public static readonly Identifier Identifier = Constants.IdentifierNamespace.Derived("client");
 
     public void Dispose()
     {

@@ -84,7 +84,7 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
             ITextComponent? reason = ctx switch
             {
                 KickedDisconnectedConnectionStatusContext c     => c.Reason,
-                UnexpectedDisconnectedConnectionStatusContext c => new TranslatableTextComponent("UniScan:client/i18n/disconnect_reason/exception_thrown", c.Exception?.Message),
+                UnexpectedDisconnectedConnectionStatusContext c => new TranslatableTextComponent("UniScan:client/i18n/disconnect_reason/exception_thrown", c.Exception),
                 _                                               => null
             } ?? new TranslatableTextComponent("UniScan:client/i18n/disconnect_reason/no_reason");
 
