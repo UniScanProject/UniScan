@@ -14,11 +14,11 @@ public interface IRemoteFactory
 {
     public RemoteServer Create(Guid id, IRemoteConnectionMethod connectionMethod);
     
-    public RemoteServer Create(Guid id, RemoteDto dto, RemoteCacheDto? cache);
+    public RemoteServer Create(Guid id, RemoteDto dto, CachedRemoteInfoDto? cache);
 }
 
 public class RemoteFactory(IServiceProvider provider) : IRemoteFactory
 {
     public RemoteServer Create(Guid id, IRemoteConnectionMethod connectionMethod) => new(id, connectionMethod, provider.GetRequiredService<IClientSocketFactory>());
-    public RemoteServer Create(Guid id, RemoteDto dto, RemoteCacheDto? cache) => new(id, dto, cache, provider.GetRequiredService<IClientSocketFactory>());
+    public RemoteServer Create(Guid id, RemoteDto dto, CachedRemoteInfoDto? cache) => new(id, dto, cache, provider.GetRequiredService<IClientSocketFactory>());
 }

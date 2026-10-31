@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
              xmlns:remote="clr-namespace:UniScan.Client.App.Views.Remote"
+             xmlns:properties="clr-namespace:UniScan.Client.App.UI.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.RemoteLinkControl"
              x:DataType="remote:RemoteLinkControlViewModel">
@@ -12,7 +13,7 @@
             <Border IsVisible="{Binding Link.IconUrl, Converter={x:Static ObjectConverters.IsNotNull}}" CornerRadius="10" VerticalAlignment="Center">
                 <Image asyncImageLoader:ImageLoader.Source="{Binding Link.IconUrl}" Width="32" Height="32" />
             </Border>
-            <TextBlock Text="{Binding Link.Name}" VerticalAlignment="Center" />
+            <TextBlock properties:TextBlockTextComponentProperty.TextComponent="{Binding Link.Name}" VerticalAlignment="Center" />
         </StackPanel>
     </HyperlinkButton>
 </UserControl>

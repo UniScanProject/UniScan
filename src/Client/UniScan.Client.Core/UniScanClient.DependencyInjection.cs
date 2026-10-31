@@ -65,12 +65,12 @@ public static class
                                                                             new JsonStorageSerializer<RemoteDto>(provider.GetRequiredKeyedService<JsonSerializerOptions>("PolymorphicJsonOptions"))
                                                                            ));
         
-        services.AddSingleton<DirectoryKeyValueStorage<RemoteCacheDto>>(provider =>
-                                                                       new DirectoryKeyValueStorage<RemoteCacheDto>(
+        services.AddSingleton<DirectoryKeyValueStorage<CachedRemoteInfoDto>>(provider =>
+                                                                       new DirectoryKeyValueStorage<CachedRemoteInfoDto>(
                                                                             Path.Combine(paths.CachePath, "remotes"),
                                                                             directoryManager,
                                                                             fileManager,
-                                                                            new JsonStorageSerializer<RemoteCacheDto>(provider.GetRequiredKeyedService<JsonSerializerOptions>("PolymorphicJsonOptions"))
+                                                                            new JsonStorageSerializer<CachedRemoteInfoDto>(provider.GetRequiredKeyedService<JsonSerializerOptions>("PolymorphicJsonOptions"))
                                                                            ));
         
         services.AddSingleton<IRemoteStorage, RemoteStorage>();

@@ -9,7 +9,6 @@ using ObservableCollections;
 using R3;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
-using Shiki.Internationalization;
 using Shiki.Internationalization.Component;
 using UniScan.Client.App.Core.Helpers;
 using UniScan.Client.App.UI.ServersideRendering;
@@ -53,17 +52,17 @@ public partial class RemoteViewModel : ViewModelBase, IDisposable
         Pipeline = new RemoteConnectionPipeline();
         _serviceProvider = provider;
 
-        RootPageViewModel = new RemoteRootPageViewModel(this, provider.GetRequiredService<TextComponentResolverService>());
+        RootPageViewModel = new RemoteRootPageViewModel(this);
 
         IUIBindingsRegistry bindingsRegistry = provider.GetRequiredService<IUIBindingsRegistry>();
         IUISlotRegistry slotRegistry = provider.GetRequiredService<IUISlotRegistry>();
         
-        _deviceList = new SynchronizedViewMirror<KeyValuePair<Slug<SnakeSlugFormatter>, RemoteDevice>, DeviceViewModel>(Remote.Devices.CreateView(kvp => new DeviceViewModel(kvp.Value, bindingsRegistry, slotRegistry)));
+        _deviceList = new SynchronizedViewMirror<KeyValuePair<Slug<SnakeSlugFormatter>, RemoteDevice>, DeviceViewModel>(Remote.Devices.CreateView(kvp => new DeviceViewModel(kvp.Value, bindingsRegistry, slotRegistry, RootPageViewModel)));
         DevicesView = _deviceList.Output;
 
-        Remote.RemoteInfo.AsObservable().Subscribe((v) =>
+        Remote.RemoteInfo.AsObservable().Subscribe(v =>
         {
-            RemoteInfoControlViewModel? n = v != null ? new RemoteInfoControlViewModel(v) : null;
+            RemoteInfoControlViewModel? n = v != null ? new RemoteInfoControlViewModel(v, Remote.DisplayName.Value) : null;
             
             InfoViewModelStream.OnNext(n);
             OnPropertyChanged(nameof(InfoViewModel));

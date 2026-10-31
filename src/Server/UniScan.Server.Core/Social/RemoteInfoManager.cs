@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ObservableCollections;
@@ -29,7 +30,8 @@ public class RemoteInfoManager
     public StoredObject<SocialMetadata> Metadata { get; }
     public StoredObject<RemoteBranding> Branding { get; }
     
-    public RemoteInfo GetRemoteInfo() => new RemoteInfo(Metadata.Property.Value.ServerName, Metadata.Value.ServerDescription, Branding.Value, new RemoteSocial(Metadata.Value.MessageOfTheDay, Announcements.Value)); 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public RemoteInfo GetRemoteInfo() => new(Metadata.Property.Value.ServerName, Metadata.Value.ServerDescription, Branding.Value, new RemoteSocial(Metadata.Value.MessageOfTheDay, Announcements.Value)); 
 
     public RemoteInfoManager(string directory, IPlatformFileManager fileManager, IPlatformDirectoryManager directoryManager, JsonSerializerOptions? serializerOptions)
     {
@@ -64,6 +66,7 @@ public class RemoteInfoManager
             new StoredObject<ObservableDictionary<Slug<SnakeSlugFormatter>, RemoteAnnouncement>>([], [v => v.ObserveChanged().Select(_ => v)], m, m);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public async Task LoadAsync()
     {
         await Metadata.LoadAsync();
@@ -72,6 +75,6 @@ public class RemoteInfoManager
     }
 }
 
-public record SocialMetadata([property: JsonPropertyName("server_name")] string ServerName,
+public record SocialMetadata([property: JsonPropertyName("server_name")] string? ServerName,
                              [property: JsonPropertyName("server_description")] ITextComponent? ServerDescription,
                              [property: JsonPropertyName("server_motd")] ITextComponent? MessageOfTheDay);

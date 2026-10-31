@@ -7,5 +7,23 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UniScan.Client.App.Views.Remote.Device.DevicePageView"
              x:DataType="device:DevicePageViewModel">
-    <ssr:UISlotControl DataContext="{Binding SSRViewModel}" />
+    <DockPanel>
+        <Border Background="{StaticResource SystemControlBackgroundBaseLowBrush}" CornerRadius="5" Padding="5" DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Command="{Binding RemotePageNavigator.NavigateCommand}" CommandParameter="{x:Null}" VerticalAlignment="Center">
+                    <TextBlock FontFamily="{StaticResource MaterialSymbolsRounded}"
+                               Text="arrow_back" 
+                               FontSize="24"
+                               Width="24"
+                               Height="24"
+                               Margin="0 0 0 0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               TextAlignment="Center" />
+                </Button>
+                <TextBlock Text="{Binding DeviceViewModel.Device.Name}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
+            </StackPanel>
+        </Border>
+        <ssr:UISlotControl DataContext="{Binding SSRViewModel}" />
+    </DockPanel>
 </UserControl>

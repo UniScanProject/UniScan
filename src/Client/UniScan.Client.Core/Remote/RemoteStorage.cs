@@ -18,7 +18,7 @@ public class RemoteStorage(
     IRemoteManager remoteManager,
     IRemoteFactory remoteFactory,
     DirectoryKeyValueStorage<RemoteDto> remoteStorage,
-    DirectoryKeyValueStorage<RemoteCacheDto>? cacheStorage
+    DirectoryKeyValueStorage<CachedRemoteInfoDto>? cacheStorage
 ) : IRemoteStorage
 {
     private readonly CompositeDisposable _disposables = new();
@@ -50,7 +50,7 @@ public class RemoteStorage(
                 continue;
             }
             
-            caches.TryGetValue(id.ToString(), out RemoteCacheDto? cache);
+            caches.TryGetValue(id.ToString(), out CachedRemoteInfoDto? cache);
             remoteManager.Remotes.Add(remoteFactory.Create(id, dto.Value, cache));
         }
 
@@ -84,7 +84,7 @@ public class RemoteStorage(
         if (cacheStorage == null)
             return;
         
-        RemoteCacheDto dto = RemoteCacheDto.FromRemoteServer(remote);
+        CachedRemoteInfoDto dto = CachedRemoteInfoDto.FromRemoteServer(remote);
         await cacheStorage.SaveAsync(remote.Id.ToString(), dto);
     }
     

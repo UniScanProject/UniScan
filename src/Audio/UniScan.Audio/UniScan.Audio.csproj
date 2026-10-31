@@ -8,4 +8,8 @@
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Network\UniScan.Network\UniScan.Network.csproj" />
+    </ItemGroup>
+
 </Project>
