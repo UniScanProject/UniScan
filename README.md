@@ -158,8 +158,8 @@ Below, you can learn how to setup and install UniScan for your platform.
 
 |                                              Name                                               | Version | Description                                    |
 |:-----------------------------------------------------------------------------------------------:|:-------:|------------------------------------------------|
-| [UniScan.Server.Core](src/Server/UniScan.Server.Core) | 0.3.0 | Shared server code |
-| [UniScan.Server.Host](src/Server/UniScan.Server.Host) | 0.1.1 | Bootstraps UniScan.Server.Core |
+| [UniScan.Server.Core](src/Server/UniScan.Server.Core) | 0.4.0 | Shared server code |
+| [UniScan.Server.Host](src/Server/UniScan.Server.Host) | 0.2.0 | Bootstraps UniScan.Server.Core |
 | [UniScan.Server.Authentication](src/Server/UniScan.Server.Authentication) | 0.0.1 | Common auth code and storage |
 | [UniScan.Platform](src/Platform/UniScan.Platform) | 0.1.0 | Shared platform abstractions |
 | [UniScan.Platform.DependencyInjection](src/Platform/UniScan.Platform.DependencyInjection) | 0.0.1 | Adds some DI extensions to UniScan.Platform |
@@ -173,7 +173,7 @@ Below, you can learn how to setup and install UniScan for your platform.
 | [UniScan.Device](src/Core/UniScan.Device) | 0.3.0 | Device abstractions and transport methods |
 | [UniScan.UserInterface](src/Core/UniScan.UserInterface) | 0.0.1 | Serverside UI definitions |
 | [UniScan.Client.Core](src/Client/UniScan.Client.Core) | 0.3.0 | Holds shared client code, no dep on Avalonia |
-| [UniScan.Client.App](src/Client/UniScan.Client.App) | 0.1.1 | UniScan client |
+| [UniScan.Client.App](src/Client/UniScan.Client.App) | 0.2.0 | UniScan client |
 | [UniScan.Client.App.Platform.Android](src/Client/UniScan.Client.App.Platform.Android) | 0.0.6 | UniScan client for Android |
 | [UniScan.Client.App.Platform.Browser](src/Client/UniScan.Client.App.Platform.Browser) | 0.1.4 | UniScan client for web browsers (https://uniscan.dexrn.me) |
 | [UniScan.Client.App.Platform.Desktop](src/Client/UniScan.Client.App.Platform.Desktop) | 0.0.3 | UniScan client for desktop |

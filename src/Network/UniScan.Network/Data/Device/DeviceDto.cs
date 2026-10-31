@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using MessagePack;
 using Semver;
+using Shiki.Common.Identity;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
 using UniScan.Network.Formatter.Semver;
@@ -17,6 +18,19 @@ public record DeviceSpecifications(
 public record DeviceDto(
     [property: Key(0)] Slug<SnakeSlugFormatter> DeviceIdentifier,
     [property: Key(1)] string? DisplayName,
-    [property: Key(2), MemberNotNullWhen(true, nameof(DeviceDto.Specs))] bool Connected,
+    [property: Key(2), MemberNotNullWhen(true, nameof(DeviceDto.Specs))]
+    bool Connected,
     [property: Key(3)] DeviceSpecifications? Specs
-);
+)
+{
+    public static DeviceDto FromDevice(Slug<SnakeSlugFormatter> deviceId, UniScan.Device.Device.Device device, string? displayName)
+    {
+        DeviceSpecifications? info = null;
+        if (device.DeviceInfo != null)
+        {
+            info = new DeviceSpecifications(device.DeviceInfo.Model, device.DeviceInfo.Version);
+        }
+
+        return new DeviceDto(deviceId, displayName, device.Active.Value, info);
+    }
+}

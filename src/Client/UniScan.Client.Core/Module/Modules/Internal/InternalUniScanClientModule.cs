@@ -23,6 +23,9 @@ public class InternalUniScanClientModule : IUniScanClientModule
         services.AddTransient<RemoteInfoPacketHandler>();
         services.AddTransient<DeviceStatePacketHandler>();
         
+        services.AddTransient<DeviceInfoPacketHandler>();
+        services.AddTransient<UnsubscribeFromDevicePacketHandler>();
+        
         services.AddSingleton<IPipelineConfigurator, InternalUniScanClientPipelineConfigurator>();
     }
 

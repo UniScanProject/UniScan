@@ -62,7 +62,7 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
 
     void IRemoteRootPageDeviceNavigatorProxy.Navigate(RemoteDevice? device)
     {
-        if (device == null)
+        if (device == null)//TODO THIS IS SHIT BECAUSE THIS WILL SWITCH THE USER OUT OF WHATEVER PAGE REGARDLESS WHEN THE DEVICE IS UNSUBSCRIBED BY THE SERVER!!!!! WE DONT WANT SUCH SPECIFIC SHIT LIKE THIS BUT RUSHING THIS
         {
             Dispatcher.UIThread.Post(() => { CurrentSubpage = (ObservableObject?)_mainPage ?? _notConnectedPage; });
             return;

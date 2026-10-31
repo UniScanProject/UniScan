@@ -36,6 +36,8 @@ public partial class DeviceInfoControlViewModel : ViewModelBase, IDisposable
             else
             {
                 _logger.Information("No longer subscribed to device '{Identifier}'", deviceViewModel.Device.Identifier);
+                
+                _navigator.Navigate(null);
             }
         }).AddTo(_subscriptions);
     }
