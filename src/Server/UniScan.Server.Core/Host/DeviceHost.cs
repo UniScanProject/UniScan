@@ -40,7 +40,7 @@ public sealed class DeviceHost
 
         this.Logger = Log.ForContext("SourceContext", ToString());
 
-        NetworkClients = new HostClientsHandler(Identifier, Device);
+        NetworkClients = new HostClientsHandler(Identifier, Device, this);
     }
 
     public async Task StartAsync(CancellationToken ct = default)

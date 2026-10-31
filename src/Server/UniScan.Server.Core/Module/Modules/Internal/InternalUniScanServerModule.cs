@@ -52,6 +52,7 @@ public class InternalUniScanServerModule : IUniScanServerModule, IInitializableM
         services.AddSingleton<IUINodeProvider, DefaultScanZoneNodeProvider>();
         
         services.AddTransient<UIContextUnsubscribePacketHandler>();
+        services.AddTransient<DeviceUnsubscribePacketHandler>();
         services.AddTransient<UIContextSubscribePacketHandler>();
         services.AddTransient<SubscribePacketHandler>();
         services.AddTransient<GetDeviceListPacketHandler>();

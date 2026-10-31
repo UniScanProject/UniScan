@@ -30,5 +30,6 @@ public class InternalUniScanServerPipelineConfigurator : IPipelineConfigurator
         pipeline.AddLast(nameof(SubscribePacketHandler), _serviceProvider.GetRequiredService<SubscribePacketHandler>());
         pipeline.AddLast(nameof(GetDeviceListPacketHandler), _serviceProvider.GetRequiredService<GetDeviceListPacketHandler>());
         pipeline.AddLast(nameof(DisconnectPacketHandler), _serviceProvider.GetRequiredService<DisconnectPacketHandler>());
+        pipeline.AddLast(nameof(DeviceUnsubscribePacketHandler), _serviceProvider.GetRequiredService<DeviceUnsubscribePacketHandler>());
     }
 }

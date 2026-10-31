@@ -10,8 +10,11 @@ using Shiki.Internationalization.Component;
 using UniScan.Core.State;
 using UniScan.Core.State.Node;
 using UniScan.Device.Device;
+using UniScan.Network.Data.Device;
 using UniScan.Network.Protocol.Packets.Clientbound.Device;
+using UniScan.Network.Protocol.Packets.Serverbound;
 using UniScan.Network.Server;
+using UniScan.Server.Core.Util;
 
 namespace UniScan.Server.Core.Host.Network;
 
@@ -19,6 +22,8 @@ public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
 {
     private readonly Slug<SnakeSlugFormatter> _deviceId;
     private readonly Device.Device.Device _device;
+    private readonly DeviceHost _host;
+    
     private IDeviceState? _currentState;
     private Dictionary<Identifier, IStateNode> _currentStates = [];
 
@@ -26,15 +31,20 @@ public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
 
     private readonly CompositeDisposable _disposables = new();
 
-    public HostClientsHandler(Slug<SnakeSlugFormatter> deviceId, Device.Device.Device device)
+    public HostClientsHandler(Slug<SnakeSlugFormatter> deviceId, Device.Device.Device device, DeviceHost host)
     {
         _deviceId = deviceId;
         _device = device;
+        _host = host;
         
         _device.State.AsObservable().DistinctUntilChanged().Subscribe(HandleState).AddTo(_disposables);
         _device.Active.AsObservable().DistinctUntilChanged().Subscribe(HandleActiveChanged).AddTo(_disposables);
     }
 
+    public HostClientsHandler(DeviceHost host) : this(host.Identifier, host.Device, host)
+    {
+    }
+    
     private void HandleState(IDeviceState? state)
     {
         _currentState = state;
@@ -73,15 +83,17 @@ public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
 
     public void HandleActiveChanged(bool active)
     {
-        if (!active)
+        foreach ((IChannelId id, IChannel channel) in _subscribers.Channels)
         {
-            foreach ((IChannelId id, IChannel channel) in _subscribers.Channels)
+            if (!active)
             {
                 _subscribers.Remove(id);
                 channel.WriteAndFlushAsync(new UnsubscribeFromDevicePacket(_deviceId,
                                                                            new TranslatableTextComponent(Identifier
-                                                                              .CreateInstance("UniScan:i18n/device/disconnected_inactive"))));
+                                                                                       .CreateInstance("UniScan:i18n/device/disconnected_inactive"))));
             }
+
+            channel.WriteAndFlushAsync(new DeviceInfoPacket(_deviceId, DeviceDto.FromDeviceHost(_host), null));//TODO this should probably all be handled in a different way because this is only writing info when device turns off/is disconnected
         }
     }
 
@@ -95,7 +107,12 @@ public sealed class HostClientsHandler : IDisposable, IAsyncDisposable
             channel.WriteAndFlushAsync(new StatePacket(_currentStates.ToDictionary(kvp => kvp.Key, IStateNode? (kvp) => kvp.Value), null,
                                                        _deviceId));
         }
-    } 
+    }
+
+    public void RemoveClient(IChannel channel)
+    {
+        _subscribers.Remove(channel);
+    }
 
     public bool Contains(IChannel channel) => _subscribers.Contains(channel);
 

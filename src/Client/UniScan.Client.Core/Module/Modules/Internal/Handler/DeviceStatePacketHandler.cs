@@ -20,6 +20,12 @@ public class DeviceStatePacketHandler : SimpleChannelInboundHandler<StatePacket>
 
         foreach (var state in msg.States)
         {
+            if (state.Value is null)
+            {
+                device.States.Remove(state.Key);
+                continue;
+            }
+
             device.States[state.Key] = state.Value;
         }
     }

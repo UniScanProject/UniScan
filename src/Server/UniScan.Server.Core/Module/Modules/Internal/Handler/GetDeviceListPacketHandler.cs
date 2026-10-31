@@ -6,6 +6,7 @@ using UniScan.Network.Data.Device;
 using UniScan.Network.Protocol.Packets.Clientbound;
 using UniScan.Network.Protocol.Packets.Serverbound;
 using UniScan.Server.Core.Host;
+using UniScan.Server.Core.Util;
 
 namespace UniScan.Server.Core.Module.Modules.Internal.Handler;
 
@@ -22,16 +23,8 @@ public class GetDeviceListPacketHandler(DeviceHostManager deviceHostManager) : S
         if (msg.RequestId == null)
             return;
 
-        var devices = _deviceHostManager.Devices.ToDictionary(i => i.Key, h =>
-        {
-            DeviceSpecifications? info = null;
-            if (h.Value.Device.DeviceInfo != null)
-            {
-                info = new DeviceSpecifications(h.Value.Device.DeviceInfo.Model, h.Value.Device.DeviceInfo.Version);
-            }
-
-            return new DeviceDto(h.Key, h.Value.DisplayName, h.Value.Device.Active.Value, info);
-        });
+        var devices = _deviceHostManager.Devices.ToDictionary(i => i.Key, h => DeviceDto.FromDeviceHost(h.Value));
+        
         ctx.WriteAndFlushAsync(new DeviceListPacket(devices, msg.RequestId));
     }
 }
