@@ -17,6 +17,8 @@ public class RemoteDevice(Slug<SnakeSlugFormatter> id, string? name, bool connec
     public Slug<SnakeSlugFormatter> Identifier { get; } = id;
 
     public string? DisplayName { get; } = name;
+    public string Name => DisplayName ?? Identifier.Value;
+    
     public bool Connected { get; } = connected;
     
     public RemoteServer Parent { get; } = parent;

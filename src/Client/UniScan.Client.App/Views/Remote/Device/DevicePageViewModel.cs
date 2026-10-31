@@ -14,10 +14,13 @@ public class DevicePageViewModel : ViewModelBase
     public DeviceViewModel DeviceViewModel { get; }
     
     public SSRSlotContext SSRViewModel { get; }
+    
+    public IRemoteRootPageDeviceNavigatorProxy RemotePageNavigator { get; }
 
-    public DevicePageViewModel(DeviceViewModel deviceViewModel, IUISlotRegistry registry)
+    public DevicePageViewModel(DeviceViewModel deviceViewModel, IUISlotRegistry registry, IRemoteRootPageDeviceNavigatorProxy remoteNavigator)
     {
         DeviceViewModel = deviceViewModel;
+        RemotePageNavigator = remoteNavigator;
         
         Identifier id = new("UniScan", "ssr", "slot", "device", DeviceViewModel.Device.Identifier);
         if (registry.TryGet(id, out SSRSlotContext? vm))//stupid hack because for some reason it keeps creating new SSRViewModel or something weird

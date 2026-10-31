@@ -13,11 +13,11 @@ public class DeviceRootPageViewModel : SubPagedViewModelBase, IDisposable
     
     private DevicePageViewModel _mainPage;
     
-    public DeviceRootPageViewModel(DeviceViewModel deviceViewModel, IUISlotRegistry registry) : base(new EmptyPageViewModel(), UniScanApp.Identifier.Derived("view_model", "device", deviceViewModel.Device.Identifier))
+    public DeviceRootPageViewModel(DeviceViewModel deviceViewModel, IUISlotRegistry registry, IRemoteRootPageDeviceNavigatorProxy remoteNavigator) : base(new EmptyPageViewModel(), UniScanApp.Identifier.Derived("view_model", "device", deviceViewModel.Device.Identifier))
     {
         DeviceViewModel = deviceViewModel;
 
-        _mainPage = new DevicePageViewModel(deviceViewModel, registry);
+        _mainPage = new DevicePageViewModel(deviceViewModel, registry, remoteNavigator);
         CurrentSubpage = _mainPage;
     }
 

@@ -38,7 +38,7 @@ public interface IRemoteServerMutationProxy
 
 public class RemoteServer : IRemoteServerMutationProxy
 {
-    public IReadOnlyBindableReactiveProperty<string> DisplayName { get; }
+    public IReadOnlyBindableReactiveProperty<string> DisplayName { get; } 
     
     public Guid Id { get; }
     
@@ -95,7 +95,7 @@ public class RemoteServer : IRemoteServerMutationProxy
         _remoteInfo.Value = info;
     }
     
-    public RemoteServer(Guid id, RemoteDto dto, RemoteCacheDto? cache, IClientSocketFactory socketFactory) : this(id, dto.ConnectionMethod, socketFactory, cache?.RemoteInfo) {}
+    public RemoteServer(Guid id, RemoteDto dto, CachedRemoteInfoDto? cache, IClientSocketFactory socketFactory) : this(id, dto.ConnectionMethod, socketFactory, cache?.ToSimpleRemoteInfo()) {}
     
     void IRemoteServerMutationProxy.SetSoftwareInfo(ServerSoftwareInfo info)
     {

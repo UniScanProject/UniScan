@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using ObservableCollections;
@@ -11,7 +12,6 @@ using R3;
 using Serilog;
 using Shiki.Common.Identity.Slug;
 using Shiki.Common.Identity.Slug.Formatting.Formatters;
-using Shiki.Internationalization;
 using Shiki.Internationalization.Component;
 using UniScan.Client.App.UI.ServersideRendering;
 using UniScan.Client.App.Views.Global;
@@ -35,17 +35,17 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
     private RemotePageViewModel? _mainPage;
     
     private readonly CompositeDisposable _disposables = new();
-
-    private readonly TextComponentResolverService _textComponentResolver;
     
-    public RemoteRootPageViewModel(RemoteViewModel remoteViewModel, TextComponentResolverService resolver) : base(new NotConnectedRemotePageViewModel(remoteViewModel), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(remoteViewModel.Remote.Id.ToString())))
+    public IRelayCommand NavigateCommand { get; }
+
+    public RemoteRootPageViewModel(RemoteViewModel remoteViewModel) : base(new NotConnectedRemotePageViewModel(remoteViewModel), UniScanApp.Identifier.Derived("view_model", "remote", new Slug<SnakeSlugFormatter>(remoteViewModel.Remote.Id.ToString())))
     {
-        _textComponentResolver = resolver;
         _notConnectedPage = (NotConnectedRemotePageViewModel)CurrentSubpage;
         
         RemoteViewModel = remoteViewModel;
 
         RemoteViewModel.Remote.ConnectionStatus.AsObservable().Skip(1).Subscribe(OnConnectionStateChanged).AddTo(_disposables);
+        NavigateCommand = new RelayCommand<RemoteDevice?>(((IRemoteRootPageDeviceNavigatorProxy)this).Navigate);
     }
 
     private void TearDown()
@@ -60,8 +60,14 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
         TearDown();
     }
 
-    void IRemoteRootPageDeviceNavigatorProxy.Navigate(RemoteDevice device)
+    void IRemoteRootPageDeviceNavigatorProxy.Navigate(RemoteDevice? device)
     {
+        if (device == null)
+        {
+            Dispatcher.UIThread.Post(() => { CurrentSubpage = (ObservableObject?)_mainPage ?? _notConnectedPage; });
+            return;
+        }
+
         DeviceViewModel? p = RemoteViewModel.DevicesView.FirstOrDefault(page => page.Device.Identifier == device.Identifier);
         if (p != null)
         {
@@ -139,5 +145,7 @@ public class RemoteRootPageViewModel : SubPagedViewModelBase, IDisposable, IRemo
 
 public interface IRemoteRootPageDeviceNavigatorProxy
 {
-    void Navigate(RemoteDevice device);
+    IRelayCommand NavigateCommand { get; }
+    
+    void Navigate(RemoteDevice? device);
 }

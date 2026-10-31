@@ -6,11 +6,14 @@ using UniScan.Network.Data.Info.Remote;
 namespace UniScan.Client.Core.Config.Remote;
 
 [method: JsonConstructor]
-public record RemoteCacheDto(
-    [property: JsonPropertyName("remote_info")]
-    RemoteInfo? RemoteInfo)
+public record CachedRemoteInfoDto(
+    [property: JsonPropertyName("display_name")] string? DisplayName,
+    [property: JsonPropertyName("logo_url")] Uri? LogoUrl)
 {
-    public static RemoteCacheDto FromRemoteServer(RemoteServer remoteServer) => new(remoteServer.RemoteInfo.Value);
+    public static CachedRemoteInfoDto? FromRemoteServer(RemoteServer remoteServer) => remoteServer.RemoteInfo.Value != null ? new CachedRemoteInfoDto(remoteServer.RemoteInfo.Value.DisplayName, remoteServer.RemoteInfo.Value.Branding.LogoUrl) : null;
+
+    //TODO replace
+    public RemoteInfo ToSimpleRemoteInfo() => new(DisplayName, null, new RemoteBranding(LogoUrl, []), new RemoteSocial());
 }
 
 [method: JsonConstructor]

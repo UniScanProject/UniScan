@@ -15,10 +15,10 @@ public class DeviceViewModel : ViewModelBase, IDisposable
     
     public DeviceRootPageViewModel RootPageViewModel { get; }
 
-    public DeviceViewModel(RemoteDevice device, IUIBindingsRegistry bindingsRegistry, IUISlotRegistry slotRegistry)
+    public DeviceViewModel(RemoteDevice device, IUIBindingsRegistry bindingsRegistry, IUISlotRegistry slotRegistry, IRemoteRootPageDeviceNavigatorProxy remoteNavigator)
     {
         Device = device;
-        RootPageViewModel = new DeviceRootPageViewModel(this, slotRegistry);
+        RootPageViewModel = new DeviceRootPageViewModel(this, slotRegistry, remoteNavigator);
         
         bindingsRegistry.RegisterDict(Device.States).AddTo(_disposables);
     }
