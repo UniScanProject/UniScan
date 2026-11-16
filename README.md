@@ -20,12 +20,19 @@ In the future, there will be easy ways for hosters to embed the UniScan client i
 
 <table>
   <tr>
-    <td align="center" width="33%">
+    <td colspan="2" align="center">
+      <a href="https://www.youtube.com/watch?v=v_Dgg01otMc"><img src="http://img.youtube.com/vi/v_Dgg01otMc/maxresdefault.jpg" width="100%"></a>
+      <br>
+      <b>A small showcase video (click to watch on YouTube)</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
       <img src="./repo_assets/device_page.png" alt="UniScan receiving and displaying data from a remote SDS100" width="100%">
       <br>
       <b>UniScan receiving and displaying data from a remote SDS100</b>
     </td>
-    <td align="center" width="33%">
+    <td align="center" width="50%">
       <img src="./repo_assets/remote_page.png" alt="UniScan connected to a "remote" that has one device" width="100%">
       <br>
       <b>UniScan connected to a "remote" that has one device</b>
